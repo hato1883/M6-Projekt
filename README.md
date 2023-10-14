@@ -21,7 +21,6 @@ Instead use sometinh more like `fixed issue with ...` or `Implemented feature ..
 If you are working on a lareger task remeber to commit during your way and use short descriptions on what the commit did.
 
 ### Pull request
-When the issue has been solved in your local branch create a **PR** (_PR_ is short for pull request) to squash merge your branch into main.
+When the issue has been solved in your local branch create a **PR** (_PR_ is short for pull request) to merge your branch into main.
 This will (if tests pass) allow you to change the main-branch of repo so other contributers can pull your new changes.
-Squash simply means that all your commits will be implemnted as 1 commit in the main branch with the name of your _PR_ to simplify the history tree.
-(All commits can still be viewd in the branch history if needed)
+We will use normal merging of commits so we can delete merged branches.

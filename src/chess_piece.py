@@ -18,10 +18,3 @@ class chess_piece:
 
     def getColor(self):
         return self.piece_color.name
-    
-    
-piece = chess_piece(Color.WHITE, PieceType.BISHOP)
-
-print(piece.getColor())
-print(piece.getType())
-print(piece.__str__())

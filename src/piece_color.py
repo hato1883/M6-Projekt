@@ -1,5 +1,5 @@
 from enum import Enum
 
-class piece_color (Enum):
-    white = 0
-    black = 1
+class Color (Enum):
+    WHITE = 0
+    BLACK = 1

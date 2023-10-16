@@ -1,4 +1,4 @@
-import piece_type
+from piece_type import PieceType
 
 class chessboard:
 
@@ -55,22 +55,22 @@ class chessboard:
         chess_piece = self.chessboard_list[orgin_row][orgin_col].get_type()
         valid_move = False
         match chess_piece:
-            case piece_type.pawn:
+            case PieceType.PAWN:
                 valid_move = valid_pawn_move(origin, dest)
                 pass
-            case piece_type.rook:
+            case PieceType.ROOK:
                 valid_move = valid_rook_move(origin, dest)
                 pass
-            case piece_type.knight:
+            case PieceType.KNIGHT:
                 valid_move = valid_knight_move(origin, dest)
                 pass
-            case piece_type.bishop:
+            case PieceType.BISHOP:
                 valid_move = valid_bishop_move(origin, dest)
                 pass
-            case piece_type.queen:
+            case PieceType.QUEEN:
                 valid_move = valid_queen_move(origin, dest)
                 pass
-            case piece_type.king:
+            case PieceType.KING:
                 valid_move = valid_king_move(origin, dest)
                 pass
         return valid_move

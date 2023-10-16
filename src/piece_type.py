@@ -1,9 +1,9 @@
 from enum import Enum
 
-class piece_type(Enum):
-    pawn = 1
-    rook = 2
-    knight = 3
-    bishop = 4
-    queen = 5
-    king = 6
+class PieceType(Enum):
+    PAWN = 1
+    KNIGHT = 2
+    BISHOP = 3
+    ROOK = 4
+    QUEEN = 5
+    KING = 6

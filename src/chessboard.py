@@ -1,3 +1,5 @@
+import piece_type
+
 class chessboard:
 
     def __init__(self) -> None:
@@ -46,3 +48,30 @@ class chessboard:
             self.chessboard_list[row][col] = None
             return True
         return False
+
+
+    def is_valid(self, origin, dest):
+        (orgin_row, orgin_col) = origin
+        chess_piece = self.chessboard_list[orgin_row][orgin_col].get_type()
+        valid_move = False
+        match chess_piece:
+            case piece_type.pawn:
+                valid_move = valid_pawn_move(origin, dest)
+                pass
+            case piece_type.rook:
+                valid_move = valid_rook_move(origin, dest)
+                pass
+            case piece_type.knight:
+                valid_move = valid_knight_move(origin, dest)
+                pass
+            case piece_type.bishop:
+                valid_move = valid_bishop_move(origin, dest)
+                pass
+            case piece_type.queen:
+                valid_move = valid_queen_move(origin, dest)
+                pass
+            case piece_type.king:
+                valid_move = valid_king_move(origin, dest)
+                pass
+        return valid_move
+

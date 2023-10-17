@@ -5,7 +5,7 @@ from piece_type import PieceType
 
 
 
-class chess_piece:
+class ChessPiece:
 
     def __init__(self, piece_color,piece_type):
         self.piece_type = piece_type
@@ -15,14 +15,14 @@ class chess_piece:
     def __str__(self):
         return f'{self.piece_color} {self.piece_type} {self.piece_has_moved}'
     
-    def getType(self):
+    def get_type(self):
         return self.piece_type.name
 
-    def getColor(self):
+    def get_color(self):
         return self.piece_color.name
     
     def get_has_moved(self):
-        return self.piece_has_moved.name
+        return self.piece_has_moved
 
     def set_has_moved_true(self):
         self.piece_has_moved = True

@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 class UI_Interface(ABC):
 
     @abstractmethod
-    def show_splash_screen(Self):
+    def show_splash_screen(self):
         # Display game name, authors, date/build
         pass
 

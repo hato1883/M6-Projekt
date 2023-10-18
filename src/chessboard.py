@@ -1,7 +1,7 @@
 from piece_type import PieceType
 from piece_color import Color
 
-class chessboard:
+class Chessboard:
 
     def __init__(self) -> None:
         chessboard_list = []

@@ -1,4 +1,5 @@
 from piece_type import PieceType
+from piece_color import Color
 
 class chessboard:
 
@@ -13,7 +14,7 @@ class chessboard:
         """
         self.chessboard_list = []
         for row in range(size):
-            col = [ [None]*size ] 
+            col = [None]*size
             self.chessboard_list.append(col)
         return None
     

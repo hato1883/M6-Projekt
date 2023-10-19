@@ -13,5 +13,5 @@ class MoveOption(Enum):
     def __str__(self):
         """Overriden to String method
 
-        Returns Enum name such as COLLISION_AXIS_TAKE instead of Number 11"""
+        Returns Enum name such as TAKE instead of Number 1"""
         return f'{self.name}'

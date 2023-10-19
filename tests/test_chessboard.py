@@ -81,8 +81,8 @@ def test_add_piece():
     b_ki = ChessPiece(Color.BLACK, PieceType.KING)
     ref = Chessboard()
     ref.create_board(3)
-    ref.add_piece(b_qu, (1,0))
-    ref.add_piece(b_ki, (1,2))
+    assert ref.add_piece(b_qu, (1,0))
+    assert ref.add_piece(b_ki, (1,2))
     expected_chessboard: list[list[ChessPiece]] = [
         [None, None, None],
         [b_qu, None, b_ki],
@@ -90,6 +90,23 @@ def test_add_piece():
     ]
     # check
     __is_board_equal(expected_chessboard, ref.chessboard_list)
+
+
+def test_remove_piece():
+    b_qu = ChessPiece(Color.BLACK, PieceType.QUEEN)
+    b_ki = ChessPiece(Color.BLACK, PieceType.KING)
+    # empty 3x3
+    expected = Chessboard()
+    expected.create_board(3)
+
+    ref = Chessboard()
+    ref.create_board(3)
+    ref.add_piece(b_qu, (1,0))
+    ref.add_piece(b_ki, (1,2))
+    assert ref.remove_piece((1, 0))
+    assert ref.remove_piece((1, 2))
+    # check
+    __is_board_equal(expected.chessboard_list, ref.chessboard_list)
 
 
 def __is_board_equal(expected: list[list[ChessPiece]], recived: list[list[ChessPiece]]):

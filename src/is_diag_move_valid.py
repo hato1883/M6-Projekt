@@ -103,7 +103,7 @@ def is_diag_move_valid(chess_board:list, origin:tuple[int,int], destination:tupl
   return True
     
 
-
+#Testing
 chess_board = create_board()
 
 while True:

@@ -17,6 +17,11 @@ class TextUserInterface(UI_Interface):
         print(f"{greeting}")
         pass
 
+    # Present user with successive choices of:
+        # 1 or 2 player game, 2 players == True
+        # Time limit per move in seconds, integer
+        # AI narration On/Off
+        # return ( 2 player True/False , time limit integer, narration True/False)
     @classmethod
     def input_game_setup_parameters(cls, min_time_limit = 30):
         while True:
@@ -54,8 +59,6 @@ class TextUserInterface(UI_Interface):
             print(current_settings)
             TextFormater.print_divider("-", len(current_settings))
 
-            
-
             answer = None
             while not answer in ("y","yes","n","no"):
     
@@ -63,40 +66,29 @@ class TextUserInterface(UI_Interface):
             
             if answer[0] == "y":
                 break
-
-            print()
-
-
-        # Present user with successive choices of:
-        # 1 or 2 player game (if 1, 2nd player is computer) 2 players == True
-        # Time limit per move in seconds, integer
-        # AI narration On/Off
-        # return ( 2 player True/False , time limit integer, narration True/False)
+        
         return (two_players, move_time_limit, ai_narration)
 
+    # Display the current layout of chess board text-based represenation
     @classmethod
     def show_chess_board(cls, chess_board):
         TextFormater.print_column_letters(("A","B","C","D","E","F","G","H"))
         for i in range(len(chess_board)):
             TextFormater.print_chess_board_row(len(chess_board)-i, chess_board[i])
 
-        # Display the current layout of chess board either text-based or graphics-based represenation
-        pass
-
+        
+    # Move tuple form is (row, column) were each element is integer [0,7]
+    # Recount previous move to user by text 
     @classmethod
     def recount_user_move(self, move):
         (coordinates_origin, coordinates_dest) = move
         algebraic_origin = TextFormater.coordinates_to_algebra(coordinates_origin)
         algebraic_dest = TextFormater.coordinates_to_algebra(coordinates_dest)
 
-        print(f"Mowed {algebraic_origin} to {algebraic_dest}")
+        print(f"Moved {algebraic_origin} to {algebraic_dest}")
 
-
-        # Input two 2-tupels. Origin, Dest.
-        # 2-tuple form is (row, column) were each element is integer [0,7]
-        # Recount previous move to user by text or possibly graphically
-        pass
-
+    # Used to input the user's move either through algebraic notation
+    # return 2-tuple,(row, column) were each element is integer in [0,7]
     @classmethod
     def input_user_move(self, prompt_one = "From", prompt_two ="To"):
 
@@ -114,11 +106,10 @@ class TextUserInterface(UI_Interface):
 
         return (origin, dest)
     
-        # Used to input the user's move either through algebraic notation or graphical interacivity
-        # returns two 2-tupels. Origin, Dest.
-        # 2-tuple form is (row, column) were each element is integer [0,7]
-        pass
-
+        
+     # Prompt's user to select promotion for pawn in question
+        # Multiple choice: queen, rook, bishop or knight
+        # by text (q, r, b or k)
     @classmethod
     def input_promotion(self):
         choice = None
@@ -135,10 +126,7 @@ class TextUserInterface(UI_Interface):
             case "k":
                 return PieceType.KNIGHT
 
-        # Prompt's user to select promotion for pawn in question
-        # Multiple choice: queen, rook, bishop or knight
-        # by text (q, r, b or k)
-        pass
+
 
 
 

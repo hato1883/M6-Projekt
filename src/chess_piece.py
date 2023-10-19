@@ -13,7 +13,10 @@ class ChessPiece:
         self.piece_has_moved = False
 
     def __str__(self):
-        return f'{self.piece_color.name} {self.piece_type.name} {self.piece_has_moved.name}'
+        # prints □ if piece is black or ■ if piece is white
+        # Followed by First letter of piece type
+        # Followed by a dash, then F/T to represent if piece has moved.
+        return f'{"■" if self.piece_color.name == Color.WHITE.name else "□"}{str(self.piece_type.name)[0]}-{"T" if self.piece_has_moved else "F"}'
     
     def get_type(self):
         return self.piece_type

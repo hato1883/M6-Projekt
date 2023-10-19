@@ -3,6 +3,7 @@ from chess_piece import ChessPiece
 from piece_color import Color
 from move_type import MoveType
 from move_option import MoveOption
+from chess_piece import ChessPiece
 
 class Chessboard:
 
@@ -28,6 +29,63 @@ class Chessboard:
         returns None (new chessboard is saved in object)
         """
         self.create_board()
+
+        # Add Black Rooks (Black is row 0 and 1)
+        black_rook = ChessPiece(Color.BLACK, PieceType.ROOK)
+        self.add_piece(black_rook, (0, 0))
+        self.add_piece(black_rook, (0, 7))
+
+        # Add Black Knight (Black is row 0 and 1)
+        black_knight = ChessPiece(Color.BLACK, PieceType.KNIGHT)
+        self.add_piece(black_knight, (0, 1))
+        self.add_piece(black_knight, (0, 6))
+
+        # Add Black Bishops (Black is row 0 and 1)
+        black_bishop = ChessPiece(Color.BLACK, PieceType.BISHOP)
+        self.add_piece(black_bishop, (0, 2))
+        self.add_piece(black_bishop, (0, 5))
+
+        # Add Black Queen (Black is row 0 and 1)
+        black_queen = ChessPiece(Color.BLACK, PieceType.QUEEN)
+        self.add_piece(black_queen, (0, 3))
+
+        # Add Black King (Black is row 0 and 1)
+        black_king = ChessPiece(Color.BLACK, PieceType.KING)
+        self.add_piece(black_king, (0, 4))
+
+        # Add Black Pawns (Black is row 0 and 1)
+        black_pawn = ChessPiece(Color.BLACK, PieceType.PAWN)
+        for col in range (len(self.chessboard_list)):
+            self.add_piece(black_pawn, (1, col))
+
+
+        # Add White Rooks (White is row 6 and 7)
+        white_rook = ChessPiece(Color.WHITE, PieceType.ROOK)
+        self.add_piece(white_rook, (7, 0))
+        self.add_piece(white_rook, (7, 7))
+
+        # Add White Knight (White is row 6 and 7)
+        white_knight = ChessPiece(Color.WHITE, PieceType.KNIGHT)
+        self.add_piece(white_knight, (7, 1))
+        self.add_piece(white_knight, (7, 6))
+
+        # Add White Bishops (White is row 6 and 7)
+        white_bishop = ChessPiece(Color.WHITE, PieceType.BISHOP)
+        self.add_piece(white_bishop, (7, 2))
+        self.add_piece(white_bishop, (7, 5))
+
+        # Add White Queen (White is row 6 and 7)
+        white_queen = ChessPiece(Color.WHITE, PieceType.QUEEN)
+        self.add_piece(white_queen, (7, 3))
+
+        # Add White King (White is row 6 and 7)
+        white_king = ChessPiece(Color.WHITE, PieceType.KING)
+        self.add_piece(white_king, (7, 4))
+
+        # Add White Pawns (White is row 6 and 7)
+        white_pawn = ChessPiece(Color.WHITE, PieceType.PAWN)
+        for col in range (len(self.chessboard_list)):
+            self.add_piece(white_pawn, (6, col))
 
 
     def add_piece(self, chess_piece, pos):
@@ -78,7 +136,7 @@ class Chessboard:
                 valid_move = valid_king_move(origin, dest)
                 pass
         return valid_move
-
+    
 
     def in_danger(self, origin: tuple[int, int], piece_color : Color) -> bool:
         (origin_row, origin_col) = origin
@@ -106,8 +164,6 @@ class Chessboard:
 
                     # Only attacking moves are left.
                     
-                    
-                    # TODO: Propegation move can have enemy pice futher away than default offset.
                     if move_type == MoveType.COLLISION_AXIS or move_type== MoveType.COLLISION_DIAG:
                         # check axis with the same direction as offset from 0,0
   
@@ -178,7 +234,6 @@ class Chessboard:
         return False
 
 
-
     def __is_in_bounds(self, origin: tuple[int, int], offset: tuple[int, int]) -> bool:
         (origin_row, origin_col) = origin
         (offset_row, offset_col) = offset
@@ -201,3 +256,17 @@ class Chessboard:
             # Col to small
             return False
         return True
+    
+
+    def __str__(self) -> str:
+        out = ""
+        for row in range(len(self.chessboard_list)):
+            for col in range(len(self.chessboard_list)):
+                out += f"[{str(self.chessboard_list[row][col])}],"
+            out += "\n"
+        return out
+
+if __name__ == "__main__":
+    ref = Chessboard()
+    ref.create_default_board()
+    print(str(ref))

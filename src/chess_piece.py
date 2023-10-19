@@ -13,13 +13,13 @@ class ChessPiece:
         self.piece_has_moved = False
 
     def __str__(self):
-        return f'{self.piece_color} {self.piece_type} {self.piece_has_moved}'
+        return f'{self.piece_color.name} {self.piece_type.name} {self.piece_has_moved.name}'
     
     def get_type(self):
-        return self.piece_type.name
+        return self.piece_type
 
     def get_color(self):
-        return self.piece_color.name
+        return self.piece_color
     
     def get_has_moved(self):
         return self.piece_has_moved

@@ -17,12 +17,12 @@ class UI_Interface(ABC):
         pass
 
     @abstractmethod
-    def show_chess_board(ChessBoard):
+    def show_chess_board():
         # Display the current layout of chess board either text-based or graphics-based represenation
         pass
 
     @abstractmethod
-    def recount_user_move(origin, dest):
+    def recount_user_move():
         # Input two 2-tupels. Origin, Dest.
         # 2-tuple form is (row, column) were each element is integer [0,7]
         # Recount previous move to user by text or possibly graphically

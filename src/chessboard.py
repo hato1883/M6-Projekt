@@ -265,9 +265,3 @@ class Chessboard:
                 out += f"[{str(self.chessboard_list[row][col])}],"
             out += "\n"
         return out
-
-if __name__ == "__main__":
-    ref = Chessboard()
-    ref.create_default_board()
-    print(str(ref))
-    print(ref.in_danger((4,1), Color.WHITE))

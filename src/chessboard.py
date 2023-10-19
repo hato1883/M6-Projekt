@@ -30,62 +30,30 @@ class Chessboard:
         """
         self.create_board()
 
-        # Add Black Rooks (Black is row 0 and 1)
-        black_rook = ChessPiece(Color.BLACK, PieceType.ROOK)
-        self.add_piece(black_rook, (0, 0))
-        self.add_piece(black_rook, (0, 7))
-
-        # Add Black Knight (Black is row 0 and 1)
-        black_knight = ChessPiece(Color.BLACK, PieceType.KNIGHT)
-        self.add_piece(black_knight, (0, 1))
-        self.add_piece(black_knight, (0, 6))
-
-        # Add Black Bishops (Black is row 0 and 1)
-        black_bishop = ChessPiece(Color.BLACK, PieceType.BISHOP)
-        self.add_piece(black_bishop, (0, 2))
-        self.add_piece(black_bishop, (0, 5))
-
-        # Add Black Queen (Black is row 0 and 1)
-        black_queen = ChessPiece(Color.BLACK, PieceType.QUEEN)
-        self.add_piece(black_queen, (0, 3))
-
-        # Add Black King (Black is row 0 and 1)
-        black_king = ChessPiece(Color.BLACK, PieceType.KING)
-        self.add_piece(black_king, (0, 4))
-
-        # Add Black Pawns (Black is row 0 and 1)
-        black_pawn = ChessPiece(Color.BLACK, PieceType.PAWN)
-        for col in range (len(self.chessboard_list)):
-            self.add_piece(black_pawn, (1, col))
-
-
-        # Add White Rooks (White is row 6 and 7)
-        white_rook = ChessPiece(Color.WHITE, PieceType.ROOK)
-        self.add_piece(white_rook, (7, 0))
-        self.add_piece(white_rook, (7, 7))
-
-        # Add White Knight (White is row 6 and 7)
-        white_knight = ChessPiece(Color.WHITE, PieceType.KNIGHT)
-        self.add_piece(white_knight, (7, 1))
-        self.add_piece(white_knight, (7, 6))
-
-        # Add White Bishops (White is row 6 and 7)
-        white_bishop = ChessPiece(Color.WHITE, PieceType.BISHOP)
-        self.add_piece(white_bishop, (7, 2))
-        self.add_piece(white_bishop, (7, 5))
-
-        # Add White Queen (White is row 6 and 7)
-        white_queen = ChessPiece(Color.WHITE, PieceType.QUEEN)
-        self.add_piece(white_queen, (7, 3))
-
-        # Add White King (White is row 6 and 7)
-        white_king = ChessPiece(Color.WHITE, PieceType.KING)
-        self.add_piece(white_king, (7, 4))
-
-        # Add White Pawns (White is row 6 and 7)
-        white_pawn = ChessPiece(Color.WHITE, PieceType.PAWN)
-        for col in range (len(self.chessboard_list)):
-            self.add_piece(white_pawn, (6, col))
+         # Black Pieces
+        b_ro = ChessPiece(Color.BLACK, PieceType.ROOK)
+        b_kn = ChessPiece(Color.BLACK, PieceType.KNIGHT)
+        b_bi = ChessPiece(Color.BLACK, PieceType.BISHOP)
+        b_qu = ChessPiece(Color.BLACK, PieceType.QUEEN)
+        b_ki = ChessPiece(Color.BLACK, PieceType.KING)
+        b_pa = ChessPiece(Color.BLACK, PieceType.PAWN)
+        # White Pieces
+        w_ro = ChessPiece(Color.WHITE, PieceType.ROOK)
+        w_kn = ChessPiece(Color.WHITE, PieceType.KNIGHT)
+        w_bi = ChessPiece(Color.WHITE, PieceType.BISHOP)
+        w_qu = ChessPiece(Color.WHITE, PieceType.QUEEN)
+        w_ki = ChessPiece(Color.WHITE, PieceType.KING)
+        w_pa = ChessPiece(Color.WHITE, PieceType.PAWN)
+        self.chessboard_list: list[list[ChessPiece]] = [
+            [b_ro, b_kn, b_bi, b_qu, b_ki, b_bi, b_kn, b_ro],
+            [b_pa, b_pa, b_pa, b_pa, b_pa, b_pa, b_pa, b_pa],
+            [None, None, None, None, None, None, None, None],
+            [None, None, None, None, None, None, None, None],
+            [None, None, None, None, None, None, None, None],
+            [None, None, None, None, None, None, None, None],
+            [w_pa, w_pa, w_pa, w_pa, w_pa, w_pa, w_pa, w_pa],
+            [w_ro, w_kn, w_bi, w_qu, w_ki, w_bi, w_kn, w_ro],
+        ]
 
 
     def add_piece(self, chess_piece: ChessPiece, pos: tuple[int, int]):
@@ -227,6 +195,7 @@ class Chessboard:
                         # Attacker is the same type we are emulating
                         # therfore it can attack origin
                         return True
+                    
                 # end of for-loop,
                 # Test next move in the list
             

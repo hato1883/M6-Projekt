@@ -7,8 +7,8 @@ from chess_piece import ChessPiece
 
 class Chessboard:
 
-    def __init__(self) -> None:
-        self.chessboard_list: list[list[ChessPiece]] = []
+    def __init__(self, chessboard: list[list[ChessPiece]] = []) -> None:
+        self.chessboard_list: list[list[ChessPiece]] = chessboard
 
 
     def create_board(self, size=8):
@@ -150,11 +150,12 @@ class Chessboard:
             moves: list[tuple[MoveType,list[MoveOption]]]
             for ((offset_row , offset_col), moves) in chess_piece_type.value: # value to get the associated list
                 # Check all moves the piece has
-                dest_row: int = origin_row + offset_row
-                dest_col: int = origin_col + offset_col
-                if not self.__is_in_bounds(origin, (dest_row , dest_col)):
+                if not self.__is_in_bounds(origin, (offset_row , offset_col)):
                     # Is out of bounds
                     continue
+
+                dest_row: int = origin_row + offset_row
+                dest_col: int = origin_col + offset_col
 
                 # Only offsets within the board are left 
                 for (move_type, options) in moves:
@@ -168,16 +169,19 @@ class Chessboard:
                         # check axis with the same direction as offset from 0,0
   
                         # Contiune loop while origin + offset
-                        while self.__is_in_bounds(origin, (dest_row, dest_col)):
+                        while self.__is_in_bounds(origin, (offset_row, offset_col)):
                             # we have taken 1 step along the axis OR diag and are still within the board
-                            
+
                             if self.chessboard_list[dest_row][dest_col] == None:
                                 # Empty space, no attacker move to next...
-                                dest_row += min(1, max(-1, offset_row)) # Next row (if offset is negativ we move 1 step up)
-                                dest_col += min(1, max(-1, offset_col)) # Next col (if offset is negativ we move 1 step left)
+                                offset_row += min(1, max(-1, offset_row)) # Next row (if offset is negativ we move 1 step up)
+                                offset_col += min(1, max(-1, offset_col)) # Next col (if offset is negativ we move 1 step left)
+                                
+                                dest_row = origin_row + offset_row
+                                dest_col = origin_col + offset_col
                                 # if both offset are set we will move diagonaly
                                 continue
-                            
+
                             # Space is not empty
                             potential_attacker: ChessPiece = self.chessboard_list[dest_row][dest_col]
 
@@ -195,9 +199,9 @@ class Chessboard:
                             # therefor it can attack
                             return True
                         
-                        else: # End of while loop:
-                            # propegation could not find a potential attacker. 
-                            return False
+                        
+                        # End of while loop:
+                        # propegation could not find a potential attacker. 
                         
                     # Not a propegation move type
                     else: 

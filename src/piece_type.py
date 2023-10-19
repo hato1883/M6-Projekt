@@ -208,7 +208,7 @@ class PieceType(Enum):
                 ]
             ),
 
-            # Bishop attacking diag
+            # Rook attacking x-axis right
             # - - -
             # - * x
             # - - -
@@ -219,7 +219,7 @@ class PieceType(Enum):
                 ]
             ),
 
-            # Bishop attacking diag
+            # Rook attacking y-axis down
             # - - -
             # - * -
             # - x -
@@ -230,7 +230,7 @@ class PieceType(Enum):
                 ]
             ),
 
-            # Bishop attacking diag
+            # Rook attacking x-axis left
             # - - -
             # x * -
             # - - -

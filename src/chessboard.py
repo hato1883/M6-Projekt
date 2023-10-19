@@ -100,7 +100,7 @@ class Chessboard:
         return False
 
 
-    def remove_piece(self, pos):
+    def remove_piece(self, pos: tuple[int, int]):
         """adds a chess piece to specifed empty position
         
         returns True if the position was not empty, else returns False
@@ -112,9 +112,9 @@ class Chessboard:
         return False
 
 
-    def is_valid(self, origin, dest):
+    def is_valid(self, origin: tuple[int, int], dest: tuple[int, int]):
         (orgin_row, orgin_col) = origin
-        chess_piece = self.chessboard_list[orgin_row][orgin_col].get_type()
+        chess_piece: PieceType = self.chessboard_list[orgin_row][orgin_col].get_type()
         valid_move = False
         match chess_piece:
             case PieceType.PAWN:

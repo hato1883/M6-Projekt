@@ -8,7 +8,7 @@ from chess_piece import ChessPiece
 class Chessboard:
 
     def __init__(self) -> None:
-        self.chessboard_list: list[ChessPiece] = []
+        self.chessboard_list: list[list[ChessPiece]] = []
 
 
     def create_board(self, size=8):
@@ -88,7 +88,7 @@ class Chessboard:
             self.add_piece(white_pawn, (6, col))
 
 
-    def add_piece(self, chess_piece, pos):
+    def add_piece(self, chess_piece: ChessPiece, pos: tuple[int, int]):
         """adds a chess piece to specifed empty position
         
         returns True if the position was empty, returns False if it was already taken
@@ -163,7 +163,7 @@ class Chessboard:
                         continue
 
                     # Only attacking moves are left.
-                    
+
                     if move_type == MoveType.COLLISION_AXIS or move_type== MoveType.COLLISION_DIAG:
                         # check axis with the same direction as offset from 0,0
   
@@ -270,3 +270,4 @@ if __name__ == "__main__":
     ref = Chessboard()
     ref.create_default_board()
     print(str(ref))
+    print(ref.in_danger((4,1), Color.WHITE))

@@ -47,3 +47,46 @@ def test_create_board():
         for col in range(len(expected_board)):
             assert chessboard_ref.chessboard_list[row][col] == None
 
+
+
+# Test if we get a default chessboard
+def test_create_default_board():
+    # Black Pieces
+    b_ro = ChessPiece(Color.BLACK, PieceType.ROOK)
+    b_kn = ChessPiece(Color.BLACK, PieceType.KNIGHT)
+    b_bi = ChessPiece(Color.BLACK, PieceType.BISHOP)
+    b_qu = ChessPiece(Color.BLACK, PieceType.QUEEN)
+    b_ki = ChessPiece(Color.BLACK, PieceType.KING)
+    b_pa = ChessPiece(Color.BLACK, PieceType.PAWN)
+    # White Pieces
+    w_ro = ChessPiece(Color.WHITE, PieceType.ROOK)
+    w_kn = ChessPiece(Color.WHITE, PieceType.KNIGHT)
+    w_bi = ChessPiece(Color.WHITE, PieceType.BISHOP)
+    w_qu = ChessPiece(Color.WHITE, PieceType.QUEEN)
+    w_ki = ChessPiece(Color.WHITE, PieceType.KING)
+    w_pa = ChessPiece(Color.WHITE, PieceType.PAWN)
+    expected_chessboard: list[list[ChessPiece]] = [
+        [b_ro, b_kn, b_bi, b_qu, b_ki, b_bi, b_kn, b_ro],
+        [b_pa, b_pa, b_pa, b_pa, b_pa, b_pa, b_pa, b_pa],
+        [None, None, None, None, None, None, None, None],
+        [None, None, None, None, None, None, None, None],
+        [None, None, None, None, None, None, None, None],
+        [None, None, None, None, None, None, None, None],
+        [w_pa, w_pa, w_pa, w_pa, w_pa, w_pa, w_pa, w_pa],
+        [w_ro, w_kn, w_bi, w_qu, w_ki, w_bi, w_kn, w_ro],
+    ]
+    ref = Chessboard()
+    ref.create_default_board()
+    # Check amount of rows are equal
+    assert len(expected_chessboard) == len(ref.chessboard_list)
+    for row in range(len(expected_chessboard)):
+        # Check amount of columns in the row are equal
+        assert len(expected_chessboard[row]) == len(ref.chessboard_list[row])
+        for col in range(len(expected_chessboard)):
+            # Check if piece matches expexted
+            print()
+            if expected_chessboard[row][col] != None:
+                assert expected_chessboard[row][col].get_color() == ref.chessboard_list[row][col].get_color()
+                assert expected_chessboard[row][col].get_type() == ref.chessboard_list[row][col].get_type()
+            else:
+                assert expected_chessboard[row][col] == ref.chessboard_list[row][col]

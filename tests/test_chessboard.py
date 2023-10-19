@@ -91,7 +91,8 @@ def test_add_piece():
     # check
     __is_board_equal(expected_chessboard, ref.chessboard_list)
 
-def __is_board_equal(cls, expected: list[list[ChessPiece]], recived: list[list[ChessPiece]]):
+
+def __is_board_equal(expected: list[list[ChessPiece]], recived: list[list[ChessPiece]]):
     assert len(expected) == len(recived)
     for row in range(len(expected)):
         # Check amount of columns in the row are equal

@@ -39,13 +39,8 @@ def test_create_board():
         [None, None, None, None, None, None, None, None]
         ]
     chessboard_ref.create_board() # default size is 8
-
-    assert len(expected_board) == len(chessboard_ref.chessboard_list)
-    for row in range(len(expected_board)):
-        # Check amount of columns in the row are equal
-        assert len(expected_board[row]) == len(chessboard_ref.chessboard_list[row])
-        for col in range(len(expected_board)):
-            assert chessboard_ref.chessboard_list[row][col] == None
+    # check
+    __is_board_equal(expected_board, chessboard_ref.chessboard_list)
 
 
 
@@ -65,7 +60,7 @@ def test_create_default_board():
     w_qu = ChessPiece(Color.WHITE, PieceType.QUEEN)
     w_ki = ChessPiece(Color.WHITE, PieceType.KING)
     w_pa = ChessPiece(Color.WHITE, PieceType.PAWN)
-    expected_chessboard: list[list[ChessPiece]] = [
+    expected_board: list[list[ChessPiece]] = [
         [b_ro, b_kn, b_bi, b_qu, b_ki, b_bi, b_kn, b_ro],
         [b_pa, b_pa, b_pa, b_pa, b_pa, b_pa, b_pa, b_pa],
         [None, None, None, None, None, None, None, None],
@@ -77,16 +72,35 @@ def test_create_default_board():
     ]
     ref = Chessboard()
     ref.create_default_board()
-    # Check amount of rows are equal
-    assert len(expected_chessboard) == len(ref.chessboard_list)
-    for row in range(len(expected_chessboard)):
+    # Check
+    __is_board_equal(expected_board, ref.chessboard_list)
+
+
+def test_add_piece():
+    b_qu = ChessPiece(Color.BLACK, PieceType.QUEEN)
+    b_ki = ChessPiece(Color.BLACK, PieceType.KING)
+    ref = Chessboard()
+    ref.create_board(3)
+    ref.add_piece(b_qu, (1,0))
+    ref.add_piece(b_ki, (1,2))
+    expected_chessboard: list[list[ChessPiece]] = [
+        [None, None, None],
+        [b_qu, None, b_ki],
+        [None, None, None],
+    ]
+    # check
+    __is_board_equal(expected_chessboard, ref.chessboard_list)
+
+def __is_board_equal(cls, expected: list[list[ChessPiece]], recived: list[list[ChessPiece]]):
+    assert len(expected) == len(recived)
+    for row in range(len(expected)):
         # Check amount of columns in the row are equal
-        assert len(expected_chessboard[row]) == len(ref.chessboard_list[row])
-        for col in range(len(expected_chessboard)):
+        assert len(expected[row]) == len(recived[row])
+        for col in range(len(expected)):
             # Check if piece matches expexted
             print()
-            if expected_chessboard[row][col] != None:
-                assert expected_chessboard[row][col].get_color() == ref.chessboard_list[row][col].get_color()
-                assert expected_chessboard[row][col].get_type() == ref.chessboard_list[row][col].get_type()
+            if expected[row][col] is not None:
+                assert expected[row][col].get_color() == recived[row][col].get_color()
+                assert expected[row][col].get_type() == recived[row][col].get_type()
             else:
-                assert expected_chessboard[row][col] == ref.chessboard_list[row][col]
+                assert expected[row][col] == recived[row][col]

@@ -71,10 +71,19 @@ class TextUserInterface(UI_Interface):
 
     # Display the current layout of chess board text-based represenation
     @classmethod
-    def show_chess_board(cls, chess_board):
-        TextFormater.print_column_letters(("A","B","C","D","E","F","G","H"))
-        for i in range(len(chess_board)):
-            TextFormater.print_chess_board_row(len(chess_board)-i, chess_board[i])
+    def show_chess_board(cls, chess_board:list, debug:bool = False):
+        if debug:
+            column_names = TextFormater.create_column_number_tuple(len(chess_board))
+            TextFormater.print_column_letters(column_names)
+            for i in range(len(chess_board)):
+                TextFormater.print_chess_board_row(i, chess_board[i])
+        else:
+            column_names = TextFormater.create_column_letter_tuple(len(chess_board))
+            TextFormater.print_column_letters(column_names)
+            for i in range(len(chess_board)):
+                TextFormater.print_chess_board_row(len(chess_board)-i, chess_board[i])
+        
+        
 
         
     # Move tuple form is (row, column) were each element is integer [0,7]
@@ -171,19 +180,18 @@ if __name__ == "__main__":
 
     def move_piece(chess_board, move):
         (origin, dest) = move
-        (xo, yo) = origin
+        (row_origin, column_origin) = origin
         print(origin) 
-        (xd, yd) = dest
+        (row_dest, column_dest) = dest
         print(dest)
         
-        chess_board[xd][yd] = chess_board[xo][yo]
-        chess_board[xo][yo] = None
-
+        chess_board[row_dest][column_dest] = chess_board[row_origin][column_origin]
+        chess_board[row_origin][column_origin] = None
     #Demo
     tui = TextUserInterface()
-    tui.show_splash_screen("@", 40, "Sagoschak", "DVA-J", "2023-10-17", "Welcome to Sagoschack!")
+    """tui.show_splash_screen("@", 40, "Sagoschak", "DVA-J", "2023-10-17", "Welcome to Sagoschack!")
     parameters = tui.input_game_setup_parameters()
-    print(parameters)
+    print(parameters) """
         
     while True:
         tui.show_chess_board(empty_board)

@@ -88,6 +88,20 @@ class TextFormater:
         row = number_of_rows - row
 
         return f"{column}{row}"
+    
+    @classmethod
+    def create_column_letter_tuple(cls, number_of_letters:int):
+        column_letters = []
+        for i in range(number_of_letters):
+            column_letters.append(chr(65+i))
+        return tuple(column_letters)
+    
+    @classmethod
+    def create_column_number_tuple(cls, numbers:int):
+        column_numbers = []
+        for i in range(numbers):
+            column_numbers.append(f"{i}")
+        return tuple(column_numbers)
 
 
         

@@ -21,12 +21,12 @@ def test_create_board():
         ]
     chessboard_ref.create_board(1)
     
-    assert len(expected_board) == len(chessboard_ref.chessboard_list)
+    assert len(expected_board) == len(chessboard_ref.get_chessboard())
     for row in range(len(expected_board)):
         # Check amount of columns in the row are equal
-        assert len(expected_board[row]) == len(chessboard_ref.chessboard_list[row])
+        assert len(expected_board[row]) == len(chessboard_ref.get_chessboard()[row])
         for col in range(len(expected_board)):
-            assert chessboard_ref.chessboard_list[row][col] == None
+            assert chessboard_ref.get_chessboard()[row][col] == None
     
     expected_board = [
         [None, None, None, None, None, None, None, None],
@@ -40,7 +40,7 @@ def test_create_board():
         ]
     chessboard_ref.create_board() # default size is 8
     # check
-    __is_board_equal(expected_board, chessboard_ref.chessboard_list)
+    __is_board_equal(expected_board, chessboard_ref.get_chessboard())
 
 
 
@@ -73,7 +73,7 @@ def test_create_default_board():
     ref = Chessboard()
     ref.create_default_board()
     # Check
-    __is_board_equal(expected_board, ref.chessboard_list)
+    __is_board_equal(expected_board, ref.chessboard)
 
 
 def test_add_piece():
@@ -89,7 +89,7 @@ def test_add_piece():
         [None, None, None],
     ]
     # check
-    __is_board_equal(expected_chessboard, ref.chessboard_list)
+    __is_board_equal(expected_chessboard, ref.chessboard)
 
 
 def test_remove_piece():
@@ -106,7 +106,7 @@ def test_remove_piece():
     assert ref.remove_piece((1, 0))
     assert ref.remove_piece((1, 2))
     # check
-    __is_board_equal(expected.chessboard_list, ref.chessboard_list)
+    __is_board_equal(expected.chessboard, ref.chessboard)
 
 
 def test_in_danger():
@@ -125,14 +125,15 @@ def test_in_danger():
     w_pa = ChessPiece(Color.WHITE, PieceType.PAWN)
 
     chessboard: list[list[ChessPiece]] = [
-        [b_ro, b_kn, b_bi, b_qu, b_ki, b_bi, b_kn, b_ro],
-        [b_pa, b_pa, b_pa, b_pa, b_pa, b_pa, b_pa, b_pa],
-        [None, None, None, None, None, None, None, None],
-        [None, None, None, None, None, None, None, None],
-        [None, None, None, None, None, None, None, None],
-        [None, None, None, None, None, None, None, None],
-        [w_pa, w_pa, w_pa, w_pa, w_pa, w_pa, w_pa, w_pa],
-        [w_ro, w_kn, w_bi, w_qu, w_ki, w_bi, w_kn, w_ro],
+        # 0     1     2     3     4     5     6     7
+        [b_ro, b_kn, b_bi, b_qu, b_ki, b_bi, b_kn, b_ro], # 0
+        [b_pa, b_pa, b_pa, b_pa, b_pa, b_pa, b_pa, b_pa], # 1
+        [None, None, None, None, None, None, None, None], # 2
+        [None, None, None, None, None, None, None, None], # 3
+        [None, None, None, None, None, None, None, None], # 4
+        [None, None, None, None, None, None, None, None], # 5
+        [w_pa, w_pa, w_pa, w_pa, w_pa, w_pa, w_pa, w_pa], # 6
+        [w_ro, w_kn, w_bi, w_qu, w_ki, w_bi, w_kn, w_ro], # 7
     ]
 
     board_refrence = Chessboard(chessboard)
@@ -147,9 +148,14 @@ def test_in_danger():
     assert board_refrence.in_danger((5,1), Color.BLACK) == False
 
     board_refrence.add_piece(w_qu, (3,3))
+    assert board_refrence.in_danger((1,0), Color.BLACK) == False
     assert board_refrence.in_danger((1,1), Color.BLACK) == True
-    assert board_refrence.in_danger((3,1), Color.BLACK) == True
-    assert board_refrence.in_danger((5,1), Color.BLACK) == True
+    assert board_refrence.in_danger((1,2), Color.BLACK) == False
+    assert board_refrence.in_danger((1,3), Color.BLACK) == True
+    assert board_refrence.in_danger((1,4), Color.BLACK) == False
+    assert board_refrence.in_danger((1,5), Color.BLACK) == True
+    assert board_refrence.in_danger((1,6), Color.BLACK) == False
+    assert board_refrence.in_danger((1,7), Color.BLACK) == False
 
 
 def __is_board_equal(expected: list[list[ChessPiece]], recived: list[list[ChessPiece]]):

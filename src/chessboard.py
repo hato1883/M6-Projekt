@@ -8,7 +8,7 @@ from chess_piece import ChessPiece
 class Chessboard:
 
     def __init__(self, chessboard: list[list[ChessPiece]] = []) -> None:
-        self.chessboard_list: list[list[ChessPiece]] = chessboard
+        self.chessboard: list[list[ChessPiece]] = chessboard
 
 
     def create_board(self, size=8):
@@ -16,10 +16,10 @@ class Chessboard:
         
         returns None (new chessboard is saved in object)
         """
-        self.chessboard_list = []
+        self.chessboard = []
         for row in range(size):
             col = [None]*size
-            self.chessboard_list.append(col)
+            self.chessboard.append(col)
         return None
     
     
@@ -44,7 +44,7 @@ class Chessboard:
         w_qu = ChessPiece(Color.WHITE, PieceType.QUEEN)
         w_ki = ChessPiece(Color.WHITE, PieceType.KING)
         w_pa = ChessPiece(Color.WHITE, PieceType.PAWN)
-        self.chessboard_list: list[list[ChessPiece]] = [
+        self.chessboard: list[list[ChessPiece]] = [
             [b_ro, b_kn, b_bi, b_qu, b_ki, b_bi, b_kn, b_ro],
             [b_pa, b_pa, b_pa, b_pa, b_pa, b_pa, b_pa, b_pa],
             [None, None, None, None, None, None, None, None],
@@ -62,8 +62,8 @@ class Chessboard:
         returns True if the position was empty, returns False if it was already taken
         """
         (row, col) = pos
-        if self.chessboard_list[row][col] is None:
-            self.chessboard_list[row][col] = chess_piece
+        if self.chessboard[row][col] is None:
+            self.chessboard[row][col] = chess_piece
             return True
         return False
 
@@ -74,15 +74,15 @@ class Chessboard:
         returns True if the position was not empty, else returns False
         """
         (row, col) = pos
-        if self.chessboard_list[row][col] is not None:
-            self.chessboard_list[row][col] = None
+        if self.chessboard[row][col] is not None:
+            self.chessboard[row][col] = None
             return True
         return False
 
 
     def is_valid(self, origin: tuple[int, int], dest: tuple[int, int]):
         (orgin_row, orgin_col) = origin
-        chess_piece: PieceType = self.chessboard_list[orgin_row][orgin_col].get_type()
+        chess_piece: PieceType = self.chessboard[orgin_row][orgin_col].get_type()
         valid_move = False
         match chess_piece:
             case PieceType.PAWN:
@@ -140,7 +140,7 @@ class Chessboard:
                         while self.__is_in_bounds(origin, (offset_row, offset_col)):
                             # we have taken 1 step along the axis OR diag and are still within the board
 
-                            if self.chessboard_list[dest_row][dest_col] == None:
+                            if self.chessboard[dest_row][dest_col] == None:
                                 # Empty space, no attacker move to next...
                                 offset_row += min(1, max(-1, offset_row)) # Next row (if offset is negativ we move 1 step up)
                                 offset_col += min(1, max(-1, offset_col)) # Next col (if offset is negativ we move 1 step left)
@@ -151,7 +151,7 @@ class Chessboard:
                                 continue
 
                             # Space is not empty
-                            potential_attacker: ChessPiece = self.chessboard_list[dest_row][dest_col]
+                            potential_attacker: ChessPiece = self.chessboard[dest_row][dest_col]
 
                             if potential_attacker.get_color() == piece_color:
                                 # attacker is in the same faction, can't attack
@@ -174,12 +174,12 @@ class Chessboard:
                     # Not a propegation move type
                     else: 
                         # is destination empty?
-                        if self.chessboard_list[origin_row + offset_row][origin_col + offset_col] == None:
+                        if self.chessboard[origin_row + offset_row][origin_col + offset_col] == None:
                             # Empty space, no attacker move to next...
                             continue
 
                         # destination contains a piece
-                        potential_attacker: ChessPiece = self.chessboard_list[origin_row + offset_row][origin_col + offset_col]
+                        potential_attacker: ChessPiece = self.chessboard[origin_row + offset_row][origin_col + offset_col]
 
                         # is it an ally?
                         if potential_attacker.get_color() == piece_color:
@@ -213,7 +213,7 @@ class Chessboard:
 
         # Check if row is within 0 and len(self.chessboard_list) (exclusive)
         # Check for negative case
-        if origin_row + offset_row >= len(self.chessboard_list):
+        if origin_row + offset_row >= len(self.chessboard):
             # Row to large
             return False
         if origin_row + offset_row < 0:
@@ -222,7 +222,7 @@ class Chessboard:
 
         # Check if column is within 0 and len(self.chessboard_list) (exclusive)
         # Check for negative case
-        if origin_col + offset_col >= len(self.chessboard_list):
+        if origin_col + offset_col >= len(self.chessboard):
             # Col to large
             return False
         if origin_col + offset_col < 0:
@@ -231,10 +231,18 @@ class Chessboard:
         return True
     
 
+    def get_chessboard(self):
+        return self.chessboard
+    
+
+    def set_chessboard(self, chessboard: list[list[ChessPiece]]):
+        self.chessboard = chessboard
+
+
     def __str__(self) -> str:
         out = ""
-        for row in range(len(self.chessboard_list)):
-            for col in range(len(self.chessboard_list)):
-                out += f"[{str(self.chessboard_list[row][col])}],"
+        for row in range(len(self.chessboard)):
+            for col in range(len(self.chessboard)):
+                out += f"[{str(self.chessboard[row][col])}],"
             out += "\n"
         return out

@@ -145,33 +145,37 @@ class Chessboard:
     def is_valid(self, origin: tuple[int, int], dest: tuple[int, int]):
         (orgin_row, orgin_col) = origin
         chess_piece: PieceType = self.chessboard[orgin_row][orgin_col].get_type()
-        valid_move = False
-        match chess_piece:
-            case PieceType.PAWN:
-                return True
-                valid_move = valid_pawn_move(origin, dest)
-                pass
-            case PieceType.ROOK:
-                return True
-                valid_move = valid_rook_move(origin, dest)
-                pass
-            case PieceType.KNIGHT:
-                return True
-                valid_move = valid_knight_move(origin, dest)
-                pass
-            case PieceType.BISHOP:
-                return True
-                valid_move = valid_bishop_move(origin, dest)
-                pass
-            case PieceType.QUEEN:
-                return True
-                valid_move = valid_queen_move(origin, dest)
-                pass
-            case PieceType.KING:
-                return True
-                valid_move = valid_king_move(origin, dest)
-                pass
-        return valid_move
+        
+        for ((offset_row , offset_col), moves) in chess_piece.value: # value to get the associated list
+            for (move_type, options) in moves:
+                match move_type:
+                    case MoveType.COLLISION_AXIS:
+                        # evaluate move with given option
+                        pass
+
+                    case MoveType.COLLISION_DIAG:
+                        # evaluate move with given option
+                        pass
+
+                    case MoveType.ABSOLUTE:
+                        # evaluate move with given option
+                        pass
+
+                    case MoveType.KING_CASTLE:
+                        # evaluate move with given option
+                        pass
+
+                    case MoveType.PAWN_EN_PASSANT:
+                        # evaluate move with given option
+                        pass
+                # Move type has been checked
+            # Move has been evaluated
+        # All moves have been check, none did a early exit with return
+        # Move must be invalid
+        # return False
+            
+        # Debugg
+        return True
     
 
     def in_danger(self, origin: tuple[int, int], piece_color : Color) -> bool:

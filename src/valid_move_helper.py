@@ -10,8 +10,8 @@ def add_coordinate_pairs(t1:tuple[int,int], t2:tuple[int,int]):
     return tuple(temp)
 
 
-#Vector subtraction and conversion of result to unit vector, sort of.
 def return_direction_vector(origin:tuple[int,int], destination:tuple[int, int]) -> tuple[int, int]:
+  """Compares destination with origin, returns unit vector pointing from origin to destination"""
   (row_origin, column_origin) = origin
   (row_dest, column_dest) = destination
 
@@ -64,7 +64,7 @@ def axis_move(origin, destination):
   else:
     return False
   
-def obstacle_in_path(chessboard_list, origin, destination, disregard_dest:bool, debug = False):
+def obstacle_in_path(chessboard:list, origin:tuple[int,int], destination:tuple[int, int], disregard_dest:bool, debug = False):
 
   step_vector = return_direction_vector(origin, destination)
   next_square = add_coordinate_pairs(origin, step_vector)
@@ -86,7 +86,7 @@ def obstacle_in_path(chessboard_list, origin, destination, disregard_dest:bool, 
 
   while next_square != do_not_check_square:
     
-    if chessboard_list[next_square[0]][next_square[1]] == None:
+    if chessboard[next_square[0]][next_square[1]] == None:
        
        if debug:
          print(f"{next_square} is empty")

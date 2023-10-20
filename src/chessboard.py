@@ -272,9 +272,9 @@ class Chessboard:
         \b With options: \n
          
         Move not diagonal? If yes -> False \n
-        MoveOption.TAKE - Obstacle between origin and destination? Is destination same color? If yes -> False \n
         MoveOption.FIRST - Has Piece been moved before, If yes -> False \n
-        MoveOption.PROTECTED - Is Piece at risk of being take if move is made? If yes -> False  """
+        MoveOption.TAKE - Obstacle between origin and destination? Is destination same color? If yes -> False \n
+        MoveOption.PROTECTED - Is Piece at risk of being taken if move is made? If yes -> False  """
 
         if not vmh.diagonal_move(origin,destination):
             return False
@@ -321,9 +321,9 @@ class Chessboard:
         \b With options: \n 
          
         Move not along single axis? If yes -> False \n
-        MoveOption.TAKE - Obstacle between origin and destination? Is destination same color? If yes -> False \n
         MoveOption.FIRST - Has Piece been moved before, If yes -> False \n
-        MoveOption.PROTECTED - Is Piece at risk of being take if move is made? If yes -> False  """
+        MoveOption.TAKE - Obstacle between origin and destination? Is destination same color? If yes -> False \n
+        MoveOption.PROTECTED - Is Piece at risk of being taken if move is made? If yes -> False  """
 
         disregard_dest_square = False
 

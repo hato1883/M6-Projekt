@@ -57,6 +57,16 @@ class Chessboard:
         ]
 
 
+    def get_piece(self, origin: tuple[int, int]) -> ChessPiece:
+        """Get a chess piece at destination
+
+        origin the posistion to retrive
+        
+        Returns a ChessPiece or None if it was empty"""
+        (row, col) = origin
+        return self.chessboard[row][col]
+
+
     def add_piece(self, chess_piece: ChessPiece, pos: tuple[int, int]):
         """adds a chess piece to specifed empty position
         
@@ -138,21 +148,27 @@ class Chessboard:
         valid_move = False
         match chess_piece:
             case PieceType.PAWN:
+                return True
                 valid_move = valid_pawn_move(origin, dest)
                 pass
             case PieceType.ROOK:
+                return True
                 valid_move = valid_rook_move(origin, dest)
                 pass
             case PieceType.KNIGHT:
+                return True
                 valid_move = valid_knight_move(origin, dest)
                 pass
             case PieceType.BISHOP:
+                return True
                 valid_move = valid_bishop_move(origin, dest)
                 pass
             case PieceType.QUEEN:
+                return True
                 valid_move = valid_queen_move(origin, dest)
                 pass
             case PieceType.KING:
+                return True
                 valid_move = valid_king_move(origin, dest)
                 pass
         return valid_move

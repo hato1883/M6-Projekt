@@ -21,9 +21,9 @@ class TextFormater:
     # returns unicode chess symbol based on supplied ChessPiece Enum
     @classmethod
     def piece_type_to_unicode_chess_symbol(cls, chess_piece):
-        suffix = ("4","5","6","7","8","9")
+        suffix = ("A", "B","C","D","E","F")
         if chess_piece.get_color() == Color.BLACK:
-            suffix = ("A", "B","C","D","E","F")
+            suffix = ("4","5","6","7","8","9")
             
         match chess_piece.get_type():
             case PieceType.KING: 

@@ -12,7 +12,7 @@ class Chessboard:
         self.chessboard: list[list[ChessPiece]] = chessboard
 
 
-    def create_board(self, size=8):
+    def create_board(self, size: int = 8):
         """Creates a empty board with given size (default is 8)
         
         returns None (new chessboard is saved in object)

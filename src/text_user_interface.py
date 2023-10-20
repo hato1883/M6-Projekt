@@ -5,17 +5,16 @@ from text_formater import *
 
 
 class TextUserInterface(UI_Interface):
-
-    # Display game name, authors, date/build in box of specified    
+      
     @classmethod    
-    def show_splash_screen(cls, char, length, game_name, authors, build_date, greeting):
-        TextFormater.print_divider( char, length)
-        TextFormater.print_box_row_with_content(char, length, game_name)
-        TextFormater.print_box_row_with_content(char, length, authors)
-        TextFormater.print_box_row_with_content(char, length, build_date)
-        TextFormater.print_divider(char, length)
+    def show_splash_screen(cls, char, width, game_name, authors, build_date, greeting):
+        """ Display game name, authors, date/build in box of specified width """
+        TextFormater.print_divider( char, width)
+        TextFormater.print_box_row_with_content(char, width, game_name)
+        TextFormater.print_box_row_with_content(char, width, authors)
+        TextFormater.print_box_row_with_content(char, width, build_date)
+        TextFormater.print_divider(char, width)
         print(f"{greeting}")
-        pass
 
     # Present user with successive choices of:
         # 1 or 2 player game, 2 players == True
@@ -103,15 +102,21 @@ class TextUserInterface(UI_Interface):
 
         while True:
             algebraic_origin = input(f"{prompt_one}: ").lower()
-            if algebraic_origin[0].isalpha and algebraic_origin[1].isnumeric:
-                origin = TextFormater.algebra_to_coordinates(algebraic = algebraic_origin)
-                break
+            try:
+                if algebraic_origin[0].isalpha() and algebraic_origin[1].isnumeric():
+                    origin = TextFormater.algebra_to_coordinates(algebraic = algebraic_origin)
+                    break
+            except:
+                continue
 
         while True:
             algebraic_dest = input(f"{prompt_two}: ").lower()
-            if algebraic_dest[0].isalpha and algebraic_dest[1].isnumeric:
-                dest = TextFormater.algebra_to_coordinates(algebraic= algebraic_dest)
-                break
+            try:
+                if algebraic_dest[0].isalpha() and algebraic_dest[1].isnumeric():
+                    dest = TextFormater.algebra_to_coordinates(algebraic= algebraic_dest)
+                    break
+            except:
+                continue
 
         return (origin, dest)
     

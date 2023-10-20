@@ -4,6 +4,7 @@ from piece_color import Color
 from move_type import MoveType
 from move_option import MoveOption
 from chess_piece import ChessPiece
+import valid_move_helper as vmh
 
 class Chessboard:
 
@@ -259,6 +260,104 @@ class Chessboard:
         if origin_col + offset_col < 0:
             # Col to small
             return False
+        return True
+    
+    def is_diag_move_valid(self, origin:tuple[int,int], destination:tuple[int, int], options:list[MoveOption]) -> bool:
+        """ Returns True if none of the below questions has answer yes, otherwise False
+
+        \b No options: \n
+        Move not diagonal? If yes -> False \n
+        Obstacle between origin and/at destination? If yes -> False
+
+        \b With options: \n
+         
+        Move not diagonal? If yes -> False \n
+        MoveOption.TAKE - Obstacle between origin and destination? Is destination same color? If yes -> False \n
+        MoveOption.FIRST - Has Piece been moved before, If yes -> False \n
+        MoveOption.PROTECTED - Is Piece at risk of being take if move is made? If yes -> False  """
+
+        if not vmh.diagonal_move(origin,destination):
+            return False
+
+        disregard_dest_square = False
+
+        if MoveOption.FIRST in options:
+            try:
+                if self.chessboard_list[origin[0]][origin[1]].get_has_moved() == True:
+                    return False
+            except:
+                print("MoveOption.First error: Not a piece")
+
+        if MoveOption.TAKE in options:
+            try:
+                if self.chessboard_list[destination[0]][destination[1]].get_color() == self.chessboard_list[origin[0]][origin[1]].get_color():
+                    return False
+                else:
+                    disregard_dest_square = True
+            except:
+                print("MoveOption.TAKE error: Moving empty square, or moving piece to empty square")
+
+        if MoveOption.PROTECTED in options:
+            try:
+                color = self.chessboard_list[origin[0]][origin[1]].get_color()
+            except:
+                print("MoveOption.Protected error: Not a piece")
+
+            if self.in_danger(origin, color):
+                return False
+
+        if vmh.obstacle_in_path(self.chessboard_list, origin, destination, disregard_dest_square):
+            return False
+        
+        return True
+    
+    def is_axis_move_valid(self, origin:tuple[int,int], destination:tuple[int, int], options:list[MoveOption]) -> bool:
+        """ Returns True if no of the below questions has answer yes, otherwise False
+
+        \b No options: \n
+        Move not along single axis? If yes -> False \n
+        Obstacle between origin and/at destination? If Yes -> False
+
+        \b With options: \n 
+         
+        Move not along single axis? If yes -> False \n
+        MoveOption.TAKE - Obstacle between origin and destination? Is destination same color? If yes -> False \n
+        MoveOption.FIRST - Has Piece been moved before, If yes -> False \n
+        MoveOption.PROTECTED - Is Piece at risk of being take if move is made? If yes -> False  """
+
+        disregard_dest_square = False
+
+        if not vmh.axis_move(origin, destination):
+            return False
+
+        if MoveOption.FIRST in options:
+            try:
+                if self.chessboard_list[origin[0]][origin[1]].get_has_moved() == True:
+                    return False
+            except:
+                print("MoveOption.First error: Not a piece")
+
+        if MoveOption.TAKE in options:
+            try:
+                if self.chessboard_list[destination[0]][destination[1]].get_color() == self.chessboard_list[origin[0]][origin[1]].get_color():
+                    return False
+                else:
+                    disregard_dest_square = True
+            except:
+                print("MoveOption.TAKE error: Moving empty square, or moving piece to empty square")
+
+        if MoveOption.PROTECTED in options:
+            try:
+                color = self.chessboard_list[origin[0]][origin[1]].get_color()
+            except:
+                print("MoveOption.Protected error: Not a piece")
+
+            if self.in_danger(origin, color):
+                return False
+
+        if vmh.obstacle_in_path(self.chessboard_list, origin, destination, disregard_dest_square):
+            return False
+        
         return True
     
 

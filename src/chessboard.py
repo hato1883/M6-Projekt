@@ -4,6 +4,7 @@ from piece_color import Color
 from move_type import MoveType
 from move_option import MoveOption
 from chess_piece import ChessPiece
+from status_enum import Status
 
 class Chessboard:
 
@@ -79,6 +80,57 @@ class Chessboard:
             return True
         return False
 
+
+    def move(self, origin: tuple[int, int], dest: tuple[int, int]) -> tuple[bool, Status]:
+        # Check if move is valid
+        if self.is_valid(origin, dest):
+            # Move is valid
+
+            # Get chess piece at origin
+            (origin_row, origin_col) = origin
+            moved_piece = self.chessboard[origin_row][origin_col]
+
+            # Check if this piece is has moved before
+            if not moved_piece.get_has_moved():
+                # It has now
+                moved_piece.set_has_moved_true()
+            
+            # Check if piece is a Pawn
+            if moved_piece.get_type() == PieceType.PAWN:
+                # Pawn might promote at edge
+                (dest_row, dest_col) =  dest
+
+                # get Color of pawn
+                # TODO: add generalised search depending on Pawn direction.
+                match moved_piece.get_color():
+                    case Color.WHITE:
+                        # Piece is moving towards 0
+                        if dest_row == 0:
+                            return (True, Status.PAWN_PROMOTION)
+                        
+                    case Color.BLACK:
+                        # Piece is moving towards max size
+                        if dest_row == len(self.chessboard)-1:
+                            return (True, Status.PAWN_PROMOTION)
+                # End of Pawn Promotion check
+
+            # is destination Empty?       
+            if self.chessboard[dest_row][dest_col] is not None:
+                # Clear destination
+                self.remove_piece(dest) 
+            
+            # Add piece to destination
+            self.add_piece(moved_piece, dest)
+
+            # Remove it from origin
+            self.remove_piece(origin)
+
+            # Succsesful move
+            return (True, Status.SUCCESS)
+        else:
+            # Move was invalid
+            return (False, Status.INVALID_MOVE)
+        
 
     def is_valid(self, origin: tuple[int, int], dest: tuple[int, int]):
         (orgin_row, orgin_col) = origin

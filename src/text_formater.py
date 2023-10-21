@@ -1,4 +1,5 @@
 from chess_piece import *
+from position_class import Position
 class TextFormater:
     
     # Print line of specified char with specified length
@@ -76,7 +77,7 @@ class TextFormater:
         
         colum = abs(ord(algebraic[0]) - 97)
         row = abs(number_of_rows-int(algebraic[1]))
-        coordinates = (row, colum)
+        coordinates = Position(row, colum)
                 
         return coordinates
     

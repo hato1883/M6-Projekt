@@ -9,7 +9,12 @@ from status_enum import Status
 class Chessboard:
 
     def __init__(self, chessboard: list[list[ChessPiece]] = []) -> None:
+        # chessboard is a 2d list of ChessPiece objects
         self.chessboard: list[list[ChessPiece]] = chessboard
+
+        # Move history is a list of tuple of ChessPiece, origin and destination
+        # Moves are in order (1st move is at index 0 2nd move if on index 1 etc)
+        self.move_history: list[tuple[ChessPiece, tuple[int, int], tuple[int, int]]] = []
 
 
     def create_board(self, size: int = 8):
@@ -99,6 +104,9 @@ class Chessboard:
             # Get chess piece at origin
             (origin_row, origin_col) = origin
             moved_piece = self.chessboard[origin_row][origin_col]
+
+            # Add move to move_history (at end of list)
+            self.move_history.append((moved_piece, origin, dest))
 
             # Check if this piece is has moved before
             if not moved_piece.get_has_moved():
@@ -303,12 +311,28 @@ class Chessboard:
         return True
     
 
-    def get_chessboard(self):
+    def get_chessboard(self) -> list[list[ChessPiece]]:
         return self.chessboard
     
 
-    def set_chessboard(self, chessboard: list[list[ChessPiece]]):
+    def set_chessboard(self, chessboard: list[list[ChessPiece]]) -> None:
         self.chessboard = chessboard
+
+
+    def get_move_history(self) -> list[ tuple[ ChessPiece, tuple[int, int], tuple[int, int]]]:
+        """Retrives the move history list
+        
+        returns a list of type list[ tuple[ ChessPiece, tuple[int, int], tuple[int, int]]]
+        where ChessPiece stores information of PieceType and PieceColor
+        and 1st tuple is the move origin and 2nd is move destination"""
+        return self.move_history
+    
+
+    def reset_move_history(self) -> None:
+        """Clears the instance move history
+        
+        Useful if reseting chessboard instance"""
+        self.move_history.clear
 
 
     def __str__(self) -> str:

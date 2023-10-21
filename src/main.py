@@ -34,8 +34,6 @@ if __name__ == "__main__":
                 # get origin and destination of the move
                 (origin, dest) = tui.input_user_move()
 
-                (origin_row, origin_col) = origin
-
                 # check if origin is empty
                 if chessboard.get_piece(origin) is None:
                     # Can't move a empty position

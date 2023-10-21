@@ -188,8 +188,12 @@ class Chessboard:
                         pass
 
                     case MoveType.KING_CASTLE:
-                        # evaluate move with given option
-                        pass
+                        if self.__is_king_castling_valid(origin, dest):
+                            # Move is valid, no need to check the remaining moves
+                            return True
+                        else:
+                            # Check next move in list
+                            continue
 
                     case MoveType.PAWN_EN_PASSANT:
                         # evaluate move with given option
@@ -203,6 +207,123 @@ class Chessboard:
         # Debugg
         return True
     
+
+    def __is_king_castling_valid(self, origin: tuple[int, int], dest: tuple[int, int]) -> bool:
+        """Private Helper Method: Checks if a king castling type move is valid to destination.
+        
+        Returns True if all of the requierments are met otherwise returns False
+
+        Requierments for valid move are:
+          1. origin piece (normaly the king) has NOT moved before
+          2. origin piece can not be under threat
+          3. space between origin piece and rook must be empty
+          4. can only castle with PieceType.ROOK
+          5. rook piece has NOT moved before
+          6. distance between rook and origin must be atleast 2 tiles (2 empty spots between them)
+          7. destination can not be under threat
+          8. rook destination can not be under threat
+        """
+
+        # Check if origin has moved before (req 1)
+        if self.get_piece(origin).get_has_moved():
+            # Castling is not valid if origin piece has moved.
+            return False
+        
+        # Check if origin is attacked (req 2)
+        if self.in_danger(origin, self.get_piece(origin).get_color()):
+            # Can't castle when attacked
+            return False
+        
+        # unbox tuple
+        (origin_row, origin_col) = origin
+        (dest_row, dest_col) = dest
+        
+        # Check if destination is left or right of king
+        if origin_col > dest_col:
+            # origin is to the right of dest so rook is towards the left
+            for col in range(origin_col-1, -1, -1):
+
+                # Check if spot is empty (req 3)
+                if self.get_piece((origin_row, col)) is None:
+
+                    # Check if the 2 spaces left of king is not under threat (req 7 & 8)
+                    if abs(origin_col - col) <= 2:
+                        if self.in_danger((origin_row, col), self.get_piece(origin).get_color()):
+                            # Origin team will be attacked on this square which is not OK
+                            break
+
+                    # Empty continue to next col
+                    continue
+
+                # col contains a chess piece
+                # Is it a rook? (req 4)
+                if self.get_piece((origin_row, col)).get_type() is not PieceType.ROOK:
+                    
+                    # Not a rook exit loop
+                    break
+
+                # Piece is a Rook
+                # Has the rook moved? (req 5)
+                if self.get_piece((origin_row, col)).get_has_moved():
+
+                    # Rook has moved and therfor can not castle
+                    break
+
+                # Rook has not moved
+                # Do we have space to castle? (req 6) 
+                if abs(origin_col - col) <= 2:
+
+                    # not enough space to castle
+                    break
+
+                # all requierments are met
+                return True
+            # Not valid to castle to the left
+        else:
+            # origin is left of dest
+            # check right side
+            for col in range(origin_col+1, len(self.chessboard), 1):
+                
+                # Check if spot is empty (req 3)
+                if self.get_piece((origin_row, col)) is None:
+
+                    # Check if the 2 spaces left of king is not under threat (req 7 & 8)
+                    if abs(origin_col - col) <= 2:
+                        if self.in_danger((origin_row, col), self.get_piece(origin).get_color()):
+                            # Origin team will be attacked on this square which is not OK
+                            break
+
+                    # Empty continue to next col
+                    continue
+
+                # col contains a chess piece
+                # Is it a rook? (req 4)
+                if self.get_piece((origin_row, col)).get_type() is not PieceType.ROOK:
+                    
+                    # Not a rook exit loop
+                    break
+
+                # Piece is a Rook
+                # Has the rook moved? (req 5)
+                if self.get_piece((origin_row, col)).get_has_moved():
+
+                    # Rook has moved and therfor can not castle
+                    break
+
+                # Rook has not moved
+                # Do we have space to castle? (req 6) 
+                if abs(origin_col - col) <= 2:
+
+                    # not enough space to castle
+                    break
+
+                # all requierments are met
+                return True
+            # end of for-loop
+        
+        # Move must be invalid.
+        return False
+
 
     def in_danger(self, origin: tuple[int, int], piece_color : Color) -> bool:
         (origin_row, origin_col) = origin
@@ -360,3 +481,4 @@ class Chessboard:
                 out += f"[{str(self.chessboard[row][col])}],"
             out += "\n"
         return out
+    

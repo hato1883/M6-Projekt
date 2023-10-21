@@ -14,7 +14,7 @@ class Chessboard:
 
         # Move history is a list of tuple of ChessPiece, origin and destination
         # Moves are in order (1st move is at index 0 2nd move if on index 1 etc)
-        self.move_history: list[tuple[ChessPiece, tuple[int, int], tuple[int, int]]] = []
+        self.move_history: list[tuple[ChessPiece, tuple[MoveType, list[MoveOption]], tuple[int, int], tuple[int, int]]] = []
 
         # A dictionary of all king PieceType on this instance of chessboard.
         # Key will be the king's current location, and value will be a ref to the king (ChessPiece)
@@ -116,7 +116,8 @@ class Chessboard:
 
     def move(self, origin: tuple[int, int], dest: tuple[int, int]) -> tuple[bool, Status]:
         # Check if move is valid
-        if self.is_valid(origin, dest):
+        (valid, move) = self.is_valid(origin, dest)
+        if valid:
             # Move is valid
 
             # Get chess piece at origin
@@ -124,7 +125,7 @@ class Chessboard:
             moved_piece = self.chessboard[origin_row][origin_col]
 
             # Add move to move_history (at end of list)
-            self.move_history.append((moved_piece, origin, dest))
+            self.move_history.append((moved_piece, move, origin, dest))
 
             # Check if this piece is has moved before
             if not moved_piece.get_has_moved():
@@ -168,11 +169,30 @@ class Chessboard:
             return (False, Status.INVALID_MOVE)
         
 
-    def is_valid(self, origin: tuple[int, int], dest: tuple[int, int]):
+    def is_valid(self, origin: tuple[int, int], dest: tuple[int, int]) -> tuple[bool, tuple[MoveType, list[MoveOption]]]:
         (orgin_row, orgin_col) = origin
+
+        # is origin out of bounds
+        if self.__is_in_bounds(origin, (0, 0)):
+            # Invalid move, Can't move from a pos that is out of bounds.
+            return (False, None)
+        
+        # is destnation out of bounds
+        if self.__is_in_bounds(dest, (0, 0)):
+            # Invalid move, Can't move to a dest that is out of bounds.
+            return (False, None)
+
+        # is destnation empty
+        if self.get_piece(origin) is None:
+            # Invalid move, Can't move empty tile.
+            return (False, None)
+        
         chess_piece: PieceType = self.chessboard[orgin_row][orgin_col].get_type()
         
-        for ((offset_row , offset_col), moves) in chess_piece.value: # value to get the associated list
+        offset: tuple[int, int]
+        moves: list[tuple[MoveType, list[MoveOption]]]
+
+        for (offset, moves) in chess_piece.value: # value to get the associated list
             for (move_type, options) in moves:
                 match move_type:
                     case MoveType.COLLISION_AXIS:
@@ -190,19 +210,21 @@ class Chessboard:
                     case MoveType.KING_CASTLE:
                         if self.__is_king_castling_valid(origin, dest):
                             # Move is valid, no need to check the remaining moves
-                            return True
-                        else:
-                            # Check next move in list
-                            continue
+                            return (True, (move_type, options))
+                        # Check next move in list
+                        continue
 
                     case MoveType.PAWN_EN_PASSANT:
-                        # evaluate move with given option
-                        pass
+                        if self.__is_pawn_en_passant_valid(origin, dest):
+                            # Move is valid, no need to check the remaining moves
+                            return (True, (move_type, options))
+                        # Check next move in list
+                        continue
                 # Move type has been checked
             # Move has been evaluated
         # All moves have been check, none did a early exit with return
         # Move must be invalid
-        # return False
+        # return (False, None)
             
         # Debugg
         return True
@@ -324,6 +346,94 @@ class Chessboard:
         # Move must be invalid.
         return False
 
+
+    def __is_pawn_en_passant_valid(self, origin: tuple[int, int], dest: tuple[int, int]) -> bool:
+        """Private Helper method: Checks if Pawn En Passant MoveType is valid
+
+        Returns True if all of the requierments are met otherwise returns False
+
+        Requierments for valid move are:
+          1. Origin must be a PieceType.PAWN
+          2. Destination must be empty
+          3. The tile (origin_row, dest_col) must contain enemy pawn (enemy pawn adjecent to origin)
+          4. Enemy pawn must have moved using a move with the MoveOption.FIRST
+        """
+
+        # check if origin is a Pawn (req 1)
+        if self.get_piece(origin).get_type() is not PieceType.PAWN:
+            # None pawn pieces are not allowed to preform this move
+            return False
+        
+        # Piece is a PAWN
+        # Check if dest is empty (req 2)
+        if self.get_piece(dest) is not None:
+            # destination is occupied, en passant is not valid
+            return False
+        # destination is empty
+
+        # unpack tuples
+        (origin_row, origin_col) = origin
+        (dest_row, dest_col) = dest
+
+        # check if there is a enemy pawn in destination colum that is on origins row
+        # In other words if ther is a enemy pawn next to origins position
+        if self.get_piece((origin_row, dest_col)) is None:
+            # No Enemy Pawn next to origin, so en passant is invalid
+            return False
+        
+        # origin_row, dest_col must contain a pawn (req 3)
+        if self.get_piece((origin_row, dest_col)).get_type() is not PieceType.PAWN:
+            # Not a pawn, Not valid
+            return False
+        
+        if self.get_piece((origin_row, dest_col)).get_color() is self.get_piece(origin).get_color():
+            # Allied pawn, Not valid
+            return False
+        
+        # Enemy pawn is adjecent to origin and destination is empty.
+        # Check move_history to see if enemy pawn moved adjecent last move
+        # keep checking the latest move until we get one of the piece color
+        # (req 4)
+        
+        move_index = len(self.get_move_history()) - 1 # last index
+        (moved_piece, used_move, move_origin, move_dest) = self.get_move_history()[move_index]
+        while moved_piece.get_color() is not self.get_piece((origin_row, dest_col)).get_color():
+            # Move is not from the same player as what we are checking
+
+            # next move
+            move_index -= 1
+
+            # check so we are not indexing outside list
+            if move_index < 0:
+                # move_index cant be less than 0
+                # that would mean that the searched color has not made a move yet.
+                break
+            
+            # index is in range, get next move
+            (moved_piece, used_move, move_origin, move_dest) = self.get_move_history()[move_index]
+        else:
+            # Found move from enemy pawn color
+            # Check if found move is to the pawn destination
+            if move_dest != (origin_row, dest_col):
+                # was not the move that moved the pawn
+                # pawn was moved more than 1 turn ago so En passant is invalid
+                return False
+            
+            # Enemy pawn was moved to location last move
+            (used_move_type, used_move_options) = used_move
+            # check if it was a double forward move or another type.
+            if MoveOption.FIRST not in used_move_options:
+                # move was not a double forward move
+                # double forward move has MoveOption.FIRST flag
+                return False
+            
+            # Move is valid
+            return True
+
+        # loop was broken, in other words enemy player has not made a move yet
+        # En Passant can't be valid.
+        return False
+    
 
     def in_danger(self, origin: tuple[int, int], piece_color : Color) -> bool:
         (origin_row, origin_col) = origin
@@ -458,12 +568,14 @@ class Chessboard:
         self.chessboard = chessboard
 
 
-    def get_move_history(self) -> list[ tuple[ ChessPiece, tuple[int, int], tuple[int, int]]]:
+    def get_move_history(self) -> list[tuple[ChessPiece, tuple[MoveType, list[MoveOption]], tuple[int, int], tuple[int, int]]]:
         """Retrives the move history list
         
-        returns a list of type list[ tuple[ ChessPiece, tuple[int, int], tuple[int, int]]]
+        returns a list of type list[ tuple[ ChessPiece, tuple[MoveType, list[MoveOption]], tuple[int, int], tuple[int, int]]]
         where ChessPiece stores information of PieceType and PieceColor
-        and 1st tuple is the move origin and 2nd is move destination"""
+        1st tuple stores the valid move used and its options,
+        2nd tuple is the move origin and
+        3rd is move destination"""
         return self.move_history
     
 

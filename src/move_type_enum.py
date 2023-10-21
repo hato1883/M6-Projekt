@@ -20,3 +20,6 @@ class MoveType(Enum):
 
         Returns Enum name such as COLLISION_AXIS_TAKE instead of Number 11"""
         return f'{self.name}'
+    
+    def __repr__(self) -> str:
+        return self.__str__()

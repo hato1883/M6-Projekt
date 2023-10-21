@@ -18,3 +18,6 @@ class MoveOption(Enum):
 
         Returns Enum name such as TAKE instead of Number 1"""
         return f'{self.name}'
+    
+    def __repr__(self) -> str:
+        return self.__str__()

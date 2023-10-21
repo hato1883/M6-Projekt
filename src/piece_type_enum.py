@@ -1,7 +1,6 @@
 from enum import Enum
 from move_type_enum import MoveType
 from move_option_enum import MoveOption
-from position_class import Position
 
 class PieceType(Enum):
     ####
@@ -13,7 +12,7 @@ class PieceType(Enum):
         # - - -
         # - * -
             (   # Offset
-                Position(-2, 0), # 2 steps up, same colum
+                (-2, 0), # 2 steps up, same colum
                 [   # Moves
                     (MoveType.COLLISION_AXIS, [MoveOption.FIRST])
                 ]
@@ -24,7 +23,7 @@ class PieceType(Enum):
         # x - -
         # - * -
             (   # Offset
-                Position(-1,-1), # 1 step up, 1 step left
+                (-1,-1), # 1 step up, 1 step left
                 [   # Moves
                     (MoveType.COLLISION_DIAG, [MoveOption.TAKE]),
                     (MoveType.PAWN_EN_PASSANT, [])
@@ -36,7 +35,7 @@ class PieceType(Enum):
         # - o -
         # - * -
             (   # Offset
-                Position(-1, 0), # 1 step up, same col
+                (-1, 0), # 1 step up, same col
                 [   # Moves
                     (MoveType.COLLISION_AXIS, [])
                 ]
@@ -47,7 +46,7 @@ class PieceType(Enum):
         # - - x
         # - * -
             (   # Offset
-                Position(-1, 1), # 1 step up, same col
+                (-1, 1), # 1 step up, same col
                 [
                     (MoveType.COLLISION_DIAG, [MoveOption.TAKE]),
                     (MoveType.PAWN_EN_PASSANT, [])
@@ -67,14 +66,14 @@ class PieceType(Enum):
         # - - - - -
         # - - - - -
             (   # Offset
-                Position(-2, -1), # 2 steps up, 1 step left
+                (-2, -1), # 2 steps up, 1 step left
                 [   # Moves
                     (MoveType.ABSOLUTE, [MoveOption.TAKE])
                 ]
             ),
 
             (   # Offset
-                Position(-2, 1), # 2 step up, 1 step right
+                (-2, 1), # 2 step up, 1 step right
                 [   # Moves
                     (MoveType.ABSOLUTE, [MoveOption.TAKE])
                 ]
@@ -87,7 +86,7 @@ class PieceType(Enum):
         # - - - - x
         # - - - - -
             (   # Offset
-                Position(-1, 2),  # 1 step up, 2 steps right
+                (-1, 2),  # 1 step up, 2 steps right
                 [   # Moves
                     (MoveType.ABSOLUTE, [MoveOption.TAKE])
                 ]
@@ -95,7 +94,7 @@ class PieceType(Enum):
 
             # Diag take + en passant
             (   # Offset
-                Position(1, 2),  # 1 step down, 2 steps right
+                (1, 2),  # 1 step down, 2 steps right
                 [   # Moves
                     (MoveType.ABSOLUTE, [MoveOption.TAKE])
                 ]
@@ -108,14 +107,14 @@ class PieceType(Enum):
         # - - - - -
         # - x - x -
             (   # Offset
-                Position(2, -1), # 2 steps down, same left
+                (2, -1), # 2 steps down, same left
                 [   # Moves
                     (MoveType.ABSOLUTE, [MoveOption.TAKE])
                 ]
             ),
 
             (   # Offset
-                Position(2, 1), # 2 steps down, 1 step right
+                (2, 1), # 2 steps down, 1 step right
                 [   # Moves
                     (MoveType.ABSOLUTE, [MoveOption.TAKE])
                 ]
@@ -128,7 +127,7 @@ class PieceType(Enum):
         # x - - - -
         # - - - - -
             (   # Offset
-                Position(-1, -2), # 1 step up, 2 steps left
+                (-1, -2), # 1 step up, 2 steps left
                 [   # Moves
                     (MoveType.ABSOLUTE, [MoveOption.TAKE])
                 ]
@@ -136,7 +135,7 @@ class PieceType(Enum):
 
             # Diag take + en passant
             (   # Offset
-                Position(1, -2), # 1 step down, 2 steps left
+                (1, -2), # 1 step down, 2 steps left
                 [   # Moves
                     (MoveType.ABSOLUTE, [MoveOption.TAKE])
                 ]
@@ -153,7 +152,7 @@ class PieceType(Enum):
             # - * -
             # - - -
             (   # Offset
-                Position(-1, -1), # 1 step up, 1 step left
+                (-1, -1), # 1 step up, 1 step left
                 [   # Moves
                     (MoveType.COLLISION_DIAG, [MoveOption.TAKE, MoveOption.PROPEGATES])
                 ]
@@ -164,7 +163,7 @@ class PieceType(Enum):
             # - * -
             # - - -
             (   # Offset
-                Position(-1, 1), # 1 step up, 1 step right
+                (-1, 1), # 1 step up, 1 step right
                 [   # Moves
                     (MoveType.COLLISION_DIAG, [MoveOption.TAKE, MoveOption.PROPEGATES])
                 ]
@@ -175,7 +174,7 @@ class PieceType(Enum):
             # - * -
             # - - x
             (   # Offset
-                Position(1, 1), # 1 step down, 1 step right
+                (1, 1), # 1 step down, 1 step right
                 [   # Moves
                     (MoveType.COLLISION_DIAG, [MoveOption.TAKE, MoveOption.PROPEGATES])
                 ]
@@ -186,7 +185,7 @@ class PieceType(Enum):
             # - * -
             # x - -
             (   # Offset
-                Position(1, -1), # 1 step down, 1 step left
+                (1, -1), # 1 step down, 1 step left
                 [   # Moves
                     (MoveType.COLLISION_DIAG, [MoveOption.TAKE, MoveOption.PROPEGATES])
                 ]
@@ -203,7 +202,7 @@ class PieceType(Enum):
             # - * -
             # - - -
             (   # Offset
-                Position(-1, 0), # 1 step up, same col
+                (-1, 0), # 1 step up, same col
                 [   # Moves
                     (MoveType.COLLISION_AXIS, [MoveOption.TAKE, MoveOption.PROPEGATES])
                 ]
@@ -214,7 +213,7 @@ class PieceType(Enum):
             # - * x
             # - - -
             (   # Offset
-                Position(0, 1), # same row, 1 step right
+                (0, 1), # same row, 1 step right
                 [   # Moves
                     (MoveType.COLLISION_AXIS, [MoveOption.TAKE, MoveOption.PROPEGATES])
                 ]
@@ -225,7 +224,7 @@ class PieceType(Enum):
             # - * -
             # - x -
             (   # Offset
-                Position(1, 0), # 1 step down, same col
+                (1, 0), # 1 step down, same col
                 [   # Moves
                     (MoveType.COLLISION_AXIS, [MoveOption.TAKE, MoveOption.PROPEGATES])
                 ]
@@ -236,7 +235,7 @@ class PieceType(Enum):
             # x * -
             # - - -
             (   # Offset
-                Position(0, -1), # same row, 1 step left
+                (0, -1), # same row, 1 step left
                 [   # Moves
                     (MoveType.COLLISION_AXIS, [MoveOption.TAKE, MoveOption.PROPEGATES])
                 ]
@@ -253,7 +252,7 @@ class PieceType(Enum):
             # - * -
             # - - -
             (   # Offset
-                Position(-1, -1), # 1 step up, 1 step left
+                (-1, -1), # 1 step up, 1 step left
                 [   # Moves
                     (MoveType.COLLISION_DIAG, [MoveOption.TAKE, MoveOption.PROPEGATES])
                 ]
@@ -263,7 +262,7 @@ class PieceType(Enum):
             # - * -
             # - - -
             (   # Offset
-                Position(-1, 0), # 1 step up, same col
+                (-1, 0), # 1 step up, same col
                 [   # Moves
                     (MoveType.COLLISION_AXIS, [MoveOption.TAKE, MoveOption.PROPEGATES])
                 ]
@@ -274,7 +273,7 @@ class PieceType(Enum):
             # - * -
             # - - -
             (   # Offset
-                Position(-1, 1), # 1 step up, 1 step right
+                (-1, 1), # 1 step up, 1 step right
                 [   # Moves
                     (MoveType.COLLISION_DIAG, [MoveOption.TAKE, MoveOption.PROPEGATES])
                 ]
@@ -285,7 +284,7 @@ class PieceType(Enum):
             # - * x
             # - - -
             (   # Offset
-                Position(0, 1), # same row, 1 step right
+                (0, 1), # same row, 1 step right
                 [   # Moves
                     (MoveType.COLLISION_AXIS, [MoveOption.TAKE, MoveOption.PROPEGATES])
                 ]
@@ -296,7 +295,7 @@ class PieceType(Enum):
             # - * -
             # - - x
             (   # Offset
-                Position(1, 1), # 1 step down, 1 step right
+                (1, 1), # 1 step down, 1 step right
                 [   # Moves
                     (MoveType.COLLISION_DIAG, [MoveOption.TAKE, MoveOption.PROPEGATES])
                 ]
@@ -307,7 +306,7 @@ class PieceType(Enum):
             # - * -
             # - x -
             (   # Offset
-                Position(1, 0), # 1 step down, same col
+                (1, 0), # 1 step down, same col
                 [   # Moves
                     (MoveType.COLLISION_AXIS, [MoveOption.TAKE, MoveOption.PROPEGATES])
                 ]
@@ -318,7 +317,7 @@ class PieceType(Enum):
             # - * -
             # x - -
             (   # Offset
-                Position(1, -1), # 1 step down, 1 step left
+                (1, -1), # 1 step down, 1 step left
                 [   # Moves
                     (MoveType.COLLISION_DIAG, [MoveOption.TAKE, MoveOption.PROPEGATES])
                 ]
@@ -329,7 +328,7 @@ class PieceType(Enum):
             # x * -
             # - - -
             (   # Offset
-                Position(0, -1), # same row, 1 step left
+                (0, -1), # same row, 1 step left
                 [   # Moves
                     (MoveType.COLLISION_AXIS, [MoveOption.TAKE, MoveOption.PROPEGATES])
                 ]
@@ -346,7 +345,7 @@ class PieceType(Enum):
             # - - * - -
             # - - - - -
             (   # Offset
-                Position(-1, -1), # 1 step up, 1 step left
+                (-1, -1), # 1 step up, 1 step left
                 [   # Moves
                     (MoveType.COLLISION_DIAG, [MoveOption.TAKE, MoveOption.PROTECTED])
                 ]
@@ -356,7 +355,7 @@ class PieceType(Enum):
             # - - * - -
             # - - - - -
             (   # Offset
-                Position(-1, 0), # 1 step up, same col
+                (-1, 0), # 1 step up, same col
                 [   # Moves
                     (MoveType.COLLISION_AXIS, [MoveOption.TAKE, MoveOption.PROTECTED])
                 ]
@@ -367,7 +366,7 @@ class PieceType(Enum):
             # - - * - -
             # - - - - -
             (   # Offset
-                Position(-1, 1), # 1 step up, 1 step right
+                (-1, 1), # 1 step up, 1 step right
                 [   # Moves
                     (MoveType.COLLISION_DIAG, [MoveOption.TAKE, MoveOption.PROTECTED])
                 ]
@@ -378,7 +377,7 @@ class PieceType(Enum):
             # - - * x -
             # - - - - -
             (   # Offset
-                Position(0, 1), # same row, 1 step right
+                (0, 1), # same row, 1 step right
                 [   # Moves
                     (MoveType.COLLISION_AXIS, [MoveOption.TAKE, MoveOption.PROTECTED])
                 ]
@@ -389,7 +388,7 @@ class PieceType(Enum):
             # - - * - -
             # - - - x -
             (   # Offset
-                Position(1, 1), # 1 step down, 1 step right
+                (1, 1), # 1 step down, 1 step right
                 [   # Moves
                     (MoveType.COLLISION_DIAG, [MoveOption.TAKE, MoveOption.PROTECTED])
                 ]
@@ -400,7 +399,7 @@ class PieceType(Enum):
             # - - * - -
             # - - x - -
             (   # Offset
-                Position(1, 0), # 1 step down, same col
+                (1, 0), # 1 step down, same col
                 [   # Moves
                     (MoveType.COLLISION_AXIS, [MoveOption.TAKE, MoveOption.PROTECTED])
                 ]
@@ -411,7 +410,7 @@ class PieceType(Enum):
             # - - * - -
             # - x - - -
             (   # Offset
-                Position(1, -1), # 1 step down, 1 step left
+                (1, -1), # 1 step down, 1 step left
                 [   # Moves
                     (MoveType.COLLISION_DIAG, [MoveOption.TAKE, MoveOption.PROTECTED])
                 ]
@@ -422,7 +421,7 @@ class PieceType(Enum):
             # - x * - -
             # - - - - -
             (   # Offset
-                Position(0, -1), # same row, 1 step left
+                (0, -1), # same row, 1 step left
                 [   # Moves
                     (MoveType.COLLISION_AXIS, [MoveOption.TAKE, MoveOption.PROTECTED])
                 ]
@@ -433,7 +432,7 @@ class PieceType(Enum):
             # s - * - -
             # - - - - -
             (   # Offset
-                Position(0, -2), # same row, 2 steps left
+                (0, -2), # same row, 2 steps left
                 [   # Moves
                     (MoveType.KING_CASTLE, [MoveOption.PROTECTED])
                 ]
@@ -444,7 +443,7 @@ class PieceType(Enum):
             # - - * - s
             # - - - - -
             (   # Offset
-                Position(0, 2), # same row, 2 steps right
+                (0, 2), # same row, 2 steps right
                 [   # Moves
                     (MoveType.KING_CASTLE, [MoveOption.PROTECTED])
                 ]
@@ -457,3 +456,6 @@ class PieceType(Enum):
 
         Returns Enum name such as KING instead of object refrense"""
         return f'{self.name}'
+    
+    def __repr__(self) -> str:
+        return self.__str__()

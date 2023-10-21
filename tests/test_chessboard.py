@@ -73,7 +73,7 @@ def test_create_default_board():
     ref = Chessboard()
     ref.create_default_board()
     # Check
-    __is_board_equal(expected_board, ref.chessboard)
+    __is_board_equal(expected_board, ref.get_chessboard())
 
 
 def test_add_piece():
@@ -81,15 +81,15 @@ def test_add_piece():
     b_ki = ChessPiece(Color.BLACK, PieceType.KING)
     ref = Chessboard()
     ref.create_board(3)
-    assert ref.add_piece(b_qu, (1,0))
-    assert ref.add_piece(b_ki, (1,2))
+    assert ref.add_piece(b_qu, Position(1,0))
+    assert ref.add_piece(b_ki, Position(1,2))
     expected_chessboard: list[list[ChessPiece]] = [
         [None, None, None],
         [b_qu, None, b_ki],
         [None, None, None],
     ]
     # check
-    __is_board_equal(expected_chessboard, ref.chessboard)
+    __is_board_equal(expected_chessboard, ref.get_chessboard())
 
 
 def test_remove_piece():
@@ -101,12 +101,12 @@ def test_remove_piece():
 
     ref = Chessboard()
     ref.create_board(3)
-    ref.add_piece(b_qu, (1,0))
-    ref.add_piece(b_ki, (1,2))
-    assert ref.remove_piece((1, 0))
-    assert ref.remove_piece((1, 2))
+    ref.add_piece(b_qu, Position(1,0))
+    ref.add_piece(b_ki, Position(1,2))
+    assert ref.remove_piece(Position(1, 0))
+    assert ref.remove_piece(Position(1, 2))
     # check
-    __is_board_equal(expected.chessboard, ref.chessboard)
+    __is_board_equal(expected.get_chessboard(), ref.get_chessboard())
 
 
 def test_in_danger():
@@ -138,24 +138,24 @@ def test_in_danger():
 
     board_refrence = Chessboard(chessboard)
     # check
-    assert board_refrence.in_danger((0,0), Color.BLACK) == False
-    assert board_refrence.in_danger((0,0), Color.WHITE) == False
-    assert board_refrence.in_danger((0,1), Color.BLACK) == False
-    assert board_refrence.in_danger((0,1), Color.WHITE) == True
+    assert board_refrence.in_danger(Position(0,0), Color.BLACK) == False
+    assert board_refrence.in_danger(Position(0,0), Color.WHITE) == False
+    assert board_refrence.in_danger(Position(0,1), Color.BLACK) == False
+    assert board_refrence.in_danger(Position(0,1), Color.WHITE) == True
 
-    assert board_refrence.in_danger((1,1), Color.BLACK) == False
-    assert board_refrence.in_danger((3,1), Color.BLACK) == False
-    assert board_refrence.in_danger((5,1), Color.BLACK) == False
+    assert board_refrence.in_danger(Position(1,1), Color.BLACK) == False
+    assert board_refrence.in_danger(Position(3,1), Color.BLACK) == False
+    assert board_refrence.in_danger(Position(5,1), Color.BLACK) == False
 
-    board_refrence.add_piece(w_qu, (3,3))
-    assert board_refrence.in_danger((1,0), Color.BLACK) == False
-    assert board_refrence.in_danger((1,1), Color.BLACK) == True
-    assert board_refrence.in_danger((1,2), Color.BLACK) == False
-    assert board_refrence.in_danger((1,3), Color.BLACK) == True
-    assert board_refrence.in_danger((1,4), Color.BLACK) == False
-    assert board_refrence.in_danger((1,5), Color.BLACK) == True
-    assert board_refrence.in_danger((1,6), Color.BLACK) == False
-    assert board_refrence.in_danger((1,7), Color.BLACK) == False
+    board_refrence.add_piece(w_qu, Position(3,3))
+    assert board_refrence.in_danger(Position(1,0), Color.BLACK) == False
+    assert board_refrence.in_danger(Position(1,1), Color.BLACK) == True
+    assert board_refrence.in_danger(Position(1,2), Color.BLACK) == False
+    assert board_refrence.in_danger(Position(1,3), Color.BLACK) == True
+    assert board_refrence.in_danger(Position(1,4), Color.BLACK) == False
+    assert board_refrence.in_danger(Position(1,5), Color.BLACK) == True
+    assert board_refrence.in_danger(Position(1,6), Color.BLACK) == False
+    assert board_refrence.in_danger(Position(1,7), Color.BLACK) == False
 
 
 def __is_board_equal(expected: list[list[ChessPiece]], recived: list[list[ChessPiece]]):

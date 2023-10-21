@@ -18,3 +18,6 @@ class Status(Enum):
 
         Returns Enum name such as PAWN_PROMOTION instead of Number 2"""
         return f'{self.name}'
+    
+    def __repr__(self) -> str:
+        return self.__str__()

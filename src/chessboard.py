@@ -10,7 +10,7 @@ class Chessboard:
 
     def __init__(self, chessboard: list[list[ChessPiece]] = []) -> None:
         # chessboard is a 2d list of ChessPiece objects
-        self.chessboard: list[list[ChessPiece]] = chessboard
+        self._chessboard: list[list[ChessPiece]] = chessboard
 
         # Move history is a list of tuple of ChessPiece, origin and destination
         # Moves are in order (1st move is at index 0 2nd move if on index 1 etc)
@@ -18,7 +18,10 @@ class Chessboard:
 
         # A dictionary of all king PieceType on this instance of chessboard.
         # Key will be the king's current location, and value will be a ref to the king (ChessPiece)
-        self.kings_location: dict[tuple[int, int]: ChessPiece] = {}
+        self._kings_location: dict[tuple[int, int]: ChessPiece] = {}
+
+        # size of chessboard
+        self._board_size: int = len(self._chessboard)
 
 
     def create_board(self, size: int = 8):
@@ -26,11 +29,12 @@ class Chessboard:
         
         returns None (new chessboard is saved in object)
         """
-        self.chessboard = []
+        self._chessboard = []
         for row in range(size):
             col = [None]*size
-            self.chessboard.append(col)
-        return None
+            self._chessboard.append(col)
+        
+        self._board_size: int = len(self._chessboard)
     
     
     def create_default_board(self):
@@ -54,7 +58,7 @@ class Chessboard:
         w_qu = ChessPiece(Color.WHITE, PieceType.QUEEN)
         w_ki = ChessPiece(Color.WHITE, PieceType.KING)
         w_pa = ChessPiece(Color.WHITE, PieceType.PAWN)
-        self.chessboard: list[list[ChessPiece]] = [
+        self._chessboard: list[list[ChessPiece]] = [
             [b_ro, b_kn, b_bi, b_qu, b_ki, b_bi, b_kn, b_ro],
             [b_pa, b_pa, b_pa, b_pa, b_pa, b_pa, b_pa, b_pa],
             [None, None, None, None, None, None, None, None],
@@ -66,8 +70,8 @@ class Chessboard:
         ]
 
         # Add kings to dictionary so we can check if they are in danger later.
-        self.kings_location[(0, 4)] = b_ki
-        self.kings_location[(7, 4)] = w_ki
+        self._kings_location[(0, 4)] = b_ki
+        self._kings_location[(7, 4)] = w_ki
 
 
     def get_piece(self, origin: tuple[int, int]) -> ChessPiece:
@@ -77,7 +81,7 @@ class Chessboard:
         
         Returns a ChessPiece or None if it was empty"""
         (row, col) = origin
-        return self.chessboard[row][col]
+        return self._chessboard[row][col]
 
 
     def add_piece(self, chess_piece: ChessPiece, pos: tuple[int, int]):
@@ -86,13 +90,13 @@ class Chessboard:
         returns True if the position was empty, returns False if it was already taken
         """
         (row, col) = pos
-        if self.chessboard[row][col] is None:
+        if self._chessboard[row][col] is None:
 
             # if we are adding a king then add it to king dict
-            if chess_piece.get_type() == PieceType.KING:
-                self.kings_location[pos] = chess_piece
+            if chess_piece.get_type() is PieceType.KING:
+                self._kings_location[pos] = chess_piece
 
-            self.chessboard[row][col] = chess_piece
+            self._chessboard[row][col] = chess_piece
             return True
         return False
 
@@ -103,13 +107,13 @@ class Chessboard:
         returns True if the position was not empty, else returns False
         """
         (row, col) = pos
-        if self.chessboard[row][col] is not None:
+        if self._chessboard[row][col] is not None:
 
             # if we are removing a king then remove it from king dict
-            if self.get_piece(pos).get_type() == PieceType.KING:
-                del self.kings_location[pos]
+            if self.get_piece(pos).get_type() is PieceType.KING:
+                del self._kings_location[pos]
 
-            self.chessboard[row][col] = None
+            self._chessboard[row][col] = None
             return True
         return False
 
@@ -122,7 +126,7 @@ class Chessboard:
 
             # Get chess piece at origin
             (origin_row, origin_col) = origin
-            moved_piece = self.chessboard[origin_row][origin_col]
+            moved_piece = self._chessboard[origin_row][origin_col]
 
             # Add move to move_history (at end of list)
             self.move_history.append((moved_piece, move, origin, dest))
@@ -133,7 +137,7 @@ class Chessboard:
                 moved_piece.set_has_moved_true()
             
             # Check if piece is a Pawn
-            if moved_piece.get_type() == PieceType.PAWN:
+            if moved_piece.get_type() is PieceType.PAWN:
                 # Pawn might promote at edge
                 (dest_row, dest_col) =  dest
 
@@ -147,12 +151,12 @@ class Chessboard:
                         
                     case Color.BLACK:
                         # Piece is moving towards max size
-                        if dest_row == len(self.chessboard)-1:
+                        if dest_row == self._board_size-1:
                             return (True, Status.PAWN_PROMOTION)
                 # End of Pawn Promotion check
 
             # is destination Empty?       
-            if self.chessboard[dest_row][dest_col] is not None:
+            if self._chessboard[dest_row][dest_col] is not None:
                 # Clear destination
                 self.remove_piece(dest) 
             
@@ -304,7 +308,7 @@ class Chessboard:
         else:
             # origin is left of dest
             # check right side
-            for col in range(origin_col+1, len(self.chessboard), 1):
+            for col in range(origin_col+1, self._board_size, 1):
                 
                 # Check if spot is empty (req 3)
                 if self.get_piece((origin_row, col)) is None:
@@ -462,14 +466,14 @@ class Chessboard:
 
                     # Only attacking moves are left.
 
-                    if move_type == MoveType.COLLISION_AXIS or move_type== MoveType.COLLISION_DIAG:
+                    if move_type is MoveType.COLLISION_AXIS or move_type is MoveType.COLLISION_DIAG:
                         # check axis with the same direction as offset from 0,0
   
                         # Contiune loop while origin + offset
                         while self.__is_in_bounds(origin, (offset_row, offset_col)):
                             # we have taken 1 step along the axis OR diag and are still within the board
 
-                            if self.chessboard[dest_row][dest_col] == None:
+                            if self._chessboard[dest_row][dest_col] is None:
                                 # Empty space, no attacker move to next...
                                 offset_row += min(1, max(-1, offset_row)) # Next row (if offset is negativ we move 1 step up)
                                 offset_col += min(1, max(-1, offset_col)) # Next col (if offset is negativ we move 1 step left)
@@ -480,9 +484,9 @@ class Chessboard:
                                 continue
 
                             # Space is not empty
-                            potential_attacker: ChessPiece = self.chessboard[dest_row][dest_col]
+                            potential_attacker: ChessPiece = self._chessboard[dest_row][dest_col]
 
-                            if potential_attacker.get_color() == piece_color:
+                            if potential_attacker.get_color() is piece_color:
                                 # attacker is in the same faction, can't attack
                                 break # We have collided along the path stop looking
 
@@ -503,15 +507,15 @@ class Chessboard:
                     # Not a propegation move type
                     else: 
                         # is destination empty?
-                        if self.chessboard[origin_row + offset_row][origin_col + offset_col] == None:
+                        if self._chessboard[origin_row + offset_row][origin_col + offset_col] is None:
                             # Empty space, no attacker move to next...
                             continue
 
                         # destination contains a piece
-                        potential_attacker: ChessPiece = self.chessboard[origin_row + offset_row][origin_col + offset_col]
+                        potential_attacker: ChessPiece = self._chessboard[origin_row + offset_row][origin_col + offset_col]
 
                         # is it an ally?
-                        if potential_attacker.get_color() == piece_color:
+                        if potential_attacker.get_color() is piece_color:
                             # piece is allied (same color)
                             continue
 
@@ -540,18 +544,18 @@ class Chessboard:
         (origin_row, origin_col) = origin
         (offset_row, offset_col) = offset
 
-        # Check if row is within 0 and len(self.chessboard_list) (exclusive)
+        # Check if row is within 0 and self._board_size (exclusive)
         # Check for negative case
-        if origin_row + offset_row >= len(self.chessboard):
+        if origin_row + offset_row >= self._board_size:
             # Row to large
             return False
         if origin_row + offset_row < 0:
             # Row to small
             return False
 
-        # Check if column is within 0 and len(self.chessboard_list) (exclusive)
+        # Check if column is within 0 and self._board_size (exclusive)
         # Check for negative case
-        if origin_col + offset_col >= len(self.chessboard):
+        if origin_col + offset_col >= self._board_size:
             # Col to large
             return False
         if origin_col + offset_col < 0:
@@ -561,11 +565,11 @@ class Chessboard:
     
 
     def get_chessboard(self) -> list[list[ChessPiece]]:
-        return self.chessboard
+        return self._chessboard
     
 
     def set_chessboard(self, chessboard: list[list[ChessPiece]]) -> None:
-        self.chessboard = chessboard
+        self._chessboard = chessboard
 
 
     def get_move_history(self) -> list[tuple[ChessPiece, tuple[MoveType, list[MoveOption]], tuple[int, int], tuple[int, int]]]:
@@ -583,14 +587,14 @@ class Chessboard:
         """Clears the instance move history
         
         Useful if reseting chessboard instance"""
-        self.move_history.clear
+        self._move_history.clear
 
 
     def __str__(self) -> str:
         out = ""
-        for row in range(len(self.chessboard)):
-            for col in range(len(self.chessboard)):
-                out += f"[{str(self.chessboard[row][col])}],"
+        for row in range(self._board_size):
+            for col in range(self._board_size):
+                out += f"[{str(self._chessboard[row][col])}],"
             out += "\n"
         return out
     

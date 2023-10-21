@@ -22,7 +22,7 @@ class TextFormater:
     @classmethod
     def piece_type_to_unicode_chess_symbol(cls, chess_piece):
         suffix = ("A", "B","C","D","E","F")
-        if chess_piece.get_color() == Color.BLACK:
+        if chess_piece.get_color() is Color.BLACK:
             suffix = ("4","5","6","7","8","9")
             
         match chess_piece.get_type():

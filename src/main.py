@@ -37,7 +37,7 @@ if __name__ == "__main__":
                 (origin_row, origin_col) = origin
 
                 # check if origin is empty
-                if chessboard.get_piece(origin) == None:
+                if chessboard.get_piece(origin) is None:
                     # Can't move a empty position
 
                     # TODO: TextUserInterface needs to display that move is invalid
@@ -61,7 +61,7 @@ if __name__ == "__main__":
                     continue
 
                 # Did a Pawn promote?
-                if status == Status.PAWN_PROMOTION:
+                if status is Status.PAWN_PROMOTION:
                     # Remove pawn
                     chessboard.remove_piece(origin)
 

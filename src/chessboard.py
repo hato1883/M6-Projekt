@@ -16,6 +16,10 @@ class Chessboard:
         # Moves are in order (1st move is at index 0 2nd move if on index 1 etc)
         self.move_history: list[tuple[ChessPiece, tuple[int, int], tuple[int, int]]] = []
 
+        # A dictionary of all king PieceType on this instance of chessboard.
+        # Key will be the king's current location, and value will be a ref to the king (ChessPiece)
+        self.kings_location: dict[tuple[int, int]: ChessPiece] = {}
+
 
     def create_board(self, size: int = 8):
         """Creates a empty board with given size (default is 8)
@@ -61,6 +65,10 @@ class Chessboard:
             [w_ro, w_kn, w_bi, w_qu, w_ki, w_bi, w_kn, w_ro],
         ]
 
+        # Add kings to dictionary so we can check if they are in danger later.
+        self.kings_location[(0, 4)] = b_ki
+        self.kings_location[(7, 4)] = w_ki
+
 
     def get_piece(self, origin: tuple[int, int]) -> ChessPiece:
         """Get a chess piece at destination
@@ -79,6 +87,11 @@ class Chessboard:
         """
         (row, col) = pos
         if self.chessboard[row][col] is None:
+
+            # if we are adding a king then add it to king dict
+            if chess_piece.get_type() == PieceType.KING:
+                self.kings_location[pos] = chess_piece
+
             self.chessboard[row][col] = chess_piece
             return True
         return False
@@ -91,6 +104,11 @@ class Chessboard:
         """
         (row, col) = pos
         if self.chessboard[row][col] is not None:
+
+            # if we are removing a king then remove it from king dict
+            if self.get_piece(pos).get_type() == PieceType.KING:
+                del self.kings_location[pos]
+
             self.chessboard[row][col] = None
             return True
         return False

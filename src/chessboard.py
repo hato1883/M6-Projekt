@@ -1,9 +1,9 @@
-from piece_type import PieceType
-from chess_piece import ChessPiece
-from piece_color import Color
-from move_type import MoveType
-from move_option import MoveOption
-from chess_piece import ChessPiece
+from piece_type_enum import PieceType
+from chess_piece_class import ChessPiece
+from piece_color_enum import Color
+from move_type_enum import MoveType
+from move_option_enum import MoveOption
+from chess_piece_class import ChessPiece
 from status_enum import Status
 from position_class import Position
 

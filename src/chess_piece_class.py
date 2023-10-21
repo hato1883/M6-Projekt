@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Any
-from piece_color import Color
-from piece_type import PieceType
+from piece_color_enum import Color
+from piece_type_enum import PieceType
 
 
 

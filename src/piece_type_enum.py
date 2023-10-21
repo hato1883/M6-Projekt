@@ -1,6 +1,6 @@
 from enum import Enum
-from move_type import MoveType
-from move_option import MoveOption
+from move_type_enum import MoveType
+from move_option_enum import MoveOption
 from position_class import Position
 
 class PieceType(Enum):

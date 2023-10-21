@@ -1,8 +1,8 @@
-from chess_piece import ChessPiece
+from chess_piece_class import ChessPiece
 import text_user_interface as ui
 from ui_interface import UI_Interface
 import chessboard as logic
-from piece_color import Color
+from piece_color_enum import Color
 from status_enum import Status
 
 if __name__ == "__main__":

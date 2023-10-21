@@ -1,4 +1,4 @@
-from chess_piece import *
+from chess_piece_class import *
 from position_class import Position
 class TextFormater:
     

@@ -482,21 +482,3 @@ class Chessboard:
             out += "\n"
         return out
     
-if __name__ == "__main__":
-    board = Chessboard()
-    board.create_default_board()
-    print(f"King can castle to the left: {board._Chessboard__is_king_castling_valid((0, 4), (0, 2))}")
-    board.remove_piece((0,3))
-    print(f"Remove piece at row 0 (1) and col 3 (4)")
-    board.remove_piece((0,2))
-    print(f"Remove piece at row 0 (1) and col 2 (3)")
-    board.remove_piece((0,1))
-    print(f"Remove piece at row 0 (1) and col 1 (2)")
-    print(f"King can castle to the left: {board._Chessboard__is_king_castling_valid((0, 4), (0, 2))}")
-    
-    print(f"King can castle to the right: {board._Chessboard__is_king_castling_valid((0, 4), (0, 6))}")
-    print(f"Remove piece at row 0 (1) and col 5 (6)")
-    board.remove_piece((0,5))
-    print(f"Remove piece at row 0 (1) and col 6 (7)")
-    board.remove_piece((0,6))
-    print(f"King can castle to the right: {board._Chessboard__is_king_castling_valid((0, 4), (0, 6))}")

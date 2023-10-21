@@ -24,6 +24,17 @@ class Chessboard:
         # size of chessboard
         self._board_size: int = len(self._chessboard)
 
+        if len(chessboard) != 0:
+            # Find kings in loaded list
+            for row in range(len(chessboard)):
+                for col in range(len(chessboard)):
+                    if chessboard[row][col] is None:
+                        continue
+                    if chessboard[row][col].get_type() is PieceType.KING:
+                        # add king chess piece to list
+                        self._kings_location[Position(row, col)] = chessboard[row][col]
+
+
 
     def create_board(self, size: int = 8):
         """Creates a empty board with given size (default is 8)
@@ -71,8 +82,8 @@ class Chessboard:
         ]
 
         # Add kings to dictionary so we can check if they are in danger later.
-        self._kings_location[(0, 4)] = b_ki
-        self._kings_location[(7, 4)] = w_ki
+        self._kings_location[Position(0, 4)] = b_ki
+        self._kings_location[Position(7, 4)] = w_ki
 
 
     def get_piece(self, origin: Position) -> ChessPiece:
@@ -582,4 +593,28 @@ class Chessboard:
                 out += f"[{str(self._chessboard[row][col])}],"
             out += "\n"
         return out
+    
+    
+    def __eq__(self, __value: object) -> bool:
+        
+        if isinstance(__value, self.__class__):
+
+            # check chessboard
+            if self._chessboard != __value._chessboard:
+                return False
+            
+            # check move_history
+            if self.move_history != __value.move_history:
+                return False
+            
+            # check king dict
+            if self._kings_location != __value._kings_location:
+                return False
+
+            return True
+        else:
+            return NotImplemented
+        
+    def __ne__(self, __value: object) -> bool:
+        return not self.__eq__(__value)
     

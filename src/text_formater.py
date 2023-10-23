@@ -1,4 +1,5 @@
-from chess_piece import *
+from chess_piece_class import *
+from position_class import Position
 class TextFormater:
     
     # Print line of specified char with specified length
@@ -21,9 +22,9 @@ class TextFormater:
     # returns unicode chess symbol based on supplied ChessPiece Enum
     @classmethod
     def piece_type_to_unicode_chess_symbol(cls, chess_piece):
-        suffix = ("4","5","6","7","8","9")
-        if chess_piece.get_color() == Color.BLACK:
-            suffix = ("A", "B","C","D","E","F")
+        suffix = ("A", "B","C","D","E","F")
+        if chess_piece.get_color() is Color.BLACK:
+            suffix = ("4","5","6","7","8","9")
             
         match chess_piece.get_type():
             case PieceType.KING: 
@@ -76,7 +77,7 @@ class TextFormater:
         
         colum = abs(ord(algebraic[0]) - 97)
         row = abs(number_of_rows-int(algebraic[1]))
-        coordinates = (row, colum)
+        coordinates = Position(row, colum)
                 
         return coordinates
     

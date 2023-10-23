@@ -1,22 +1,20 @@
-from chess_piece import *
-from move_option import *
+from chess_piece_class import *
+from move_option_enum import *
+from position_class import *
 
-def add_coordinate_pairs(t1:tuple[int,int], t2:tuple[int,int]):
-    temp = []
+def add_coordinate_pairs(t1:Position, t2:Position):
+
+    return Position(t1.row + t2.row, t1.col + t2.col)
     
-    for i in range(2):
-        temp.append(t1[i] + t2[i])
 
-    return tuple(temp)
+  
 
 
-def return_direction_vector(origin:tuple[int,int], destination:tuple[int, int]) -> tuple[int, int]:
+def return_direction_vector(origin:Position, destination:Position) -> Position:
   """Compares destination with origin, returns unit vector pointing from origin to destination"""
-  (row_origin, column_origin) = origin
-  (row_dest, column_dest) = destination
 
-  d_row = row_dest - row_origin
-  d_column = column_dest - column_origin
+  d_row = destination.row - origin.row
+  d_column = destination.col - destination.col
 
   row_step = 0
   colum_step = 0
@@ -31,15 +29,14 @@ def return_direction_vector(origin:tuple[int,int], destination:tuple[int, int]) 
   elif d_column < 0:
     colum_step = -1
     
-  return (row_step, colum_step)
+  return Position(row_step, colum_step)
 
 #Checks if move is diagonal
 def diagonal_move(origin, destination):
-  (row_origin, column_origin) = origin
-  (row_dest, column_dest) = destination
+  
 
-  d_row = row_dest - row_origin
-  d_column = column_dest - column_origin
+  d_row = destination.row - origin.row
+  d_column = destination.col - destination.col
     
   try:
     if abs(d_row / d_column)== 1:
@@ -51,11 +48,8 @@ def diagonal_move(origin, destination):
   
 #Check if move is straight line
 def axis_move(origin, destination):
-  (row_origin, column_origin) = origin
-  (row_dest, column_dest) = destination
-
-  d_row = row_dest - row_origin
-  d_column = column_dest - column_origin
+  d_row = destination.row - origin.row
+  d_column = destination.col - destination.col
 
   if d_row != 0 and d_column == 0:
     return True
@@ -64,7 +58,7 @@ def axis_move(origin, destination):
   else:
     return False
   
-def obstacle_in_path(chessboard:list, origin:tuple[int,int], destination:tuple[int, int], disregard_dest:bool, debug = False):
+def obstacle_in_path(chessboard:list, origin:Position, destination:Position, disregard_dest:bool, debug = False):
 
   step_vector = return_direction_vector(origin, destination)
   next_square = add_coordinate_pairs(origin, step_vector)
@@ -76,7 +70,7 @@ def obstacle_in_path(chessboard:list, origin:tuple[int,int], destination:tuple[i
 
   if debug:
     print(f"Diagonal move: {diagonal_move(origin, destination)}")
-    print(f"Vertical/Horizontal move: {vert_hori_move(origin,destination)}")
+    print(f"Vertical/Horizontal move: {axis_move(origin,destination)}")
     print(f"| Origin: {origin} | Destination: {destination} | Step vector: {step_vector} |")
     print("****Checking****")
 
@@ -86,7 +80,7 @@ def obstacle_in_path(chessboard:list, origin:tuple[int,int], destination:tuple[i
 
   while next_square != do_not_check_square:
     
-    if chessboard[next_square[0]][next_square[1]] == None:
+    if chessboard[next_square.row][next_square.col] == None:
        
        if debug:
          print(f"{next_square} is empty")

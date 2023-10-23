@@ -118,6 +118,7 @@ class TextUserInterface(UI_Interface):
             except:
                 continue
 
+
         return (origin, dest)
     
         

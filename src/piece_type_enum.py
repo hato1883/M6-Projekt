@@ -1,6 +1,6 @@
 from enum import Enum
-from move_type import MoveType
-from move_option import MoveOption
+from move_type_enum import MoveType
+from move_option_enum import MoveOption
 
 class PieceType(Enum):
     ####
@@ -456,3 +456,6 @@ class PieceType(Enum):
 
         Returns Enum name such as KING instead of object refrense"""
         return f'{self.name}'
+    
+    def __repr__(self) -> str:
+        return self.__str__()

@@ -6,6 +6,7 @@ from move_option_enum import MoveOption
 from chess_piece_class import ChessPiece
 from status_enum import Status
 from position_class import Position
+import valid_move_helper as vmh
 
 class Chessboard:
 
@@ -183,12 +184,12 @@ class Chessboard:
     def is_valid(self, origin: Position, dest: Position) -> tuple[bool, tuple[MoveType, list[MoveOption]]]:
 
         # is origin out of bounds
-        if self.__is_in_bounds(origin, Position(0, 0)):
+        if not self.__is_in_bounds(origin, Position(0, 0)):
             # Invalid move, Can't move from a pos that is out of bounds.
             return (False, None)
         
         # is destnation out of bounds
-        if self.__is_in_bounds(dest, Position(0, 0)):
+        if not self.__is_in_bounds(dest, Position(0, 0)):
             # Invalid move, Can't move to a dest that is out of bounds.
             return (False, None)
 
@@ -197,7 +198,7 @@ class Chessboard:
             # Invalid move, Can't move empty tile.
             return (False, None)
         
-        chess_piece: PieceType = self.chessboard[origin.row][origin.col].get_type()
+        chess_piece: PieceType = self._chessboard[origin.row][origin.col].get_type()
         
         offset: Position
         moves: list[tuple[MoveType, list[MoveOption]]]
@@ -237,7 +238,7 @@ class Chessboard:
         # return (False, None)
             
         # Debugg
-        return True
+        return (True, None)
     
 
     def __is_king_castling_valid(self, origin: Position, dest: Position) -> bool:
@@ -381,16 +382,16 @@ class Chessboard:
 
         # check if there is a enemy pawn in destination colum that is on origins row
         # In other words if ther is a enemy pawn next to origins position
-        if self.get_piece((origin.row, dest.col)) is None:
+        if self.get_piece(Position(origin.row, dest.col)) is None:
             # No Enemy Pawn next to origin, so en passant is invalid
             return False
         
         # origin_row, dest_col must contain a pawn (req 3)
-        if self.get_piece((origin.row, dest.col)).get_type() is not PieceType.PAWN:
+        if self.get_piece(Position(origin.row, dest.col)).get_type() is not PieceType.PAWN:
             # Not a pawn, Not valid
             return False
         
-        if self.get_piece((origin.row, dest.col)).get_color() is self.get_piece(origin).get_color():
+        if self.get_piece(Position(origin.row, dest.col)).get_color() is self.get_piece(origin).get_color():
             # Allied pawn, Not valid
             return False
         
@@ -401,7 +402,7 @@ class Chessboard:
         
         move_index = len(self.get_move_history()) - 1 # last index
         (moved_piece, used_move, move_origin, move_dest) = self.get_move_history()[move_index]
-        while moved_piece.get_color() is not self.get_piece((origin.row, dest.col)).get_color():
+        while moved_piece.get_color() is not self.get_piece(Position(origin.row, dest.col)).get_color():
             # Move is not from the same player as what we are checking
 
             # next move
@@ -472,6 +473,9 @@ class Chessboard:
                             # we have taken 1 step along the axis OR diag and are still within the board
 
                             if self._chessboard[dest.row][dest.col] is None:
+
+                                if chess_piece_type is PieceType.PAWN:
+                                    break
                                 # Empty space, no attacker move to next...
                                 offset_row += min(1, max(-1, offset_row)) # Next row (if offset is negativ we move 1 step up)
                                 offset_col += min(1, max(-1, offset_col)) # Next col (if offset is negativ we move 1 step left)
@@ -585,6 +589,110 @@ class Chessboard:
         Useful if reseting chessboard instance"""
         self._move_history.clear
 
+    def is_diag_move_valid(self, origin:Position, destination:Position, options:list[MoveOption]) -> bool:
+        """ Returns True if none of the below questions has answer yes, otherwise False
+
+        \b No options: \n
+        Move not diagonal? If yes -> False \n
+        Obstacle between origin and/at destination? If yes -> False
+
+        \b With options: \n
+         
+        Move not diagonal? If yes -> False \n
+        MoveOption.FIRST - Has Piece been moved before, If yes -> False \n
+        MoveOption.TAKE - Obstacle between origin and destination? Is destination same color? If yes -> False \n
+        MoveOption.PROTECTED - Is Piece at risk of being taken if move is made? If yes -> False  """
+
+        print(self.get_piece(origin))
+
+        if not vmh.diagonal_move(origin,destination):
+            return False
+
+        disregard_dest_square = False
+
+        if MoveOption.FIRST in options:
+            try:
+                if self._chessboard[origin.row][origin.col].get_has_moved() == True:
+                    return False
+            except:
+                print("MoveOption.First error: Not a piece")
+
+        if MoveOption.TAKE in options:
+            try:
+                if self._chessboard[destination.row][destination.col].get_color() == self._chessboard[origin.row][origin.col].get_color():
+                    return False
+                else:
+                    disregard_dest_square = True
+            except:
+                print("MoveOption.TAKE error: Moving empty square, or moving piece to empty square")
+
+        if MoveOption.PROTECTED in options:
+            try:
+                color = self._chessboard[origin.row][origin.col].get_color()
+            except:
+                print("MoveOption.Protected error: Not a piece")
+
+            if self.in_danger(origin, color):
+                return False
+
+        if vmh.obstacle_in_path(self._chessboard, origin, destination, disregard_dest_square):
+            return False
+        
+        return True
+    
+    def is_axis_move_valid(self, origin:Position, destination:Position, options:list[MoveOption]) -> bool:
+        """ Returns True if no of the below questions has answer yes, otherwise False
+
+        \b No options: \n
+        Move not along single axis? If yes -> False \n
+        Obstacle between origin and/at destination? If Yes -> False
+
+        \b With options: \n 
+         
+        Move not along single axis? If yes -> False \n
+        MoveOption.FIRST - Has Piece been moved before, If yes -> False \n
+        MoveOption.TAKE - Obstacle between origin and destination? Is destination same color? If yes -> False \n
+        MoveOption.PROTECTED - Is Piece at risk of being taken if move is made? If yes -> False  """
+
+        print(self.get_piece(origin))
+
+        disregard_dest_square = False
+
+        if not vmh.axis_move(origin, destination):
+            return False
+
+        if MoveOption.FIRST in options:
+            try:
+                if self._chessboard[origin.row][origin.col].get_has_moved() == True:
+                    return False
+            except:
+                print("MoveOption.First error: Not a piece")
+
+        if MoveOption.TAKE in options:
+            try:
+                if self._chessboard[destination.row][destination.col].get_color() == self._chessboard[origin.row][origin.col].get_color():
+                    return False
+                else:
+                    disregard_dest_square = True
+            except:
+                print("MoveOption.TAKE error: Moving empty square, or moving piece to empty square")
+
+        if MoveOption.PROTECTED in options:
+            try:
+                color = self._chessboard[origin.row][origin.col].get_color()
+            except:
+                print("MoveOption.Protected error: Not a piece")
+
+            if self.in_danger(destination, color):
+                print("danger")
+                return False
+
+        if vmh.obstacle_in_path(self._chessboard, origin, destination, disregard_dest_square):
+            print("obstacle")
+            return False
+        
+        return True
+    
 
     def __str__(self) -> str:
         out = ""

@@ -56,7 +56,7 @@ class TextFormater:
 
         i = 0
         for square in row_list:
-            if square != None:
+            if square is not None:
                 print(f" {cls.piece_type_to_unicode_chess_symbol(square)} ", end='')
             else:
                 print(f" { even_square if i % 2 == 0 else odd_square} ", end='')
@@ -89,6 +89,20 @@ class TextFormater:
         row = number_of_rows - row
 
         return f"{column}{row}"
+    
+    @classmethod
+    def create_column_letter_tuple(cls, number_of_letters:int):
+        column_letters = []
+        for i in range(number_of_letters):
+            column_letters.append(chr(65+i))
+        return tuple(column_letters)
+    
+    @classmethod
+    def create_column_number_tuple(cls, numbers:int):
+        column_numbers = []
+        for i in range(numbers):
+            column_numbers.append(f"{i}")
+        return tuple(column_numbers)
 
 
         

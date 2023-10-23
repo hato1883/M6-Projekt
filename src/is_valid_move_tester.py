@@ -15,14 +15,12 @@ def move_piece(chess_board, move):
 
 
 while True:
-  TextUserInterface.show_chess_board(cb.get_chessboard(), debug=False)
-  move = TextUserInterface.input_user_move()
-  print(f"{move}")
-  (origin, dest) = move
+    TextUserInterface.show_chess_board(cb.get_chessboard(), debug=False)
+    move = TextUserInterface.input_user_move()
+    print(f"{move}")
+    (origin, dest) = move
 
-  valid_move = cb.is_axis_move_valid(origin, dest, [])
-  print(valid_move)
-  if valid_move:
+
     cb.move(origin, dest)
     TextUserInterface.show_chess_board(cb.get_chessboard(), debug=True)
     input("Enter to continue")

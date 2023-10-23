@@ -58,33 +58,20 @@ class Chessboard:
         self.create_board()
 
          # Black Pieces
-        b_ro = ChessPiece(Color.BLACK, PieceType.ROOK)
-        b_kn = ChessPiece(Color.BLACK, PieceType.KNIGHT)
-        b_bi = ChessPiece(Color.BLACK, PieceType.BISHOP)
-        b_qu = ChessPiece(Color.BLACK, PieceType.QUEEN)
-        b_ki = ChessPiece(Color.BLACK, PieceType.KING)
-        b_pa = ChessPiece(Color.BLACK, PieceType.PAWN)
-        # White Pieces
-        w_ro = ChessPiece(Color.WHITE, PieceType.ROOK)
-        w_kn = ChessPiece(Color.WHITE, PieceType.KNIGHT)
-        w_bi = ChessPiece(Color.WHITE, PieceType.BISHOP)
-        w_qu = ChessPiece(Color.WHITE, PieceType.QUEEN)
-        w_ki = ChessPiece(Color.WHITE, PieceType.KING)
-        w_pa = ChessPiece(Color.WHITE, PieceType.PAWN)
         self._chessboard: list[list[ChessPiece]] = [
-            [b_ro, b_kn, b_bi, b_qu, b_ki, b_bi, b_kn, b_ro],
-            [b_pa, b_pa, b_pa, b_pa, b_pa, b_pa, b_pa, b_pa],
+            [ChessPiece(Color.BLACK, PieceType.ROOK), ChessPiece(Color.BLACK, PieceType.KNIGHT), ChessPiece(Color.BLACK, PieceType.BISHOP), ChessPiece(Color.BLACK, PieceType.QUEEN), ChessPiece(Color.BLACK, PieceType.KING), ChessPiece(Color.BLACK, PieceType.BISHOP), ChessPiece(Color.BLACK, PieceType.KNIGHT), ChessPiece(Color.BLACK, PieceType.ROOK)],
+            [ChessPiece(Color.BLACK, PieceType.PAWN), ChessPiece(Color.BLACK, PieceType.PAWN), ChessPiece(Color.BLACK, PieceType.PAWN), ChessPiece(Color.BLACK, PieceType.PAWN), ChessPiece(Color.BLACK, PieceType.PAWN), ChessPiece(Color.BLACK, PieceType.PAWN), ChessPiece(Color.BLACK, PieceType.PAWN), ChessPiece(Color.BLACK, PieceType.PAWN)],
             [None, None, None, None, None, None, None, None],
             [None, None, None, None, None, None, None, None],
             [None, None, None, None, None, None, None, None],
             [None, None, None, None, None, None, None, None],
-            [w_pa, w_pa, w_pa, w_pa, w_pa, w_pa, w_pa, w_pa],
-            [w_ro, w_kn, w_bi, w_qu, w_ki, w_bi, w_kn, w_ro],
+            [ChessPiece(Color.WHITE, PieceType.PAWN), ChessPiece(Color.WHITE, PieceType.PAWN), ChessPiece(Color.WHITE, PieceType.PAWN), ChessPiece(Color.WHITE, PieceType.PAWN), ChessPiece(Color.WHITE, PieceType.PAWN), ChessPiece(Color.WHITE, PieceType.PAWN), ChessPiece(Color.WHITE, PieceType.PAWN), ChessPiece(Color.WHITE, PieceType.PAWN)],
+            [ChessPiece(Color.WHITE, PieceType.ROOK), ChessPiece(Color.WHITE, PieceType.KNIGHT), ChessPiece(Color.WHITE, PieceType.BISHOP), ChessPiece(Color.WHITE, PieceType.QUEEN), ChessPiece(Color.WHITE, PieceType.KING), ChessPiece(Color.WHITE, PieceType.BISHOP), ChessPiece(Color.WHITE, PieceType.KNIGHT), ChessPiece(Color.WHITE, PieceType.ROOK)],
         ]
 
         # Add kings to dictionary so we can check if they are in danger later.
-        self._kings_location[Position(0, 4)] = b_ki
-        self._kings_location[Position(7, 4)] = w_ki
+        self._kings_location[Position(0, 4)] = ChessPiece(Color.BLACK, PieceType.KING)
+        self._kings_location[Position(7, 4)] = ChessPiece(Color.BLACK, PieceType.KING)
 
 
     def get_piece(self, origin: Position) -> ChessPiece:
@@ -203,15 +190,35 @@ class Chessboard:
         offset: Position
         moves: list[tuple[MoveType, list[MoveOption]]]
 
-        for (offset, moves) in chess_piece.value: # value to get the associated list
+        # get Calculated offset between dest and origin
+        calculated_offset: tuple[int, int] = (dest.row - origin.row, dest.col - origin.col)
+        normalized_offset = (min(1, max(-1, calculated_offset[0])), min(1, max(-1, calculated_offset[1])))
+
+
+
+        for (offset, moves) in [ # Loop thru resluting list
+            (offset, moves) for offset, moves in chess_piece.value # loop thru all moves
+            if offset  == calculated_offset or offset == normalized_offset # save move if offset is in list or its normalised vector
+            ]: # value to get the associated list
+
             for (move_type, options) in moves:
+                if offset != calculated_offset:
+                    
+                    # Move is not on moveset, ,dose move propegate?
+                    if MoveOption.PROPEGATES not in options:
+                        continue
+
                 match move_type:
                     case MoveType.COLLISION_AXIS:
-                        # evaluate move with given option
-                        pass
+                         if self.is_axis_move_valid(origin, dest, options):
+                            # Move is valid, no need to check the remaining moves
+                            return (True, (move_type, options))
 
                     case MoveType.COLLISION_DIAG:
                         # evaluate move with given option
+                        if self.is_diag_move_valid(origin, dest, options):
+                            # Move is valid, no need to check the remaining moves
+                            return (True, (move_type, options))
                         pass
 
                     case MoveType.ABSOLUTE:
@@ -233,12 +240,14 @@ class Chessboard:
                         continue
                 # Move type has been checked
             # Move has been evaluated
+        
+
         # All moves have been check, none did a early exit with return
         # Move must be invalid
         # return (False, None)
             
         # Debugg
-        return (True, None)
+        return (False, None)
     
 
     def __is_king_castling_valid(self, origin: Position, dest: Position) -> bool:
@@ -589,6 +598,7 @@ class Chessboard:
         Useful if reseting chessboard instance"""
         self._move_history.clear
 
+
     def is_diag_move_valid(self, origin:Position, destination:Position, options:list[MoveOption]) -> bool:
         """ Returns True if none of the below questions has answer yes, otherwise False
 
@@ -639,6 +649,7 @@ class Chessboard:
             return False
         
         return True
+    
     
     def is_axis_move_valid(self, origin:Position, destination:Position, options:list[MoveOption]) -> bool:
         """ Returns True if no of the below questions has answer yes, otherwise False

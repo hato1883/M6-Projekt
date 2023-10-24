@@ -295,11 +295,11 @@ class Chessboard:
             for searched_col in range(origin.col-1, -1, -1):
 
                 # Check if spot is empty (req 3)
-                if self.get_piece((origin.row, searched_col)) is None:
+                if self.get_piece(Position(origin.row, searched_col)) is None:
 
                     # Check if the 2 spaces left of king is not under threat (req 7 & 8)
                     if abs(origin.col - searched_col) <= 2:
-                        if self.in_danger((origin.row, searched_col), self.get_piece(origin).get_color()):
+                        if self.in_danger(Position(origin.row, searched_col), self.get_piece(origin).get_color()):
                             # Origin team will be attacked on this square which is not OK
                             break
 
@@ -308,14 +308,14 @@ class Chessboard:
 
                 # col contains a chess piece
                 # Is it a rook? (req 4)
-                if self.get_piece((origin.row, searched_col)).get_type() is not PieceType.ROOK:
+                if self.get_piece(Position(origin.row, searched_col)).get_type() is not PieceType.ROOK:
                     
                     # Not a rook exit loop
                     break
 
                 # Piece is a Rook
                 # Has the rook moved? (req 5)
-                if self.get_piece((origin.row, searched_col)).get_has_moved():
+                if self.get_piece(Position(origin.row, searched_col)).get_has_moved():
 
                     # Rook has moved and therfor can not castle
                     break
@@ -336,11 +336,11 @@ class Chessboard:
             for searched_col in range(origin.col+1, self._board_size, 1):
                 
                 # Check if spot is empty (req 3)
-                if self.get_piece((origin.row, searched_col)) is None:
+                if self.get_piece(Position(origin.row, searched_col)) is None:
 
                     # Check if the 2 spaces left of king is not under threat (req 7 & 8)
                     if abs(origin.col - searched_col) <= 2:
-                        if self.in_danger((origin.row, searched_col), self.get_piece(origin).get_color()):
+                        if self.in_danger(Position(origin.row, searched_col), self.get_piece(origin).get_color()):
                             # Origin team will be attacked on this square which is not OK
                             break
 
@@ -349,14 +349,14 @@ class Chessboard:
 
                 # col contains a chess piece
                 # Is it a rook? (req 4)
-                if self.get_piece((origin.row, searched_col)).get_type() is not PieceType.ROOK:
+                if self.get_piece(Position(origin.row, searched_col)).get_type() is not PieceType.ROOK:
                     
                     # Not a rook exit loop
                     break
 
                 # Piece is a Rook
                 # Has the rook moved? (req 5)
-                if self.get_piece((origin.row, searched_col)).get_has_moved():
+                if self.get_piece(Position(origin.row, searched_col)).get_has_moved():
 
                     # Rook has moved and therfor can not castle
                     break

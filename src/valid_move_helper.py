@@ -63,6 +63,8 @@ def obstacle_in_path(chessboard:list, origin:Position, destination:Position, dis
 
   if disregard_dest:
     do_not_check_square = destination
+    if next_square == do_not_check_square:
+      return False
   else:
     do_not_check_square = add_coordinate_pairs(destination, step_vector)
 

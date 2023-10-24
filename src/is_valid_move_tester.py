@@ -14,6 +14,12 @@ def move_piece(chess_board, move):
     chess_board[row_dest][column_dest].set_has_moved_true()
 
 
+cb.remove_piece(Position(7,1))
+cb.remove_piece(Position(7,2))
+cb.remove_piece(Position(7,3))
+
+
+
 while True:
     TextUserInterface.show_chess_board(cb.get_chessboard(), debug=False)
     move = TextUserInterface.input_user_move()

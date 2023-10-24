@@ -121,7 +121,8 @@ class Chessboard:
             # Move is valid
 
             # Get chess piece at origin
-            moved_piece = self._chessboard[origin.row][origin.col]
+            moved_piece = self.get_piece(origin)
+            attacked_piece = self.get_piece(dest)
 
             # Add move to move_history (at end of list)
             self.move_history.append((moved_piece, move, origin, dest))
@@ -141,12 +142,13 @@ class Chessboard:
                     case Color.WHITE:
                         # Piece is moving towards 0
                         if dest.row == 0:
-                            return (True, Status.PAWN_PROMOTION)
+
+                            return (True, Status.PAWN_PROMOTION, (moved_piece, attacked_piece))
                         
                     case Color.BLACK:
                         # Piece is moving towards max size
                         if dest.row == self._board_size-1:
-                            return (True, Status.PAWN_PROMOTION)
+                            return (True, Status.PAWN_PROMOTION, (moved_piece, attacked_piece))
                 # End of Pawn Promotion check
 
                 if MoveType.PAWN_EN_PASSANT in move:
@@ -201,10 +203,10 @@ class Chessboard:
             self.remove_piece(origin)
 
             # Succsesful move
-            return (True, Status.SUCCESS)
+            return (True, Status.SUCCESS, (moved_piece, attacked_piece))
         else:
             # Move was invalid
-            return (False, Status.INVALID_MOVE)
+            return (False, Status.INVALID_MOVE, None)
         
 
     def is_valid(self, origin: Position, dest: Position) -> tuple[bool, tuple[MoveType, list[MoveOption]]]:

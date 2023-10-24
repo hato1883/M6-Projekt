@@ -1,12 +1,16 @@
 from chess_piece_class import ChessPiece
 import text_user_interface as ui
 from ui_interface import UI_Interface
+import chatgpt_narrator as gpt
+import normal_narrator as nn
+from narration_interface import NarrationInterface
 import chessboard as logic
 from piece_color_enum import Color
 from status_enum import Status
 
 if __name__ == "__main__":
     tui: UI_Interface = ui.TextUserInterface()
+    narrator: NarrationInterface = gpt.ChatGPTNarrator()
     chessboard = logic.Chessboard()
 
     # show titel screen
@@ -14,6 +18,12 @@ if __name__ == "__main__":
 
     # get game parameters
     (is_two_player, time_limit, ai_naration) = tui.input_game_setup_parameters()
+
+    if ai_naration:
+        narrator: NarrationInterface = gpt.ChatGPTNarrator()
+    else:
+        narrator: NarrationInterface = nn.NormalNarrator()
+
     
     # create the default 8x8 board
     chessboard.create_default_board()
@@ -24,10 +34,11 @@ if __name__ == "__main__":
     while not has_ended:
         # TODO: check if king is being attacked.
         # TODO: If king is attacked, can the king move, Or can something block attacker.
+        ai_naration_text = ""
         for color_turn in list(Color)[:2]:
             
             # Show user the chess board
-            tui.show_chess_board(chessboard.get_chessboard())
+            tui.show_chess_board(chessboard.get_chessboard()) #, ai_naration_text)
 
             # Loop until valid move
             while True: # Wait for valid move
@@ -49,14 +60,15 @@ if __name__ == "__main__":
                     continue
 
                 # Move chess piece
-                (succeeded, status) = chessboard.move(origin, dest)
-
+                (succeeded, status, pieces) = chessboard.move(origin, dest)
                 # Check if it worked
                 if not succeeded:
                     # Moved failed valid check
 
                     # TODO: TextUserInterface needs to display that move is invalid
                     continue
+
+                ai_naration_text = narrator.generate_move_text(origin, dest, pieces[0], pieces[1])
 
                 # Did a Pawn promote?
                 if status is Status.PAWN_PROMOTION:
@@ -71,6 +83,8 @@ if __name__ == "__main__":
                 
                 # End this players turn.
                 break
+
+            print(ai_naration_text)
         # Next color
         continue
     # Game has ended

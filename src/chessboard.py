@@ -36,7 +36,6 @@ class Chessboard:
                         self._kings_location[Position(row, col)] = chessboard[row][col]
 
 
-
     def create_board(self, size: int = 8):
         """Creates a empty board with given size (default is 8)
         
@@ -194,13 +193,25 @@ class Chessboard:
         calculated_offset: tuple[int, int] = (dest.row - origin.row, dest.col - origin.col)
         normalized_offset = (min(1, max(-1, calculated_offset[0])), min(1, max(-1, calculated_offset[1])))
 
+        debug_tuple = self._chessboard[origin.row][origin.col].get_color().value
 
-
+        # TODO: Add multiplication white chess_piece.get_color().value (-1 or 1, -1 or 1)
         for (offset, moves) in [ # Loop thru resluting list
             (offset, moves) for offset, moves in chess_piece.value # loop thru all moves
-            if offset  == calculated_offset or offset == normalized_offset # save move if offset is in list or its normalised vector
+            if # save move if offset is in list or its normalised vector
+                (   # modify x offset with color inversion 
+                    offset[0] * self._chessboard[origin.row][origin.col].get_color().value[0] == calculated_offset[0]
+                and # modify y offset with color inversion
+                    offset[1] * self._chessboard[origin.row][origin.col].get_color().value[1] == calculated_offset[1]
+                ) 
+                or
+                (   # modify x offset with color inversion 
+                    offset[0] * self._chessboard[origin.row][origin.col].get_color().value[0] == normalized_offset[0]
+                and # modify x offset with color inversion 
+                    offset[1] * self._chessboard[origin.row][origin.col].get_color().value[1] == normalized_offset[1]
+                )
             ]: # value to get the associated list
-
+            offset = (offset[0] * self._chessboard[origin.row][origin.col].get_color().value[0], offset[1] * self._chessboard[origin.row][origin.col].get_color().value[1])
             for (move_type, options) in moves:
                 if offset != calculated_offset:
                     
@@ -650,7 +661,7 @@ class Chessboard:
         
         return True
     
-    
+
     def is_axis_move_valid(self, origin:Position, destination:Position, options:list[MoveOption]) -> bool:
         """ Returns True if no of the below questions has answer yes, otherwise False
 

@@ -4,20 +4,13 @@ from text_user_interface import *
 cb = Chessboard()
 cb.create_default_board()
 
-def move_piece(chess_board, move):
-    (origin, dest) = move
-    (row_origin, column_origin) = origin
-    (row_dest, column_dest) = dest
-
-    chess_board[row_dest][column_dest] = chess_board[row_origin][column_origin]
-    chess_board[row_origin][column_origin] = None
-    chess_board[row_dest][column_dest].set_has_moved_true()
-
-
 #cb.remove_piece(Position(7,1))
 #cb.remove_piece(Position(7,2))
 #cb.remove_piece(Position(7,3))
 
+cb.move(Position(6,0),Position(4,0))
+cb.move(Position(4,0),Position(3,0))
+cb.move(Position(1,1),Position(3,1))
 
 
 while True:

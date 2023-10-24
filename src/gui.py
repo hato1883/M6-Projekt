@@ -1,4 +1,4 @@
-#### TODO More shit, draw the actual chesspieces, find
+#### TODO More shit, draw the actual chesspieces[import the stolen assets], find
 #### out how to make the program relate the chessboard to the graphics
 import pygame
 import sys

@@ -1,7 +1,15 @@
 from narration_interface import *
 import openai
-
-openai.api_key = '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'
+import json
+ 
+# Opening JSON file
+config = open('config.json')
+ 
+# returns JSON object as 
+# a dictionary
+data = json.load(config)
+openai.api_key = data['openai-api']
+print(openai.api_key)
 
 class ChatGPTNarrator(NarrationInterface):
    

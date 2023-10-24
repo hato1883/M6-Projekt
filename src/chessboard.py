@@ -615,7 +615,7 @@ class Chessboard:
 
         print(self.get_piece(origin))
 
-        if not vmh.diagonal_move(origin,destination):
+        if not vmh.diagonal_move(origin, destination):
             return False
 
         disregard_dest_square = False
@@ -628,13 +628,13 @@ class Chessboard:
                 print("MoveOption.First error: Not a piece")
 
         if MoveOption.TAKE in options:
-            try:
-                if self._chessboard[destination.row][destination.col].get_color() == self._chessboard[origin.row][origin.col].get_color():
-                    return False
-                else:
-                    disregard_dest_square = True
-            except:
-                print("MoveOption.TAKE error: Moving empty square, or moving piece to empty square")
+            disregard_dest_square = True
+            if self._chessboard[destination.row][destination.col] is not None:
+                try:
+                    if self._chessboard[destination.row][destination.col].get_color() == self._chessboard[origin.row][origin.col].get_color():
+                        return False 
+                except:
+                    print("MoveOption.TAKE error: Moving empty square, or moving piece to empty square")
 
         if MoveOption.PROTECTED in options:
             try:
@@ -642,7 +642,7 @@ class Chessboard:
             except:
                 print("MoveOption.Protected error: Not a piece")
 
-            if self.in_danger(origin, color):
+            if self.in_danger(destination, color):
                 return False
 
         if vmh.obstacle_in_path(self._chessboard, origin, destination, disregard_dest_square):
@@ -680,13 +680,13 @@ class Chessboard:
                 print("MoveOption.First error: Not a piece")
 
         if MoveOption.TAKE in options:
-            try:
-                if self._chessboard[destination.row][destination.col].get_color() == self._chessboard[origin.row][origin.col].get_color():
-                    return False
-                else:
-                    disregard_dest_square = True
-            except:
-                print("MoveOption.TAKE error: Moving empty square, or moving piece to empty square")
+            disregard_dest_square = True
+            if self._chessboard[destination.row][destination.col] is not None:
+                try:
+                    if self._chessboard[destination.row][destination.col].get_color() == self._chessboard[origin.row][origin.col].get_color():
+                        return False 
+                except:
+                    print("MoveOption.TAKE error: Moving empty square, or moving piece to empty square")
 
         if MoveOption.PROTECTED in options:
             try:

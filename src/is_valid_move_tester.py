@@ -19,8 +19,6 @@ while True:
     move = TextUserInterface.input_user_move()
     print(f"{move}")
     (origin, dest) = move
-
-
     cb.move(origin, dest)
     TextUserInterface.show_chess_board(cb.get_chessboard(), debug=True)
     input("Enter to continue")

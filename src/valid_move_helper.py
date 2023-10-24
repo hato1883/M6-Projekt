@@ -7,14 +7,12 @@ def add_coordinate_pairs(t1:Position, t2:Position):
     return Position(t1.row + t2.row, t1.col + t2.col)
     
 
-  
-
 
 def return_direction_vector(origin:Position, destination:Position) -> Position:
   """Compares destination with origin, returns unit vector pointing from origin to destination"""
 
   d_row = destination.row - origin.row
-  d_column = destination.col - destination.col
+  d_column = destination.col - origin.col
 
   row_step = 0
   colum_step = 0
@@ -36,7 +34,7 @@ def diagonal_move(origin, destination):
   
 
   d_row = destination.row - origin.row
-  d_column = destination.col - destination.col
+  d_column = destination.col - origin.col
     
   try:
     if abs(d_row / d_column)== 1:
@@ -49,7 +47,7 @@ def diagonal_move(origin, destination):
 #Check if move is straight line
 def axis_move(origin, destination):
   d_row = destination.row - origin.row
-  d_column = destination.col - destination.col
+  d_column = destination.col - origin.col
 
   if d_row != 0 and d_column == 0:
     return True

@@ -14,9 +14,9 @@ def move_piece(chess_board, move):
     chess_board[row_dest][column_dest].set_has_moved_true()
 
 
-cb.remove_piece(Position(7,1))
-cb.remove_piece(Position(7,2))
-cb.remove_piece(Position(7,3))
+#cb.remove_piece(Position(7,1))
+#cb.remove_piece(Position(7,2))
+#cb.remove_piece(Position(7,3))
 
 
 

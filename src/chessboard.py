@@ -232,8 +232,12 @@ class Chessboard:
                             return (True, (move_type, options))
                         pass
 
+
                     case MoveType.ABSOLUTE:
                         # evaluate move with given option
+                        if self.is_abs_move_valid(origin, dest, options):
+                            # Move is valid, no need to check the remaining moves
+                            return (True, (move_type, options))
                         pass
 
                     case MoveType.KING_CASTLE:
@@ -609,6 +613,44 @@ class Chessboard:
         Useful if reseting chessboard instance"""
         self._move_history.clear
 
+    def is_abs_move_valid(self, origin:Position, destination:Position, options:list[MoveOption]) -> bool:
+        """ Returns True if no of the below questions has answer yes, otherwise False
+
+
+        \b With options: \n 
+            
+        MoveOption.FIRST - Has Piece been moved before, If yes -> False \n
+        MoveOption.PROTECTED - Is Piece at risk of being taken if move is made? If yes -> False  """
+
+        print(self.get_piece(origin))
+
+
+
+        if MoveOption.FIRST in options:
+            try:
+                if self._chessboard[origin.row][origin.col].get_has_moved() == True:
+                    return False
+            except:
+                print("MoveOption.First error: Not a piece")
+
+        if MoveOption.TAKE in options:
+            if self._chessboard[destination.row][destination.col] is not None:
+
+                if self._chessboard[destination.row][destination.col].get_color() == self._chessboard[origin.row][origin.col].get_color():
+                    return False
+
+
+        if MoveOption.PROTECTED in options:
+            try:
+                color = self._chessboard[origin.row][origin.col].get_color()
+            except:
+                print("MoveOption.Protected error: Not a piece")
+
+            if self.in_danger(destination, color):
+                print("danger")
+                return False
+        
+        return True
 
     def is_diag_move_valid(self, origin:Position, destination:Position, options:list[MoveOption]) -> bool:
         """ Returns True if none of the below questions has answer yes, otherwise False

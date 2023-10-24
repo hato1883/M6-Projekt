@@ -44,7 +44,7 @@ class TextFormater:
 
     #Print a numbered row of chess board with unicode symbols
     @classmethod
-    def print_chess_board_row(cls, row, row_list):
+    def print_chess_board_row(cls, row, row_list, narration_line:str):
         if row % 2 == 0:
             even_square = "\u2610" # unicode for white square
             odd_square = "\u2630" # unicode for black square
@@ -61,6 +61,7 @@ class TextFormater:
             else:
                 print(f" { even_square if i % 2 == 0 else odd_square} ", end='')
             i += 1
+        print(f"   {narration_line}", end='')
         print()
 
     # Prints evenly spaced letters for column orientatin
@@ -103,6 +104,39 @@ class TextFormater:
         for i in range(numbers):
             column_numbers.append(f"{i}")
         return tuple(column_numbers)
+    
+    @classmethod
+    def split_string_into_rows(cls, str:str):
+        split_str = str.split(' ') 
+        row_list= []
+
+        end_words = ''
+        if not len(split_str) % 4 == 0:
+            end_words = end_words + f"{split_str[-1]} "
+            split_str = split_str[:-1]
+        
+        if len(split_str) < 4:
+            row_list = [end_words]
+            return row_list
+        
+        words_per_line = len(split_str) // 4
+        rows = len(split_str) // words_per_line
+
+        
+        for _ in range(rows):
+            row_list.append('')
+
+        for r in range(rows):
+            for i in range(words_per_line):
+                row_list[r] = row_list[r] + f"{split_str[i]} "
+            split_str = split_str[words_per_line:]
+
+            print(f"{row_list[r]}")
+            print()
+
+        row_list.append(end_words)
+        
+        return row_list
 
 
         

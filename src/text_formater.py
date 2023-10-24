@@ -131,9 +131,6 @@ class TextFormater:
                 row_list[r] = row_list[r] + f"{split_str[i]} "
             split_str = split_str[words_per_line:]
 
-            print(f"{row_list[r]}")
-            print()
-
         row_list.append(end_words)
         
         return row_list

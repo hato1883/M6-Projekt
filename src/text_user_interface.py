@@ -74,7 +74,7 @@ class TextUserInterface(UI_Interface):
 
     # Display the current layout of chess board text-based represenation
     @classmethod
-    def show_chess_board(cls, chess_board:list, ai_narration, debug:bool = False):
+    def show_chess_board(cls, chess_board:list, ai_narration:str, debug:bool = False):
 
         if ai_narration != '':
             row_lines = TextFormater.split_string_into_rows(ai_narration)

@@ -653,6 +653,7 @@ class Chessboard:
         Useful if reseting chessboard instance"""
         self._move_history.clear
 
+
     def is_abs_move_valid(self, origin:Position, destination:Position, options:list[MoveOption]) -> bool:
         """ Returns True if no of the below questions has answer yes, otherwise False
 
@@ -673,6 +674,14 @@ class Chessboard:
             except:
                 print("MoveOption.First error: Not a piece")
 
+        if MoveOption.MUST_TAKE in options:
+            if self._chessboard[destination.row][destination.col] is None:
+                # Destination must have enemy piece
+                return False 
+            if self._chessboard[destination.row][destination.col].get_color() == self._chessboard[origin.row][origin.col].get_color():
+                # Can not take allied piece
+                return False
+
         if MoveOption.TAKE in options:
             if self._chessboard[destination.row][destination.col] is not None:
 
@@ -692,6 +701,7 @@ class Chessboard:
         
         return True
 
+
     def is_diag_move_valid(self, origin:Position, destination:Position, options:list[MoveOption]) -> bool:
         """ Returns True if none of the below questions has answer yes, otherwise False
 
@@ -704,6 +714,7 @@ class Chessboard:
         Move not diagonal? If yes -> False \n
         MoveOption.FIRST - Has Piece been moved before, If yes -> False \n
         MoveOption.CAN_TAKE - Obstacle between origin and destination? Is destination same color? If yes -> False \n
+        MoveOption.MUST_TAKE - Obstacle between origin and destination? is destination empty? If yes -> False \n
         MoveOption.PROTECTED - Is Piece at risk of being taken if move is made? If yes -> False  """
 
         print(self.get_piece(origin))
@@ -720,6 +731,15 @@ class Chessboard:
             except:
                 print("MoveOption.First error: Not a piece")
 
+        if MoveOption.MUST_TAKE in options:
+            disregard_dest_square = True
+            if self._chessboard[destination.row][destination.col] is None:
+                # Destination must have enemy piece
+                return False 
+            if self._chessboard[destination.row][destination.col].get_color() == self._chessboard[origin.row][origin.col].get_color():
+                # Can not take allied piece
+                return False
+        
         if MoveOption.CAN_TAKE in options:
             disregard_dest_square = True
             if self._chessboard[destination.row][destination.col] is not None:
@@ -772,6 +792,15 @@ class Chessboard:
             except:
                 print("MoveOption.First error: Not a piece")
 
+        if MoveOption.MUST_TAKE in options:
+            disregard_dest_square = True
+            if self._chessboard[destination.row][destination.col] is None:
+                # Destination must have enemy piece
+                return False 
+            if self._chessboard[destination.row][destination.col].get_color() == self._chessboard[origin.row][origin.col].get_color():
+                # Can not take allied piece
+                return False
+            
         if MoveOption.CAN_TAKE in options:
             disregard_dest_square = True
             if self._chessboard[destination.row][destination.col] is not None:

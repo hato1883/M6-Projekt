@@ -524,7 +524,7 @@ class Chessboard:
 
                 # Only offsets within the board are left 
                 for (move_type, options) in moves:
-                    if MoveOption.CAN_TAKE not in options or MoveOption.MUST_TAKE:
+                    if MoveOption.CAN_TAKE not in options and MoveOption.MUST_TAKE not in options:
                         # move can't attack
                         continue
 
@@ -664,10 +664,6 @@ class Chessboard:
         MoveOption.FIRST - Has Piece been moved before, If yes -> False \n
         MoveOption.PROTECTED - Is Piece at risk of being taken if move is made? If yes -> False  """
 
-        print(self.get_piece(origin))
-
-
-
         if MoveOption.FIRST in options:
             try:
                 if self._chessboard[origin.row][origin.col].get_has_moved() == True:
@@ -717,8 +713,6 @@ class Chessboard:
         MoveOption.CAN_TAKE - Obstacle between origin and destination? Is destination same color? If yes -> False \n
         MoveOption.MUST_TAKE - Obstacle between origin and destination? is destination empty? If yes -> False \n
         MoveOption.PROTECTED - Is Piece at risk of being taken if move is made? If yes -> False  """
-
-        print(self.get_piece(origin))
 
         if not vmh.diagonal_move(origin, destination):
             return False
@@ -778,8 +772,6 @@ class Chessboard:
         MoveOption.FIRST - Has Piece been moved before, If yes -> False \n
         MoveOption.CAN_TAKE - Obstacle between origin and destination? Is destination same color? If yes -> False \n
         MoveOption.PROTECTED - Is Piece at risk of being taken if move is made? If yes -> False  """
-
-        print(self.get_piece(origin))
 
         disregard_dest_square = False
 
@@ -848,14 +840,10 @@ class Chessboard:
             # check move_history
             if self.move_history != __value.move_history:
                 return False
-            
-            # check king dict
-            if self._kings_location != __value._kings_location:
-                return False
 
             return True
         else:
-            return NotImplemented
+            return False
         
 
     def __ne__(self, __value: object) -> bool:

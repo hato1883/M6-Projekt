@@ -38,7 +38,7 @@ class ChessPiece:
         if isinstance(__value, self.__class__):
             return self.__dict__ == __value.__dict__
         else:
-            return NotImplemented
+            return False
 
     def __ne__(self, __value: object) -> bool:
         return not self.__eq__(__value)

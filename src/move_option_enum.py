@@ -5,16 +5,16 @@ class MoveOption(Enum):
     CAN_TAKE = 1
 
     # Can the piece take Enemy on destination
-    MUST_TAKE = 1
+    MUST_TAKE = 2
 
     # Dose the destination and path need to be safe
-    PROTECTED = 2
+    PROTECTED = 4
 
     # Must piece be unmoved
-    FIRST = 4
+    FIRST = 8
 
     # Dose move propegate to edges
-    PROPEGATES = 8
+    PROPEGATES = 16
     
     def __str__(self):
         """Overriden to String method

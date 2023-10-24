@@ -272,7 +272,6 @@ class Chessboard:
                             return (True, (move_type, options))
                         pass
 
-
                     case MoveType.ABSOLUTE:
                         # evaluate move with given option
                         if self.is_abs_move_valid(origin, dest, options):
@@ -856,6 +855,7 @@ class Chessboard:
         else:
             return NotImplemented
         
+
     def __ne__(self, __value: object) -> bool:
         return not self.__eq__(__value)
     

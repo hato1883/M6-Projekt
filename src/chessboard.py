@@ -149,6 +149,46 @@ class Chessboard:
                             return (True, Status.PAWN_PROMOTION)
                 # End of Pawn Promotion check
 
+                if MoveType.PAWN_EN_PASSANT in move:
+                    # get killed pawn location
+                    pawn_location = Position(origin.row, dest.col)
+                    # remove killed enemy pawn
+                    self.remove_piece(pawn_location) 
+
+
+            # Check if we was castling on this move
+            if moved_piece.get_type() is PieceType.KING and MoveType.KING_CASTLE in move:
+                # Move rook the rook to the oposite side of the king.
+
+                # find rook in direction of king.
+                if origin.col > dest.col:
+                    # origin is to the right of dest so rook is towards the left
+                    for searched_col in range(origin.col-3, -1, -1):
+                        if self.get_piece(Position(origin.row, searched_col)) is None:
+                            continue
+                        # assume piece is rook due to move being valid
+                        rook_loaction = Position(dest.row, searched_col)
+                
+                else:
+                    # origin is to the right of dest so rook is towards the left
+                    for searched_col in range(origin.col+3, self._board_size, 1):
+                        if self.get_piece(Position(origin.row, searched_col)) is None:
+                            continue
+                        # assume piece is rook due to move being valid
+                        rook_loaction = Position(dest.row, searched_col)
+
+                # rook lands between origin and dest
+                rook_landing = Position(origin.row, int((origin.col + dest.col)/2))
+
+                # save rook piece
+                rook_piece = self.get_piece(rook_loaction)
+                # rook piece has now moved
+                rook_piece.set_has_moved_true()
+                # add it to new dest
+                self.add_piece(rook_piece, rook_landing)
+                # remove it from the old
+                self.remove_piece(rook_loaction) 
+
             # is destination Empty?       
             if self._chessboard[dest.row][dest.col] is not None:
                 # Clear destination
@@ -483,7 +523,7 @@ class Chessboard:
 
                 # Only offsets within the board are left 
                 for (move_type, options) in moves:
-                    if MoveOption.TAKE not in options:
+                    if MoveOption.CAN_TAKE not in options or MoveOption.MUST_TAKE:
                         # move can't attack
                         continue
 
@@ -663,7 +703,7 @@ class Chessboard:
          
         Move not diagonal? If yes -> False \n
         MoveOption.FIRST - Has Piece been moved before, If yes -> False \n
-        MoveOption.TAKE - Obstacle between origin and destination? Is destination same color? If yes -> False \n
+        MoveOption.CAN_TAKE - Obstacle between origin and destination? Is destination same color? If yes -> False \n
         MoveOption.PROTECTED - Is Piece at risk of being taken if move is made? If yes -> False  """
 
         print(self.get_piece(origin))
@@ -680,14 +720,14 @@ class Chessboard:
             except:
                 print("MoveOption.First error: Not a piece")
 
-        if MoveOption.TAKE in options:
+        if MoveOption.CAN_TAKE in options:
             disregard_dest_square = True
             if self._chessboard[destination.row][destination.col] is not None:
                 try:
                     if self._chessboard[destination.row][destination.col].get_color() == self._chessboard[origin.row][origin.col].get_color():
                         return False 
                 except:
-                    print("MoveOption.TAKE error: Moving empty square, or moving piece to empty square")
+                    print("MoveOption.CAN_TAKE error: Moving empty square, or moving piece to empty square")
 
         if MoveOption.PROTECTED in options:
             try:
@@ -715,7 +755,7 @@ class Chessboard:
          
         Move not along single axis? If yes -> False \n
         MoveOption.FIRST - Has Piece been moved before, If yes -> False \n
-        MoveOption.TAKE - Obstacle between origin and destination? Is destination same color? If yes -> False \n
+        MoveOption.CAN_TAKE - Obstacle between origin and destination? Is destination same color? If yes -> False \n
         MoveOption.PROTECTED - Is Piece at risk of being taken if move is made? If yes -> False  """
 
         print(self.get_piece(origin))
@@ -732,14 +772,14 @@ class Chessboard:
             except:
                 print("MoveOption.First error: Not a piece")
 
-        if MoveOption.TAKE in options:
+        if MoveOption.CAN_TAKE in options:
             disregard_dest_square = True
             if self._chessboard[destination.row][destination.col] is not None:
                 try:
                     if self._chessboard[destination.row][destination.col].get_color() == self._chessboard[origin.row][origin.col].get_color():
                         return False 
                 except:
-                    print("MoveOption.TAKE error: Moving empty square, or moving piece to empty square")
+                    print("MoveOption.CAN_TAKE error: Moving empty square, or moving piece to empty square")
 
         if MoveOption.PROTECTED in options:
             try:

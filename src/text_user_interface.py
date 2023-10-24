@@ -24,11 +24,11 @@ class TextUserInterface(UI_Interface):
     @classmethod
     def input_game_setup_parameters(cls, min_time_limit = 30):
         while True:
-            players = 0
-            move_time_limit = 0
+            """ players = 0
+            move_time_limit = 0 """
             ai_narration = False
 
-            while not players in (1, 2):
+            """ while not players in (1, 2):
     
                 players = input("Players(1/2): ")
 
@@ -42,7 +42,7 @@ class TextUserInterface(UI_Interface):
                 input_time = input("Time limit per move (s): ")
 
                 if input_time.isnumeric():
-                    move_time_limit = int(input_time)
+                    move_time_limit = int(input_time) """
             
             answer = None
             while not answer in ("y","yes","n","no"):
@@ -52,11 +52,15 @@ class TextUserInterface(UI_Interface):
             if answer[0] == "y":
                 ai_narration = True
 
-            current_settings = f"| Players: {players} | Time/move: {move_time_limit} s | AI Narration: { 'On' if ai_narration == True else 'Off' } |"
+            current_setting = f"|AI Narration: { 'On' if ai_narration == True else 'Off' }|"
 
-            TextFormater.print_divider("-", len(current_settings))
-            print(current_settings)
-            TextFormater.print_divider("-", len(current_settings))
+            TextFormater.print_divider("-", len(current_setting))
+            print(current_setting)
+            TextFormater.print_divider("-", len(current_setting))
+
+            
+
+            """ current_settings = f"| Players: {players} | Time/move: {move_time_limit} s | AI Narration: { 'On' if ai_narration == True else 'Off' } |" """
 
             answer = None
             while not answer in ("y","yes","n","no"):
@@ -66,21 +70,30 @@ class TextUserInterface(UI_Interface):
             if answer[0] == "y":
                 break
         
-        return (two_players, move_time_limit, ai_narration)
+        return (ai_narration)
 
     # Display the current layout of chess board text-based represenation
     @classmethod
-    def show_chess_board(cls, chess_board:list, debug:bool = False):
+    def show_chess_board(cls, chess_board:list, ai_narration, debug:bool = False):
+
+        if ai_narration != '':
+            row_lines = TextFormater.split_string_into_rows(ai_narration)
+        else:
+            row_lines = []
+            
+        while len(row_lines) != len(chess_board):
+            row_lines.append('')
+
         if debug:
             column_names = TextFormater.create_column_number_tuple(len(chess_board))
             TextFormater.print_column_letters(column_names)
             for i in range(len(chess_board)):
-                TextFormater.print_chess_board_row(i, chess_board[i])
+                TextFormater.print_chess_board_row(i, chess_board[i], row_lines[i])
         else:
             column_names = TextFormater.create_column_letter_tuple(len(chess_board))
             TextFormater.print_column_letters(column_names)
             for i in range(len(chess_board)):
-                TextFormater.print_chess_board_row(len(chess_board)-i, chess_board[i])
+                TextFormater.print_chess_board_row(len(chess_board)-i, chess_board[i], row_lines[i])
         
         
 
@@ -198,9 +211,11 @@ if __name__ == "__main__":
     """tui.show_splash_screen("@", 40, "Sagoschak", "DVA-J", "2023-10-17", "Welcome to Sagoschack!")
     parameters = tui.input_game_setup_parameters()
     print(parameters) """
+
+    ai_response = "With a graceful sweep of its ivory, the pawn on a5 claims the prize, capturing the pawn on b5 in a bold and elegant move, as the dance of chess unfolds with precision and strategy."
         
     while True:
-        tui.show_chess_board(empty_board)
+        tui.show_chess_board(empty_board, ai_response)
         move = tui.input_user_move()
         move_piece(empty_board, move)
         tui.recount_user_move(move)

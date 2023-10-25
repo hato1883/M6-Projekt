@@ -2,6 +2,7 @@ from enum import Enum
 from move_type_enum import MoveType
 from move_option_enum import MoveOption
 
+
 class PieceType(Enum):
     ####
     # Pawn Move List
@@ -11,49 +12,48 @@ class PieceType(Enum):
         # - o -
         # - - -
         # - * -
-            (   # Offset
-                (-2, 0), # 2 steps up, same colum
-                [   # Moves
-                    (MoveType.COLLISION_AXIS, [MoveOption.FIRST])
-                ]
-            ),
+        (   # Offset
+            (-2, 0),  # 2 steps up, same colum
+            [   # Moves
+                (MoveType.COLLISION_AXIS, [MoveOption.FIRST])
+            ]
+        ),
 
         # Pawn attacking left
         # - - -
         # x - -
         # - * -
-            (   # Offset
-                (-1,-1), # 1 step up, 1 step left
-                [   # Moves
-                    (MoveType.COLLISION_DIAG, [MoveOption.MUST_TAKE]),
-                    (MoveType.PAWN_EN_PASSANT, [])
-                ]
-            ),
+        (   # Offset
+            (-1, -1),  # 1 step up, 1 step left
+            [   # Moves
+                (MoveType.COLLISION_DIAG, [MoveOption.MUST_TAKE]),
+                (MoveType.PAWN_EN_PASSANT, [])
+            ]
+        ),
 
         # Pawn walking up
         # - - -
         # - o -
         # - * -
-            (   # Offset
-                (-1, 0), # 1 step up, same col
-                [   # Moves
-                    (MoveType.COLLISION_AXIS, [])
-                ]
-            ),
+        (   # Offset
+            (-1, 0),  # 1 step up, same col
+            [   # Moves
+                (MoveType.COLLISION_AXIS, [])
+            ]
+        ),
 
         # Pawn attacking right
         # - - -
         # - - x
         # - * -
-            (   # Offset
-                (-1, 1), # 1 step up, same col
-                [
-                    (MoveType.COLLISION_DIAG, [MoveOption.MUST_TAKE]),
-                    (MoveType.PAWN_EN_PASSANT, [])
-                ]
-            )
+        (   # Offset
+            (-1, 1),  # 1 step up, same col
+            [
+                (MoveType.COLLISION_DIAG, [MoveOption.MUST_TAKE]),
+                (MoveType.PAWN_EN_PASSANT, [])
             ]
-    
+        )
+        ]
 
     ####
     # Knight Move List
@@ -65,19 +65,19 @@ class PieceType(Enum):
         # - - * - -
         # - - - - -
         # - - - - -
-            (   # Offset
-                (-2, -1), # 2 steps up, 1 step left
-                [   # Moves
-                    (MoveType.ABSOLUTE, [MoveOption.CAN_TAKE])
-                ]
-            ),
+        (   # Offset
+            (-2, -1),  # 2 steps up, 1 step left
+            [   # Moves
+                (MoveType.ABSOLUTE, [MoveOption.CAN_TAKE])
+            ]
+        ),
 
-            (   # Offset
-                (-2, 1), # 2 step up, 1 step right
-                [   # Moves
-                    (MoveType.ABSOLUTE, [MoveOption.CAN_TAKE])
-                ]
-            ),
+        (   # Offset
+            (-2, 1),  # 2 step up, 1 step right
+            [   # Moves
+                (MoveType.ABSOLUTE, [MoveOption.CAN_TAKE])
+            ]
+        ),
 
         # Knight T facing right
         # - - - - -
@@ -85,20 +85,20 @@ class PieceType(Enum):
         # - - * - -
         # - - - - x
         # - - - - -
-            (   # Offset
-                (-1, 2),  # 1 step up, 2 steps right
-                [   # Moves
-                    (MoveType.ABSOLUTE, [MoveOption.CAN_TAKE])
-                ]
-            ),
+        (   # Offset
+            (-1, 2),  # 1 step up, 2 steps right
+            [   # Moves
+                (MoveType.ABSOLUTE, [MoveOption.CAN_TAKE])
+            ]
+        ),
 
-            # Diag take + en passant
-            (   # Offset
-                (1, 2),  # 1 step down, 2 steps right
-                [   # Moves
-                    (MoveType.ABSOLUTE, [MoveOption.CAN_TAKE])
-                ]
-            ),
+        # Diag take + en passant
+        (   # Offset
+            (1, 2),  # 1 step down, 2 steps right
+            [   # Moves
+                (MoveType.ABSOLUTE, [MoveOption.CAN_TAKE])
+            ]
+        ),
 
         # Knight T facing down
         # - - - - -
@@ -106,19 +106,19 @@ class PieceType(Enum):
         # - - * - -
         # - - - - -
         # - x - x -
-            (   # Offset
-                (2, -1), # 2 steps down, same left
-                [   # Moves
-                    (MoveType.ABSOLUTE, [MoveOption.CAN_TAKE])
-                ]
-            ),
+        (   # Offset
+            (2, -1),  # 2 steps down, same left
+            [   # Moves
+                (MoveType.ABSOLUTE, [MoveOption.CAN_TAKE])
+            ]
+        ),
 
-            (   # Offset
-                (2, 1), # 2 steps down, 1 step right
-                [   # Moves
-                    (MoveType.ABSOLUTE, [MoveOption.CAN_TAKE])
-                ]
-            ),
+        (   # Offset
+            (2, 1),  # 2 steps down, 1 step right
+            [   # Moves
+                (MoveType.ABSOLUTE, [MoveOption.CAN_TAKE])
+            ]
+        ),
 
         # Knight T facing left
         # - - - - -
@@ -126,72 +126,74 @@ class PieceType(Enum):
         # - - * - -
         # x - - - -
         # - - - - -
-            (   # Offset
-                (-1, -2), # 1 step up, 2 steps left
-                [   # Moves
-                    (MoveType.ABSOLUTE, [MoveOption.CAN_TAKE])
-                ]
-            ),
-
-            # Diag take + en passant
-            (   # Offset
-                (1, -2), # 1 step down, 2 steps left
-                [   # Moves
-                    (MoveType.ABSOLUTE, [MoveOption.CAN_TAKE])
-                ]
-            )
+        (   # Offset
+            (-1, -2),  # 1 step up, 2 steps left
+            [   # Moves
+                (MoveType.ABSOLUTE, [MoveOption.CAN_TAKE])
             ]
-    
+        ),
+
+        # Diag take + en passant
+        (   # Offset
+            (1, -2),  # 1 step down, 2 steps left
+            [   # Moves
+                (MoveType.ABSOLUTE, [MoveOption.CAN_TAKE])
+            ]
+        )
+        ]
 
     ####
     # Bishop Move List
     ####
     BISHOP = [
-            # Bishop attacking diag
-            # x - -
-            # - * -
-            # - - -
-            (   # Offset
-                (-1, -1), # 1 step up, 1 step left
-                [   # Moves
-                    (MoveType.COLLISION_DIAG, [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
-                ]
-            ),
-
-            # Bishop attacking diag
-            # - - x
-            # - * -
-            # - - -
-            (   # Offset
-                (-1, 1), # 1 step up, 1 step right
-                [   # Moves
-                    (MoveType.COLLISION_DIAG, [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
-                ]
-            ),
-
-            # Bishop attacking diag
-            # - - -
-            # - * -
-            # - - x
-            (   # Offset
-                (1, 1), # 1 step down, 1 step right
-                [   # Moves
-                    (MoveType.COLLISION_DIAG, [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
-                ]
-            ),
-
-            # Bishop attacking diag
-            # - - -
-            # - * -
-            # x - -
-            (   # Offset
-                (1, -1), # 1 step down, 1 step left
-                [   # Moves
-                    (MoveType.COLLISION_DIAG, [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
-                ]
-            )
+        # Bishop attacking diag
+        # x - -
+        # - * -
+        # - - -
+        (   # Offset
+            (-1, -1),  # 1 step up, 1 step left
+            [   # Moves
+                (MoveType.COLLISION_DIAG, [MoveOption.CAN_TAKE,
+                                           MoveOption.PROPEGATES])
             ]
-    
+        ),
+
+        # Bishop attacking diag
+        # - - x
+        # - * -
+        # - - -
+        (   # Offset
+            (-1, 1),  # 1 step up, 1 step right
+            [   # Moves
+                (MoveType.COLLISION_DIAG, [MoveOption.CAN_TAKE,
+                                           MoveOption.PROPEGATES])
+            ]
+        ),
+
+        # Bishop attacking diag
+        # - - -
+        # - * -
+        # - - x
+        (   # Offset
+            (1, 1),  # 1 step down, 1 step right
+            [   # Moves
+                (MoveType.COLLISION_DIAG, [MoveOption.CAN_TAKE,
+                                           MoveOption.PROPEGATES])
+            ]
+        ),
+
+        # Bishop attacking diag
+        # - - -
+        # - * -
+        # x - -
+        (   # Offset
+            (1, -1),  # 1 step down, 1 step left
+            [   # Moves
+                (MoveType.COLLISION_DIAG, [MoveOption.CAN_TAKE,
+                                           MoveOption.PROPEGATES])
+            ]
+        )
+        ]
 
     ####
     # Rook Move List
@@ -202,9 +204,10 @@ class PieceType(Enum):
             # - * -
             # - - -
             (   # Offset
-                (-1, 0), # 1 step up, same col
+                (-1, 0),  # 1 step up, same col
                 [   # Moves
-                    (MoveType.COLLISION_AXIS, [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
+                    (MoveType.COLLISION_AXIS, [MoveOption.CAN_TAKE,
+                                               MoveOption.PROPEGATES])
                 ]
             ),
 
@@ -213,9 +216,10 @@ class PieceType(Enum):
             # - * x
             # - - -
             (   # Offset
-                (0, 1), # same row, 1 step right
+                (0, 1),  # same row, 1 step right
                 [   # Moves
-                    (MoveType.COLLISION_AXIS, [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
+                    (MoveType.COLLISION_AXIS, [MoveOption.CAN_TAKE,
+                                               MoveOption.PROPEGATES])
                 ]
             ),
 
@@ -224,9 +228,10 @@ class PieceType(Enum):
             # - * -
             # - x -
             (   # Offset
-                (1, 0), # 1 step down, same col
+                (1, 0),  # 1 step down, same col
                 [   # Moves
-                    (MoveType.COLLISION_AXIS, [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
+                    (MoveType.COLLISION_AXIS, [MoveOption.CAN_TAKE,
+                                               MoveOption.PROPEGATES])
                 ]
             ),
 
@@ -235,13 +240,13 @@ class PieceType(Enum):
             # x * -
             # - - -
             (   # Offset
-                (0, -1), # same row, 1 step left
+                (0, -1),  # same row, 1 step left
                 [   # Moves
-                    (MoveType.COLLISION_AXIS, [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
+                    (MoveType.COLLISION_AXIS, [MoveOption.CAN_TAKE,
+                                               MoveOption.PROPEGATES])
                 ]
             )
             ]
-    
 
     ####
     # QUEEN Move List
@@ -252,9 +257,10 @@ class PieceType(Enum):
             # - * -
             # - - -
             (   # Offset
-                (-1, -1), # 1 step up, 1 step left
+                (-1, -1),  # 1 step up, 1 step left
                 [   # Moves
-                    (MoveType.COLLISION_DIAG, [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
+                    (MoveType.COLLISION_DIAG, [MoveOption.CAN_TAKE,
+                                               MoveOption.PROPEGATES])
                 ]
             ),
             # Queen attacking y-axis up
@@ -262,9 +268,10 @@ class PieceType(Enum):
             # - * -
             # - - -
             (   # Offset
-                (-1, 0), # 1 step up, same col
+                (-1, 0),  # 1 step up, same col
                 [   # Moves
-                    (MoveType.COLLISION_AXIS, [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
+                    (MoveType.COLLISION_AXIS, [MoveOption.CAN_TAKE,
+                                               MoveOption.PROPEGATES])
                 ]
             ),
 
@@ -273,9 +280,10 @@ class PieceType(Enum):
             # - * -
             # - - -
             (   # Offset
-                (-1, 1), # 1 step up, 1 step right
+                (-1, 1),  # 1 step up, 1 step right
                 [   # Moves
-                    (MoveType.COLLISION_DIAG, [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
+                    (MoveType.COLLISION_DIAG, [MoveOption.CAN_TAKE,
+                                               MoveOption.PROPEGATES])
                 ]
             ),
 
@@ -284,9 +292,10 @@ class PieceType(Enum):
             # - * x
             # - - -
             (   # Offset
-                (0, 1), # same row, 1 step right
+                (0, 1),  # same row, 1 step right
                 [   # Moves
-                    (MoveType.COLLISION_AXIS, [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
+                    (MoveType.COLLISION_AXIS, [MoveOption.CAN_TAKE,
+                                               MoveOption.PROPEGATES])
                 ]
             ),
 
@@ -295,9 +304,10 @@ class PieceType(Enum):
             # - * -
             # - - x
             (   # Offset
-                (1, 1), # 1 step down, 1 step right
+                (1, 1),  # 1 step down, 1 step right
                 [   # Moves
-                    (MoveType.COLLISION_DIAG, [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
+                    (MoveType.COLLISION_DIAG, [MoveOption.CAN_TAKE,
+                                               MoveOption.PROPEGATES])
                 ]
             ),
 
@@ -306,9 +316,10 @@ class PieceType(Enum):
             # - * -
             # - x -
             (   # Offset
-                (1, 0), # 1 step down, same col
+                (1, 0),  # 1 step down, same col
                 [   # Moves
-                    (MoveType.COLLISION_AXIS, [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
+                    (MoveType.COLLISION_AXIS, [MoveOption.CAN_TAKE,
+                                               MoveOption.PROPEGATES])
                 ]
             ),
 
@@ -317,9 +328,10 @@ class PieceType(Enum):
             # - * -
             # x - -
             (   # Offset
-                (1, -1), # 1 step down, 1 step left
+                (1, -1),  # 1 step down, 1 step left
                 [   # Moves
-                    (MoveType.COLLISION_DIAG, [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
+                    (MoveType.COLLISION_DIAG, [MoveOption.CAN_TAKE,
+                                               MoveOption.PROPEGATES])
                 ]
             ),
 
@@ -328,13 +340,13 @@ class PieceType(Enum):
             # x * -
             # - - -
             (   # Offset
-                (0, -1), # same row, 1 step left
+                (0, -1),  # same row, 1 step left
                 [   # Moves
-                    (MoveType.COLLISION_AXIS, [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
+                    (MoveType.COLLISION_AXIS, [MoveOption.CAN_TAKE,
+                                               MoveOption.PROPEGATES])
                 ]
             )
             ]
-    
 
     ####
     # King Move List
@@ -345,9 +357,10 @@ class PieceType(Enum):
             # - - * - -
             # - - - - -
             (   # Offset
-                (-1, -1), # 1 step up, 1 step left
+                (-1, -1),  # 1 step up, 1 step left
                 [   # Moves
-                    (MoveType.COLLISION_DIAG, [MoveOption.CAN_TAKE, MoveOption.PROTECTED])
+                    (MoveType.COLLISION_DIAG, [MoveOption.CAN_TAKE,
+                                               MoveOption.PROTECTED])
                 ]
             ),
             # KING attacking y-axis up
@@ -355,9 +368,10 @@ class PieceType(Enum):
             # - - * - -
             # - - - - -
             (   # Offset
-                (-1, 0), # 1 step up, same col
+                (-1, 0),  # 1 step up, same col
                 [   # Moves
-                    (MoveType.COLLISION_AXIS, [MoveOption.CAN_TAKE, MoveOption.PROTECTED])
+                    (MoveType.COLLISION_AXIS, [MoveOption.CAN_TAKE,
+                                               MoveOption.PROTECTED])
                 ]
             ),
 
@@ -366,9 +380,10 @@ class PieceType(Enum):
             # - - * - -
             # - - - - -
             (   # Offset
-                (-1, 1), # 1 step up, 1 step right
+                (-1, 1),  # 1 step up, 1 step right
                 [   # Moves
-                    (MoveType.COLLISION_DIAG, [MoveOption.CAN_TAKE, MoveOption.PROTECTED])
+                    (MoveType.COLLISION_DIAG, [MoveOption.CAN_TAKE,
+                                               MoveOption.PROTECTED])
                 ]
             ),
 
@@ -377,9 +392,10 @@ class PieceType(Enum):
             # - - * x -
             # - - - - -
             (   # Offset
-                (0, 1), # same row, 1 step right
+                (0, 1),  # same row, 1 step right
                 [   # Moves
-                    (MoveType.COLLISION_AXIS, [MoveOption.CAN_TAKE, MoveOption.PROTECTED])
+                    (MoveType.COLLISION_AXIS, [MoveOption.CAN_TAKE,
+                                               MoveOption.PROTECTED])
                 ]
             ),
 
@@ -388,9 +404,10 @@ class PieceType(Enum):
             # - - * - -
             # - - - x -
             (   # Offset
-                (1, 1), # 1 step down, 1 step right
+                (1, 1),  # 1 step down, 1 step right
                 [   # Moves
-                    (MoveType.COLLISION_DIAG, [MoveOption.CAN_TAKE, MoveOption.PROTECTED])
+                    (MoveType.COLLISION_DIAG, [MoveOption.CAN_TAKE,
+                                               MoveOption.PROTECTED])
                 ]
             ),
 
@@ -399,9 +416,10 @@ class PieceType(Enum):
             # - - * - -
             # - - x - -
             (   # Offset
-                (1, 0), # 1 step down, same col
+                (1, 0),  # 1 step down, same col
                 [   # Moves
-                    (MoveType.COLLISION_AXIS, [MoveOption.CAN_TAKE, MoveOption.PROTECTED])
+                    (MoveType.COLLISION_AXIS, [MoveOption.CAN_TAKE,
+                                               MoveOption.PROTECTED])
                 ]
             ),
 
@@ -410,9 +428,10 @@ class PieceType(Enum):
             # - - * - -
             # - x - - -
             (   # Offset
-                (1, -1), # 1 step down, 1 step left
+                (1, -1),  # 1 step down, 1 step left
                 [   # Moves
-                    (MoveType.COLLISION_DIAG, [MoveOption.CAN_TAKE, MoveOption.PROTECTED])
+                    (MoveType.COLLISION_DIAG, [MoveOption.CAN_TAKE,
+                                               MoveOption.PROTECTED])
                 ]
             ),
 
@@ -421,9 +440,10 @@ class PieceType(Enum):
             # - x * - -
             # - - - - -
             (   # Offset
-                (0, -1), # same row, 1 step left
+                (0, -1),  # same row, 1 step left
                 [   # Moves
-                    (MoveType.COLLISION_AXIS, [MoveOption.CAN_TAKE, MoveOption.PROTECTED])
+                    (MoveType.COLLISION_AXIS, [MoveOption.CAN_TAKE,
+                                               MoveOption.PROTECTED])
                 ]
             ),
 
@@ -432,7 +452,7 @@ class PieceType(Enum):
             # s - * - -
             # - - - - -
             (   # Offset
-                (0, -2), # same row, 2 steps left
+                (0, -2),  # same row, 2 steps left
                 [   # Moves
                     (MoveType.KING_CASTLE, [MoveOption.PROTECTED])
                 ]
@@ -443,19 +463,18 @@ class PieceType(Enum):
             # - - * - s
             # - - - - -
             (   # Offset
-                (0, 2), # same row, 2 steps right
+                (0, 2),  # same row, 2 steps right
                 [   # Moves
                     (MoveType.KING_CASTLE, [MoveOption.PROTECTED])
                 ]
             )
             ]
-    
 
     def __str__(self):
         """Overriden to String method
 
         Returns Enum name such as KING instead of object refrense"""
         return f'{self.name}'
-    
+
     def __repr__(self) -> str:
         return self.__str__()

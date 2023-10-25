@@ -1,16 +1,17 @@
-from chessboard import *
-from text_user_interface import *
+from chessboard import Chessboard
+from position_class import Position
+from text_user_interface import TextUserInterface
 
 cb = Chessboard()
 cb.create_default_board()
 
-#cb.remove_piece(Position(7,1))
-#cb.remove_piece(Position(7,2))
-#cb.remove_piece(Position(7,3))
+# cb.remove_piece(Position(7,1))
+# cb.remove_piece(Position(7,2))
+# cb.remove_piece(Position(7,3))
 
-cb.move(Position(6,0),Position(4,0))
-cb.move(Position(4,0),Position(3,0))
-cb.move(Position(1,1),Position(3,1))
+cb.move(Position(6, 0), Position(4, 0))
+cb.move(Position(4, 0), Position(3, 0))
+cb.move(Position(1, 1), Position(3, 1))
 
 
 while True:

@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class MoveType(Enum):
     # Moves along x/y axis
     COLLISION_AXIS = 1
@@ -14,12 +15,11 @@ class MoveType(Enum):
     PAWN_EN_PASSANT = 8
     KING_CASTLE = 16
 
-    
     def __str__(self):
         """Overriden to String method
 
         Returns Enum name such as COLLISION_AXIS_TAKE instead of Number 11"""
         return f'{self.name}'
-    
+
     def __repr__(self) -> str:
         return self.__str__()

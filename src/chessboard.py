@@ -1,3 +1,4 @@
+import copy
 from piece_type_enum import PieceType
 from chess_piece_class import ChessPiece
 from piece_color_enum import Color
@@ -870,3 +871,23 @@ class Chessboard:
 
     def __ne__(self, __value: object) -> bool:
         return not self.__eq__(__value)
+
+    def copy(self):
+        """Returns a shallow copy of the class
+
+        (original is original.copy()) is False and
+        (original == original.copy()) is True. But
+        (original.get_chessboard() is original.copy().get_chessboard()) is True"""  # noqa E501
+        return copy.copy(self)
+
+    def deep_copy(self, memo: dict = {}):
+        """Returns a deep copy of the class
+
+        (original is original.copy()) is False and
+        (original == original.copy()) is True. But
+        (original.get_chessboard() is original.copy().get_chessboard()) is False but we still get
+        (original.get_chessboard() == original.copy().get_chessboard()) is True
+
+        This means that chessboard layout is the same
+        but modifications can be made withot affecting the original"""  # noqa E501
+        return copy.deepcopy(self, memo)

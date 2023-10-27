@@ -92,13 +92,13 @@ class Window_Class(UI_Interface):
 
     def mouse_pos_to_index(self, pos):
         x, y = pos
-        if x > 601 and y > 601:
+        if x > 601:
             return None
         else:
             row = x // self.SQUARE_SIZE
             col = y // self.SQUARE_SIZE
 
-            print(f"{row}{col}")
+            print(f"({row},{col})")
         
         return Position(row, col)
 

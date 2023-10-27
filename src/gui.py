@@ -78,11 +78,18 @@ class Window_Class(UI_Interface):
             #call the show_chessboard function and draw the chessboard
             self.show_chess_board(self.board.get_chessboard())
             # print(type(self.board.get_chessboard()))
+            self.get_mouse_pos()
             pygame.display.flip()
 
         pygame.quit()
         sys.exit()
 
+    def show_side_text(self):
+
+        text = self.font.render("Sago-Shack, by: Hampus, John & Simon", True, (255, 255, 255))
+        text_rect = text.get_rect()
+        text_rect.center = (self.size[0] // 3, self.size[1] // 2)
+        self.screen.blit(text, text_rect)
 
     def show_splash_screen(self):
         # Display game name, authors, date/build
@@ -205,6 +212,9 @@ class Window_Class(UI_Interface):
         scaled_sprite = pygame.transform.scale(sprite_image, (scaled_width, scaled_height))
 
         return scaled_sprite
+    def get_mouse_pos(self):
+        mouse_x, mouse_y = pygame.mouse.get_pos()
+        print(f"Mouse Position: x={mouse_x}, y={mouse_y}")
 
 
    

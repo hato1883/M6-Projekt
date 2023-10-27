@@ -2,6 +2,7 @@
 #### out how to make the program relate the chessboard to the graphics
 import pygame
 import sys
+import os
 from chessboard import *
 from ui_interface import UI_Interface
 
@@ -31,9 +32,13 @@ class Window_Class(UI_Interface):
     def run(self):
         self.running=True
 
+        current_directory = os.path.dirname(__file__)
+
+        assetfolder = os.path.dirname(__path__)
+
         #show splashscreen
         self.show_splash_screen()
-        bb = pygame.image.load("assets/bb.png")  # Replace with the path to your sprite image
+        bb = pygame.image.load("bb.png")  # Replace with the path to your sprite image
         while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -44,6 +49,7 @@ class Window_Class(UI_Interface):
 
             #call the show_chessboard function and draw the chessboard
             self.show_chess_board()
+            self.draw_sprite(bb,300,300)
             pygame.display.flip()
 
         pygame.quit()

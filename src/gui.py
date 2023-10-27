@@ -140,11 +140,8 @@ class Window_Class(UI_Interface):
 
     def asset_load(self,target:str):
        
-       target
-
        asset_filepath=os.path.join(self.asset_path,target)
        image_path = os.path.join(f'{asset_filepath}.png')
-
 
        return image_path
 

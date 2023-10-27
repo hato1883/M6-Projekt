@@ -133,8 +133,8 @@ class Window_Class(UI_Interface):
         #Draw the text
         pygame.display.flip()
         
-        #Wait 2000 ms
-        pygame.time.delay(2000)
+        #Wait 500 ms
+        pygame.time.delay(500)
 
         pass
 

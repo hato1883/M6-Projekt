@@ -33,6 +33,7 @@ class Window_Class(UI_Interface):
 
         #show splashscreen
         self.show_splash_screen()
+        bb = pygame.image.load("assets/bb.png")  # Replace with the path to your sprite image
         while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -106,13 +107,10 @@ class Window_Class(UI_Interface):
         # Either by text (q, r, b or k) or graphical interaction
         # return  integer in [0,3]. 0 == queen, 1 == r and so on.
         pass
-    def draw_something(thing):
 
-    # Load an image for the sprite
-        sprite_image = pygame.image.load("assets/sprite.png")  # Replace with the path to your sprite image
-
-def draw_sprite(x, y):
-    screen.blit(sprite_image, (x, y))
+    def draw_sprite(self, sprite, x, y):
+        
+        self.screen.blit(sprite, (x, y))
 
 
    

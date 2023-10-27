@@ -50,8 +50,19 @@ class Window_Class(UI_Interface):
 
         #show splashscreen
         self.show_splash_screen()
-        bb = self.asset_load('bb')
-        bb = self.load_and_scale_sprite(bb)
+
+        self.piece_image = [[],[]]
+
+        colors =("b","w")
+        suffix = ("k","q","r","b","n","p")
+        i = 0
+        for color in colors:
+            for letter in suffix:
+                temp = self.asset_load(f"{color}{letter}")
+                self.piece_image[i].append( self.load_and_scale_sprite(temp) )
+            i += 1
+
+
         while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -62,7 +73,7 @@ class Window_Class(UI_Interface):
 
             #call the show_chessboard function and draw the chessboard
             self.show_chess_board()
-            self.draw_sprite(bb,150,150)
+            self.draw_sprite(self.piece_image[0][1],150,150)
             pygame.display.flip()
 
         pygame.quit()

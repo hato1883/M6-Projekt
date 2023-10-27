@@ -29,21 +29,19 @@ class Window_Class(UI_Interface):
 
 
     def run(self):
-        #show splashscreen
         self.running=True
 
+        #show splashscreen
         self.show_splash_screen()
         while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
 
-            #show splashscreen
-
             #paint the background
             self.screen.fill(((43, 42, 51)))
 
-            #call the show_chessboard function
+            #call the show_chessboard function and draw the chessboard
             self.show_chess_board()
             pygame.display.flip()
 
@@ -108,10 +106,16 @@ class Window_Class(UI_Interface):
         # Either by text (q, r, b or k) or graphical interaction
         # return  integer in [0,3]. 0 == queen, 1 == r and so on.
         pass
+    def draw_something(thing):
+
+    # Load an image for the sprite
+        sprite_image = pygame.image.load("assets/sprite.png")  # Replace with the path to your sprite image
+
+def draw_sprite(x, y):
+    screen.blit(sprite_image, (x, y))
+
 
    
 if __name__ == "__main__":
     game=Window_Class()
     game.run()
-
-

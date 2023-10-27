@@ -77,12 +77,49 @@ class Window_Class(UI_Interface):
 
             #call the show_chessboard function and draw the chessboard
             self.show_chess_board(self.board.get_chessboard())
+            ip= "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+            self.text_wrap(self.screen, ip, (602, 0), pygame.font.SysFont('Arial', 20))
             # print(type(self.board.get_chessboard()))
+            
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                pos = pygame.mouse.get_pos()
+                self.mouse_pos_to_index(pos)
             pygame.display.flip()
+
 
         pygame.quit()
         sys.exit()
 
+    def mouse_pos_to_index(self, pos):
+        x, y = pos
+        if x > 601 and y > 601:
+            return None
+        else:
+            row = x // self.SQUARE_SIZE
+            col = y // self.SQUARE_SIZE
+
+            print(f"{row}{col}")
+        
+        return Position(row, col)
+
+
+
+    def text_wrap(self, surface, text, pos, font, color=pygame.Color('white')):
+        words = [word.split(' ') for word in text.splitlines()]  # 2D array where each row is a list of words.
+        space = font.size(' ')[0]  # The width of a space.
+        max_width, max_height = surface.get_size()
+        x, y = pos
+        for line in words:
+            for word in line:
+                word_surface = font.render(word, 0, color)
+                word_width, word_height = word_surface.get_size()
+                if x + word_width >= max_width:
+                    x = pos[0]  # Reset the x.
+                    y += word_height  # Start on new row.
+                surface.blit(word_surface, (x, y))
+                x += word_width + space
+            x = pos[0]  # Reset the x.
+            y += word_height  # Start on new row.
 
     def show_splash_screen(self):
         # Display game name, authors, date/build

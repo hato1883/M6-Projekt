@@ -53,3 +53,6 @@ class ChessPiece:
 
     def __ne__(self, __value: object) -> bool:
         return not self.__eq__(__value)
+
+
+EMPTY_PIECE = ChessPiece(Color.EMPTY, PieceType.EMPTY)

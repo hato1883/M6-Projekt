@@ -4,6 +4,7 @@ from enum import Enum
 class Color (Enum):
     WHITE = (1, 1)
     BLACK = (-1, 1)
+    EMPTY = (0, 0)
 
     def __str__(self) -> str:
         return f"{self.name}"

@@ -7,7 +7,7 @@ sys.path.append(current + "/../src")
 
 from chessboard import Chessboard  # noqa: E402
 from position_class import Position  # noqa: E402
-from chess_piece_class import ChessPiece  # noqa: E402
+from chess_piece_class import EMPTY_PIECE, ChessPiece  # noqa: E402
 from piece_color_enum import Color  # noqa: E402
 from piece_type_enum import PieceType  # noqa: E402
 
@@ -33,27 +33,27 @@ def test_in_danger_rook_threats():
     # Black attacking
     ####
     board_state: list[list[ChessPiece]] = [
-        [b_ro, None, None],
-        [None, None, None],
-        [None, None, w_ki]
+        [b_ro, EMPTY_PIECE, EMPTY_PIECE],
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],
+        [EMPTY_PIECE, EMPTY_PIECE, w_ki]
     ]
     chessboard_instance = Chessboard(board_state)
     # Is white king in danger from the rook? Answer: No
     assert chessboard_instance.in_danger(Position(2, 2)) is False
 
     board_state: list[list[ChessPiece]] = [
-        [None, b_ro, None],
-        [b_ro, None, None],
-        [None, None, w_ki]
+        [EMPTY_PIECE, b_ro, EMPTY_PIECE],
+        [b_ro, EMPTY_PIECE, EMPTY_PIECE],
+        [EMPTY_PIECE, EMPTY_PIECE, w_ki]
     ]
     chessboard_instance = Chessboard(board_state)
     # Is white king in danger from the rooks? Answer: No
     assert chessboard_instance.in_danger(Position(2, 2)) is False
 
     board_state: list[list[ChessPiece]] = [
-        [b_ro, b_ro, None],
-        [b_ro, b_ro, None],
-        [None, None, w_ki]
+        [b_ro, b_ro, EMPTY_PIECE],
+        [b_ro, b_ro, EMPTY_PIECE],
+        [EMPTY_PIECE, EMPTY_PIECE, w_ki]
     ]
     chessboard_instance = Chessboard(board_state)
     # Is white king in danger from the rooks? Answer: No
@@ -62,18 +62,18 @@ def test_in_danger_rook_threats():
     # Now attack the King
 
     board_state: list[list[ChessPiece]] = [
-        [None, None, b_ro],
-        [None, None, None],
-        [None, None, w_ki]
+        [EMPTY_PIECE, EMPTY_PIECE, b_ro],
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],
+        [EMPTY_PIECE, EMPTY_PIECE, w_ki]
     ]
     chessboard_instance = Chessboard(board_state)
     # Is white king in danger from the rooks? Answer: Yes
 
     assert chessboard_instance.in_danger(Position(2, 2)) is True
     board_state: list[list[ChessPiece]] = [
-        [None, None, None],
-        [None, None, None],
-        [b_ro, None, w_ki]
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],
+        [b_ro, EMPTY_PIECE, w_ki]
     ]
     chessboard_instance = Chessboard(board_state)
     # Is white king in danger from the rook? Answer: Yes
@@ -93,27 +93,27 @@ def test_in_danger_rook_threats():
     # White attacking
     ####
     board_state: list[list[ChessPiece]] = [
-        [w_ro, None, None],
-        [None, None, None],
-        [None, None, b_ki]
+        [w_ro, EMPTY_PIECE, EMPTY_PIECE],
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],
+        [EMPTY_PIECE, EMPTY_PIECE, b_ki]
     ]
     chessboard_instance = Chessboard(board_state)
     # Is black king in danger from the rook? Answer: No
     assert chessboard_instance.in_danger(Position(2, 2)) is False
 
     board_state: list[list[ChessPiece]] = [
-        [None, w_ro, None],
-        [w_ro, None, None],
-        [None, None, b_ki]
+        [EMPTY_PIECE, w_ro, EMPTY_PIECE],
+        [w_ro, EMPTY_PIECE, EMPTY_PIECE],
+        [EMPTY_PIECE, EMPTY_PIECE, b_ki]
     ]
     chessboard_instance = Chessboard(board_state)
     # Is black king in danger from the rooks? Answer: No
     assert chessboard_instance.in_danger(Position(2, 2)) is False
 
     board_state: list[list[ChessPiece]] = [
-        [w_ro, w_ro, None],
-        [w_ro, w_ro, None],
-        [None, None, b_ki]
+        [w_ro, w_ro, EMPTY_PIECE],
+        [w_ro, w_ro, EMPTY_PIECE],
+        [EMPTY_PIECE, EMPTY_PIECE, b_ki]
     ]
     chessboard_instance = Chessboard(board_state)
     # Is black king in danger from the rooks? Answer: No
@@ -122,18 +122,18 @@ def test_in_danger_rook_threats():
     # Now attack the King
 
     board_state: list[list[ChessPiece]] = [
-        [None, None, w_ro],
-        [None, None, None],
-        [None, None, b_ki]
+        [EMPTY_PIECE, EMPTY_PIECE, w_ro],
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],
+        [EMPTY_PIECE, EMPTY_PIECE, b_ki]
     ]
     chessboard_instance = Chessboard(board_state)
     # Is black king in danger from the rooks? Answer: Yes
 
     assert chessboard_instance.in_danger(Position(2, 2)) is True
     board_state: list[list[ChessPiece]] = [
-        [None, None, None],
-        [None, None, None],
-        [w_ro, None, b_ki]
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],
+        [w_ro, EMPTY_PIECE, b_ki]
     ]
     chessboard_instance = Chessboard(board_state)
     # Is black king in danger from the rook? Answer: Yes
@@ -157,26 +157,26 @@ def test_in_danger_bishop_threats():
     # Black attacking
     ####
     board_state: list[list[ChessPiece]] = [
-        [None, b_bi, None],
-        [None, None, None],
-        [None, None, w_ki]
+        [EMPTY_PIECE, b_bi, EMPTY_PIECE],
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],
+        [EMPTY_PIECE, EMPTY_PIECE, w_ki]
     ]
     chessboard_instance = Chessboard(board_state)
     # Is white king in danger from the bishop? Answer: No
     assert chessboard_instance.in_danger(Position(2, 2)) is False
 
     board_state: list[list[ChessPiece]] = [
-        [None, b_bi, None],
-        [b_bi, None, None],
-        [None, None, w_ki]
+        [EMPTY_PIECE, b_bi, EMPTY_PIECE],
+        [b_bi, EMPTY_PIECE, EMPTY_PIECE],
+        [EMPTY_PIECE, EMPTY_PIECE, w_ki]
     ]
     chessboard_instance = Chessboard(board_state)
     # Is white king in danger from the bishops? Answer: No
     assert chessboard_instance.in_danger(Position(2, 2)) is False
 
     board_state: list[list[ChessPiece]] = [
-        [None, b_bi, b_bi],
-        [b_bi, None, b_bi],
+        [EMPTY_PIECE, b_bi, b_bi],
+        [b_bi, EMPTY_PIECE, b_bi],
         [b_bi, b_bi, w_ki]
     ]
     chessboard_instance = Chessboard(board_state)
@@ -186,18 +186,18 @@ def test_in_danger_bishop_threats():
     # Now attack the King
 
     board_state: list[list[ChessPiece]] = [
-        [b_bi, None, None],
-        [None, None, None],
-        [None, None, w_ki]
+        [b_bi, EMPTY_PIECE, EMPTY_PIECE],
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],
+        [EMPTY_PIECE, EMPTY_PIECE, w_ki]
     ]
     chessboard_instance = Chessboard(board_state)
     # Is white king in danger from the bishops? Answer: Yes
 
     assert chessboard_instance.in_danger(Position(2, 2)) is True
     board_state: list[list[ChessPiece]] = [
-        [None, None, None],
-        [None, b_bi, None],
-        [None, None, w_ki]
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],
+        [EMPTY_PIECE, b_bi, EMPTY_PIECE],
+        [EMPTY_PIECE, EMPTY_PIECE, w_ki]
     ]
     chessboard_instance = Chessboard(board_state)
     # Is white king in danger from the bishop? Answer: Yes
@@ -216,26 +216,26 @@ def test_in_danger_bishop_threats():
     # White attacking
     ####
     board_state: list[list[ChessPiece]] = [
-        [None, w_bi, None],
-        [None, None, None],
-        [None, None, b_ki]
+        [EMPTY_PIECE, w_bi, EMPTY_PIECE],
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],
+        [EMPTY_PIECE, EMPTY_PIECE, b_ki]
     ]
     chessboard_instance = Chessboard(board_state)
     # Is black king in danger from the bishop? Answer: No
     assert chessboard_instance.in_danger(Position(2, 2)) is False
 
     board_state: list[list[ChessPiece]] = [
-        [None, w_bi, None],
-        [w_bi, None, None],
-        [None, None, b_ki]
+        [EMPTY_PIECE, w_bi, EMPTY_PIECE],
+        [w_bi, EMPTY_PIECE, EMPTY_PIECE],
+        [EMPTY_PIECE, EMPTY_PIECE, b_ki]
     ]
     chessboard_instance = Chessboard(board_state)
     # Is black king in danger from the bishops? Answer: No
     assert chessboard_instance.in_danger(Position(2, 2)) is False
 
     board_state: list[list[ChessPiece]] = [
-        [None, w_bi, w_bi],
-        [w_bi, None, w_bi],
+        [EMPTY_PIECE, w_bi, w_bi],
+        [w_bi, EMPTY_PIECE, w_bi],
         [w_bi, w_bi, b_ki]
     ]
     chessboard_instance = Chessboard(board_state)
@@ -245,18 +245,18 @@ def test_in_danger_bishop_threats():
     # Now attack the King
 
     board_state: list[list[ChessPiece]] = [
-        [w_bi, None, None],
-        [None, None, None],
-        [None, None, b_ki]
+        [w_bi, EMPTY_PIECE, EMPTY_PIECE],
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],
+        [EMPTY_PIECE, EMPTY_PIECE, b_ki]
     ]
     chessboard_instance = Chessboard(board_state)
     # Is black king in danger from the bishop? Answer: Yes
 
     assert chessboard_instance.in_danger(Position(2, 2)) is True
     board_state: list[list[ChessPiece]] = [
-        [None, None, None],
-        [None, w_bi, None],
-        [None, None, b_ki]
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],
+        [EMPTY_PIECE, w_bi, EMPTY_PIECE],
+        [EMPTY_PIECE, EMPTY_PIECE, b_ki]
     ]
     chessboard_instance = Chessboard(board_state)
     # Is black king in danger from the bishop? Answer: Yes
@@ -278,18 +278,18 @@ def test_in_danger_pawn_diag():
     # Black attacking
     ####
     board_state: list[list[ChessPiece]] = [
-        [b_pa, None, None],
-        [None, None, None],
-        [None, None, w_ki]
+        [b_pa, EMPTY_PIECE, EMPTY_PIECE],
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],
+        [EMPTY_PIECE, EMPTY_PIECE, w_ki]
     ]
     chessboard_instance = Chessboard(board_state)
     # Is white king in danger from the pawn? Answer: No
     assert chessboard_instance.in_danger(Position(2, 2)) is False
 
     board_state: list[list[ChessPiece]] = [
-        [None, None, None],
-        [None, None, b_pa],
-        [None, None, w_ki]
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],
+        [EMPTY_PIECE, EMPTY_PIECE, b_pa],
+        [EMPTY_PIECE, EMPTY_PIECE, w_ki]
     ]
     chessboard_instance = Chessboard(board_state)
     # Is white king in danger from the pawn? Answer: No
@@ -297,7 +297,7 @@ def test_in_danger_pawn_diag():
 
     board_state: list[list[ChessPiece]] = [
         [b_pa, b_pa, b_pa],
-        [b_pa, None, b_pa],
+        [b_pa, EMPTY_PIECE, b_pa],
         [b_pa, b_pa, w_ki]
     ]
     chessboard_instance = Chessboard(board_state)
@@ -305,9 +305,9 @@ def test_in_danger_pawn_diag():
     assert chessboard_instance.in_danger(Position(2, 2)) is False
 
     board_state: list[list[ChessPiece]] = [
-        [None, None, None],
-        [None, b_pa, None],
-        [None, None, w_ki]
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],
+        [EMPTY_PIECE, b_pa, EMPTY_PIECE],
+        [EMPTY_PIECE, EMPTY_PIECE, w_ki]
     ]
     chessboard_instance = Chessboard(board_state)
     # Is white king in danger from the pawn? Answer: Yes
@@ -326,18 +326,18 @@ def test_in_danger_pawn_diag():
     # White attacking
     ####
     board_state: list[list[ChessPiece]] = [
-        [None, None, b_ki],
-        [None, None, None],
-        [w_pa, None, None]
+        [EMPTY_PIECE, EMPTY_PIECE, b_ki],
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],
+        [w_pa, EMPTY_PIECE, EMPTY_PIECE]
     ]
     chessboard_instance = Chessboard(board_state)
     # Is white king in danger from the pawn? Answer: No
     assert chessboard_instance.in_danger(Position(0, 2)) is False
 
     board_state: list[list[ChessPiece]] = [
-        [None, None, b_ki],
-        [None, None, w_pa],
-        [None, None, None]
+        [EMPTY_PIECE, EMPTY_PIECE, b_ki],
+        [EMPTY_PIECE, EMPTY_PIECE, w_pa],
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE]
     ]
     chessboard_instance = Chessboard(board_state)
     # Is white king in danger from the pawn? Answer: No
@@ -345,7 +345,7 @@ def test_in_danger_pawn_diag():
 
     board_state: list[list[ChessPiece]] = [
         [w_pa, w_pa, b_ki],
-        [w_pa, None, w_pa],
+        [w_pa, EMPTY_PIECE, w_pa],
         [w_pa, w_pa, w_pa]
     ]
     chessboard_instance = Chessboard(board_state)
@@ -353,9 +353,9 @@ def test_in_danger_pawn_diag():
     assert chessboard_instance.in_danger(Position(0, 2)) is False
 
     board_state: list[list[ChessPiece]] = [
-        [None, None, b_ki],
-        [None, w_pa, None],
-        [None, None, None]
+        [EMPTY_PIECE, EMPTY_PIECE, b_ki],
+        [EMPTY_PIECE, w_pa, EMPTY_PIECE],
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE]
     ]
     chessboard_instance = Chessboard(board_state)
     # Is white king in danger from the pawn? Answer: Yes
@@ -376,10 +376,10 @@ def test_in_danger_pawn_en_passant():
 
     # Start state, board must be square
     board_state: list[list[ChessPiece]] = [
-        [None, None, None, None],
-        [b_pa, None, None, None],
-        [None, None, None, None],
-        [None, w_pa, None, None]
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],
+        [b_pa, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],
+        [EMPTY_PIECE, w_pa, EMPTY_PIECE, EMPTY_PIECE]
     ]
     chessboard_instance = Chessboard(board_state)
 
@@ -392,10 +392,10 @@ def test_in_danger_pawn_en_passant():
 
     # Start state, board must be square
     board_state: list[list[ChessPiece]] = [
-        [None, None, None, None],
-        [b_pa, None, None, None],
-        [None, None, None, None],
-        [None, w_pa, None, None]
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],
+        [b_pa, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],
+        [EMPTY_PIECE, w_pa, EMPTY_PIECE, EMPTY_PIECE]
     ]
     chessboard_instance = Chessboard(board_state)
 
@@ -409,10 +409,10 @@ def test_in_danger_pawn_en_passant():
 
     # Start state, board must be square
     board_state: list[list[ChessPiece]] = [
-        [b_pa, None, None, None],
-        [None, None, None, None],
-        [None, w_pa, None, None],
-        [None, None, None, None]
+        [b_pa, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],
+        [EMPTY_PIECE, w_pa, EMPTY_PIECE, EMPTY_PIECE],
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE]
     ]
     chessboard_instance = Chessboard(board_state)
 
@@ -425,10 +425,10 @@ def test_in_danger_pawn_en_passant():
 
     # Start state, board must be square
     board_state: list[list[ChessPiece]] = [
-        [b_pa, None, None, None],
-        [None, None, None, None],
-        [None, w_pa, None, None],
-        [None, None, None, None]
+        [b_pa, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],
+        [EMPTY_PIECE, w_pa, EMPTY_PIECE, EMPTY_PIECE],
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE]
     ]
     chessboard_instance = Chessboard(board_state)
 
@@ -444,11 +444,11 @@ def test_in_danger_pawn_en_passant():
 def test_in_danger_knight_threats():
     # Start state, board must be square
     board_state: list[list[ChessPiece]] = [
-        [None, None, None, None, None],
-        [None, None, None, None, None],
-        [None, None, b_kn, None, None],
-        [None, None, None, None, None],
-        [None, None, None, None, None]
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],
+        [EMPTY_PIECE, EMPTY_PIECE, b_kn, EMPTY_PIECE, EMPTY_PIECE],
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE]
     ]
     chessboard_instance = Chessboard(board_state)
 
@@ -530,10 +530,10 @@ def test_TBA():
         # 0     1     2     3     4     5     6     7
         [b_ro, b_kn, b_bi, b_qu, b_ki, b_bi, b_kn, b_ro],  # 0
         [b_pa, b_pa, b_pa, b_pa, b_pa, b_pa, b_pa, b_pa],  # 1
-        [None, None, None, None, None, None, None, None],  # 2
-        [None, None, None, None, None, None, None, None],  # 3
-        [None, None, None, None, None, None, None, None],  # 4
-        [None, None, None, None, None, None, None, None],  # 5
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],  # 2 # noqa E501
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],  # 3 # noqa E501
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],  # 4 # noqa E501
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],  # 5 # noqa E501
         [w_pa, w_pa, w_pa, w_pa, w_pa, w_pa, w_pa, w_pa],  # 6
         [w_ro, w_kn, w_bi, w_qu, w_ki, w_bi, w_kn, w_ro],  # 7
     ]

@@ -1,3 +1,4 @@
+from chess_piece_class import EMPTY_PIECE
 from position_class import Position
 
 
@@ -72,7 +73,7 @@ def obstacle_in_path(chessboard: list,
 
     while next_square != do_not_check_square:
 
-        if chessboard[next_square.row][next_square.col] is None:
+        if chessboard[next_square.row][next_square.col] is EMPTY_PIECE:
 
             if debug:
                 print(f"{next_square} is empty")

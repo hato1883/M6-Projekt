@@ -1,3 +1,4 @@
+from chess_piece_class import EMPTY_PIECE
 from position_class import Position
 from piece_type_enum import PieceType
 from piece_color_enum import Color
@@ -59,7 +60,7 @@ class TextFormater:
 
         i = 0
         for square in row_list:
-            if square is not None:
+            if square is not EMPTY_PIECE:
                 print(f" {cls.piece_type_to_unicode_chess_symbol(square)} ", end='')  # noqa E501
             else:
                 print(f" { even_square if i % 2 == 0 else odd_square} ", end='')  # noqa E501

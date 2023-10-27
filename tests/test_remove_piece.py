@@ -7,7 +7,7 @@ sys.path.append(current + "/../src")
 
 from chessboard import Chessboard  # noqa: E402
 from position_class import Position  # noqa: E402
-from chess_piece_class import ChessPiece  # noqa: E402
+from chess_piece_class import EMPTY_PIECE, ChessPiece  # noqa: E402
 from piece_color_enum import Color  # noqa: E402
 from piece_type_enum import PieceType  # noqa: E402
 
@@ -22,15 +22,15 @@ def test_remove_piece():
     expected.create_board(3)
 
     starting_board: list[list[ChessPiece]] = [
-        [None, None, None],
-        [b_qu, None, b_ki],
-        [None, None, None],
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],
+        [b_qu, EMPTY_PIECE, b_ki],
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],
     ]
 
     expected_board: list[list[ChessPiece]] = [
-        [None, None, None],
-        [None, None, None],
-        [None, None, None],
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],
     ]
 
     ref = Chessboard(starting_board)

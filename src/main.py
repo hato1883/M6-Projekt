@@ -1,4 +1,4 @@
-from chess_piece_class import ChessPiece
+from chess_piece_class import EMPTY_PIECE, ChessPiece
 import text_user_interface as ui
 from ui_interface import UI_Interface
 import chatgpt_narrator as gpt
@@ -18,9 +18,7 @@ if __name__ == "__main__":
                            "2023-10-17", "Welcome to Sagoschack!")
 
     # get game parameters
-    (is_two_player,
-     time_limit,
-     ai_naration) = tui.input_game_setup_parameters()
+    (ai_naration) = tui.input_game_setup_parameters()
 
     if ai_naration:
         narrator: NarrationInterface = gpt.ChatGPTNarrator()
@@ -33,11 +31,11 @@ if __name__ == "__main__":
     # game state bool
     has_ended = False
 
+    ai_naration_text = ""
     while not has_ended:
         # TODO: check if king is being attacked.
         # TODO: If king is attacked, can the king move,
         # Or can something block attacker.
-        ai_naration_text = ""
         for color_turn in list(Color)[:2]:
 
             # Show user the chess board
@@ -49,7 +47,7 @@ if __name__ == "__main__":
                 (origin, dest) = tui.input_user_move()
 
                 # check if origin is empty
-                if chessboard.get_piece(origin) is None:
+                if chessboard.get_piece(origin) is EMPTY_PIECE:
                     # Can't move a empty position
 
                     # TODO: TextUserInterface needs
@@ -66,7 +64,9 @@ if __name__ == "__main__":
                     continue
 
                 # Move chess piece
-                (succeeded, status, pieces) = chessboard.move(origin, dest)
+                (succeeded, status, pieces) = chessboard.move(origin,
+                                                              dest,
+                                                              color_turn)
                 # Check if it worked
                 if not succeeded:
                     # Moved failed valid check
@@ -96,7 +96,6 @@ if __name__ == "__main__":
                 # End this players turn.
                 break
 
-            print(ai_naration_text)
         # Next color
         continue
     # Game has ended

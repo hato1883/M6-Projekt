@@ -1,11 +1,14 @@
 import copy
 from piece_type_enum import PieceType
 from chess_piece_class import ChessPiece
+from chess_piece_class import EMPTY_PIECE
 from piece_color_enum import Color
 from move_type_enum import MoveType
 from move_option_enum import MoveOption
 from status_enum import Status
 from position_class import Position
+from moveset_class import Moveset
+from move_class import Move
 import valid_move_helper as vmh
 
 
@@ -23,12 +26,8 @@ class Chessboard:
         self.move_history: list[
             tuple[
                 ChessPiece,
-                tuple[
-                    MoveType,
-                    list[MoveOption]
-                ],
                 Position,
-                Position]
+                Move]
             ] = []
 
         # A dictionary of all king PieceType on this instance of chessboard.
@@ -44,7 +43,7 @@ class Chessboard:
             for row in range(self._board_size):
                 for col in range(self._board_size):
                     pos = Position(row, col)
-                    if self.get_piece(pos) is None:
+                    if self.get_piece(pos) is EMPTY_PIECE:
                         continue
                     if self.get_piece(pos).get_type() is PieceType.KING:
                         # add king chess piece to list
@@ -57,7 +56,7 @@ class Chessboard:
         """
         self._chessboard = []
         for row in range(size):
-            col = [None]*size
+            col = [EMPTY_PIECE]*size
             self._chessboard.append(col)
 
         self._board_size: int = len(self._chessboard)
@@ -73,24 +72,24 @@ class Chessboard:
         self._chessboard: list[list[ChessPiece]] = [
             [ChessPiece(Color.BLACK, PieceType.ROOK), ChessPiece(Color.BLACK, PieceType.KNIGHT), ChessPiece(Color.BLACK, PieceType.BISHOP), ChessPiece(Color.BLACK, PieceType.QUEEN), ChessPiece(Color.BLACK, PieceType.KING), ChessPiece(Color.BLACK, PieceType.BISHOP), ChessPiece(Color.BLACK, PieceType.KNIGHT), ChessPiece(Color.BLACK, PieceType.ROOK)],  # noqa E501
             [ChessPiece(Color.BLACK, PieceType.PAWN), ChessPiece(Color.BLACK, PieceType.PAWN), ChessPiece(Color.BLACK, PieceType.PAWN), ChessPiece(Color.BLACK, PieceType.PAWN), ChessPiece(Color.BLACK, PieceType.PAWN), ChessPiece(Color.BLACK, PieceType.PAWN), ChessPiece(Color.BLACK, PieceType.PAWN), ChessPiece(Color.BLACK, PieceType.PAWN)],  # noqa E501
-            [None, None, None, None, None, None, None, None],  # noqa E501
-            [None, None, None, None, None, None, None, None],  # noqa E501
-            [None, None, None, None, None, None, None, None],  # noqa E501
-            [None, None, None, None, None, None, None, None],  # noqa E501
+            [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],  # noqa E501
+            [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],  # noqa E501
+            [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],  # noqa E501
+            [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],  # noqa E501
             [ChessPiece(Color.WHITE, PieceType.PAWN), ChessPiece(Color.WHITE, PieceType.PAWN), ChessPiece(Color.WHITE, PieceType.PAWN), ChessPiece(Color.WHITE, PieceType.PAWN), ChessPiece(Color.WHITE, PieceType.PAWN), ChessPiece(Color.WHITE, PieceType.PAWN), ChessPiece(Color.WHITE, PieceType.PAWN), ChessPiece(Color.WHITE, PieceType.PAWN)],  # noqa E501
             [ChessPiece(Color.WHITE, PieceType.ROOK), ChessPiece(Color.WHITE, PieceType.KNIGHT), ChessPiece(Color.WHITE, PieceType.BISHOP), ChessPiece(Color.WHITE, PieceType.QUEEN), ChessPiece(Color.WHITE, PieceType.KING), ChessPiece(Color.WHITE, PieceType.BISHOP), ChessPiece(Color.WHITE, PieceType.KNIGHT), ChessPiece(Color.WHITE, PieceType.ROOK)],  # noqa E501
         ]
 
         # Add kings to dictionary so we can check if they are in danger later.
         self._kings_location[Position(0, 4)] = ChessPiece(Color.BLACK, PieceType.KING)  # noqa E501
-        self._kings_location[Position(7, 4)] = ChessPiece(Color.BLACK, PieceType.KING)  # noqa E501
+        self._kings_location[Position(7, 4)] = ChessPiece(Color.WHITE, PieceType.KING)  # noqa E501
 
     def get_piece(self, location: Position) -> ChessPiece:
         """Get a chess piece at location
 
         location the posistion to retrive
 
-        Returns a ChessPiece or None if it was empty"""
+        Returns a ChessPiece or EMPTY_PIECE if it was empty"""
         return self._chessboard[location.row][location.col]
 
     def add_piece(self, chess_piece: ChessPiece, dest: Position):
@@ -99,7 +98,7 @@ class Chessboard:
         returns True if the position was empty,
         returns False if it was already taken
         """
-        if self._chessboard[dest.row][dest.col] is None:
+        if self.get_piece(dest) is EMPTY_PIECE:
 
             # if we are adding a king then add it to king dict
             if chess_piece.get_type() is PieceType.KING:
@@ -114,17 +113,35 @@ class Chessboard:
 
         returns True if the position was not empty, else returns False
         """
-        if self._chessboard[dest.row][dest.col] is not None:
+        if self.get_piece(dest) is not EMPTY_PIECE:
 
             # if we are removing a king then remove it from king dict
             if self.get_piece(dest).get_type() is PieceType.KING:
                 del self._kings_location[dest]
 
-            self._chessboard[dest.row][dest.col] = None
+            self._chessboard[dest.row][dest.col] = EMPTY_PIECE
             return True
         return False
 
-    def move(self, origin: Position, dest: Position) -> tuple[bool, Status]:
+    def move(self,
+             origin: Position,
+             dest: Position,
+             player_color: Color = None) -> tuple[bool, Status]:
+
+        if player_color is not None:
+            # check if player is in check
+            if self.in_check(player_color):
+                # Check if player is in checkmate
+                valid_moves = self.get_valid_moves(player_color)
+
+                if len(valid_moves) == 0:
+                    return (False, Status.IN_CHECKMATE, None)
+                # Not checkmate.
+
+                if (origin, dest) not in valid_moves:
+                    return (False, Status.IN_CHECK, None)
+                # move is valid.
+
         # Check if move is valid
         (valid, move) = self.is_valid(origin, dest)
         if not valid:
@@ -138,7 +155,7 @@ class Chessboard:
         attacked_piece = self.get_piece(dest)
 
         # Add move to move_history (at end of list)
-        self.move_history.append((moved_piece, move, origin, dest))
+        self.move_history.append((moved_piece, dest, move))
 
         # Check if this piece is has moved before
         if not moved_piece.get_has_moved():
@@ -170,8 +187,7 @@ class Chessboard:
                                 (moved_piece, attacked_piece)
                             )
             # End of Pawn Promotion check
-
-            if MoveType.PAWN_EN_PASSANT in move:
+            if MoveType.PAWN_EN_PASSANT is move.move_type:
                 # get killed pawn location
                 pawn_location = Position(origin.row, dest.col)
                 # remove killed enemy pawn
@@ -179,7 +195,7 @@ class Chessboard:
 
         # Check if we was castling on this move
         if (moved_piece.get_type() is PieceType.KING
-                and MoveType.KING_CASTLE in move):
+                and MoveType.KING_CASTLE is move.move_type):
             # Move rook the rook to the oposite side of the king.
 
             # find rook in direction of king.
@@ -187,7 +203,7 @@ class Chessboard:
                 # origin is to the right of dest so rook is towards the left
                 for searched_col in range(origin.col-3, -1, -1):
                     searched_pos = Position(origin.row, searched_col)
-                    if self.get_piece(searched_pos) is None:
+                    if self.get_piece(searched_pos) is EMPTY_PIECE:
                         continue
                     # assume piece is rook due to move being valid
                     rook_loaction = Position(dest.row, searched_col)
@@ -196,7 +212,7 @@ class Chessboard:
                 # origin is to the right of dest so rook is towards the left
                 for searched_col in range(origin.col+3, self._board_size, 1):
                     searched_pos = Position(origin.row, searched_col)
-                    if self.get_piece(searched_pos) is None:
+                    if self.get_piece(searched_pos) is EMPTY_PIECE:
                         continue
                     # assume piece is rook due to move being valid
                     rook_loaction = Position(dest.row, searched_col)
@@ -214,7 +230,7 @@ class Chessboard:
             self.remove_piece(rook_loaction)
 
         # is destination Empty?
-        if self._chessboard[dest.row][dest.col] is not None:
+        if self.get_piece(dest) is not EMPTY_PIECE:
             # Clear destination
             self.remove_piece(dest)
 
@@ -231,7 +247,7 @@ class Chessboard:
                  origin: Position,
                  dest: Position,
                  dest_color: Color = None
-                 ) -> tuple[bool, tuple[MoveType, list[MoveOption]]]:
+                 ) -> tuple[bool, Move]:
 
         # is origin out of bounds
         if not self.__is_in_bounds(origin, Position(0, 0)):
@@ -244,14 +260,14 @@ class Chessboard:
             return (False, None)
 
         # is destnation empty
-        if self.get_piece(origin) is None:
+        if self.get_piece(origin) is EMPTY_PIECE:
             # Invalid move, Can't move empty tile.
             return (False, None)
 
         chess_piece: PieceType = self.get_piece(origin).get_type()
 
         offset: Position
-        moves: list[tuple[MoveType, list[MoveOption]]]
+        moveset: Moveset
 
         # get Calculated offset between dest and origin
         calc_offset: tuple[int, int] = (
@@ -264,71 +280,72 @@ class Chessboard:
 
         # create a list with offsets equal to calculated or normalized offset
         potential_valid_moves = []
-        for offset, moves in chess_piece.value:
-            reflec_row = offset[0] * reflec_tup[0]
-            reflec_col = offset[1] * reflec_tup[1]
+        for moveset in chess_piece.value:
+            reflec_row = moveset.dest_offset[0] * reflec_tup[0]
+            reflec_col = moveset.dest_offset[1] * reflec_tup[1]
 
             # Check if calculated offset exists in list
             if reflec_row == calc_offset[0] and reflec_col == calc_offset[1]:
                 # add move to potential valid moves
-                potential_valid_moves.append((offset, moves))
+                potential_valid_moves.append(moveset)  # noqa E501
 
             # Check if normalized offset exists in list
             elif reflec_row == norm_offset[0] and reflec_col == norm_offset[1]:
                 # add move to potential valid moves
-                potential_valid_moves.append((offset, moves))
+                potential_valid_moves.append(moveset)
 
         # loop thru ddetermined potential moves
-        for (offset, moves) in potential_valid_moves:
+        for moveset in potential_valid_moves:
             # reflect the offset using our tuple.
-            offset = (offset[0] * reflec_tup[0],
-                      offset[1] * reflec_tup[1])
+            offset = (moveset.dest_offset[0] * reflec_tup[0],
+                      moveset.dest_offset[1] * reflec_tup[1])
 
             # Go thru each move for the given offset
-            for (move_type, options) in moves:
+            for move in moveset.moves:
 
                 if offset != calc_offset:
                     # offset is equal to normalized offset
+
                     # check if move can propegate
-                    if MoveOption.PROPEGATES not in options:
+                    if MoveOption.PROPEGATES not in move.conditions:
                         continue
 
                 # check against MoveType rules
-                match move_type:
+                match move.move_type:
                     case MoveType.COLLISION_AXIS:
                         if self.__is_axis_move_valid(origin,
                                                      dest,
-                                                     options,
+                                                     move.conditions,
                                                      dest_color):
-                            return (True, (move_type, options))
+                            return (True, move)
                         continue
 
                     case MoveType.COLLISION_DIAG:
                         if self.__is_diag_move_valid(origin,
                                                      dest,
-                                                     options,
+                                                     move.conditions,
                                                      dest_color):
-                            return (True, (move_type, options))
+                            return (True, move)
                         continue
 
                     case MoveType.ABSOLUTE:
                         if self.__is_abs_move_valid(origin,
                                                     dest,
-                                                    options,
+                                                    move.conditions,
                                                     dest_color):
-                            return (True, (move_type, options))
+                            return (True, move)
                         continue
 
                     case MoveType.KING_CASTLE:
                         if self.__is_king_castling_valid(origin,
                                                          dest):
-                            return (True, (move_type, options))
+                            return (True, move)
                         continue
 
                     case MoveType.PAWN_EN_PASSANT:
                         if self.__is_pawn_en_passant_valid(origin,
                                                            dest):
-                            return (True, (move_type, options))
+                            return (True, move)
                         continue
                 # End of match case
 
@@ -340,48 +357,125 @@ class Chessboard:
 
     def in_danger(self, origin: Position, piece_color: Color = None) -> bool:
 
-        if piece_color is None and self.get_piece(origin) is None:
+        if piece_color is None and self.get_piece(origin) is EMPTY_PIECE:
             raise ValueError("Can't check if a empty square is in danger if no Color is given")  # noqa E501
 
         elif piece_color is None:
             piece_color = self.get_piece(origin).get_color()
 
-        # loop thru all enemy pieces.
+        if piece_color is Color.WHITE:
+            positions = self.get_pieces(Color.BLACK)
+        else:
+            positions = self.get_pieces(Color.WHITE)
+
+        for pos in positions:
+            move: Move = None
+            (valid, move) = self.is_valid(pos, origin, piece_color)
+
+            if valid:
+                return True
+
+            elif self.get_piece(pos).get_type() is PieceType.PAWN:
+                # check position behind dest
+                # and check if valid used move is en passant
+
+                # row that en passant move would move to
+                passant_row = origin.row + piece_color.value[0]
+
+                # position that the pawn would be arriving at
+                en_passant_pos = Position(passant_row, origin.col)
+
+                (valid, move) = self.is_valid(pos,
+                                              en_passant_pos,
+                                              piece_color)
+
+                if valid and move.move_type is MoveType.PAWN_EN_PASSANT:
+                    return True
+        return False
+
+    def in_check(self, king_color: Color) -> bool:
+        """Checks if the given color's king is in danger
+
+        uses in danger method on kings location"""
+        # Assume no king on board
+        king_location: Position = None
+
+        # declare types
+        pos: Position
+        piece: ChessPiece
+        # get kings location from the dictionary
+        for pos, piece in self._kings_location.items():
+            # check it's color
+            if piece.get_color() is king_color:
+                # save location
+                king_location = pos
+                # break loop (assumes only 1 king per color)
+                break
+
+        # if king_location is still empty,
+        # that would mean player dose not have a king
+        if king_location is None:
+            # invalid state
+            raise ValueError(f"No king on the board for player {king_color}")
+
+        # returns if the king is in danger
+        return self.in_danger(king_location, king_color)
+
+    def get_valid_moves(self, player_color: Color) -> list:
+        """returns a list of valid moves
+
+        uses in check method so we can disgared moves that put king in check"""
+        # list of valid moves
+        valid_moves = []
+
+        piece_list: list[Position] = self.get_pieces(player_color)
+
+        pos: Position
+        # loop thru all pices and chek thier moves
+        for pos in piece_list:
+            piece_type: PieceType = self.get_piece(pos).get_type()
+            for moveset in piece_type.value:
+                # check if move is valid:
+                dest = Position(pos.row + moveset.dest_offset[0], pos.col + moveset.dest_offset[1])  # noqa E501
+                (valid, move) = self.is_valid(pos, dest)
+                if not valid:
+                    # Invalid move continue to the next
+                    continue
+
+                # Move is valid but might put player in check, lets test.
+                simulated = self.deep_copy()
+                simulated.move(pos, dest)
+                if simulated.in_check(player_color):
+                    # move puts king in check so its invalid.
+                    continue
+
+                # move did not put king in check so it's valid
+                valid_moves.append((pos, dest))
+
+        # returns if the king is in danger
+        return valid_moves
+
+    def get_pieces(self, piece_color: Color) -> list[Position]:
+        """Returns a list of all pieces of the given color
+
+        Usefull when you need to itterate thru a players pieces"""
+        piece_list: list[Position] = []
+
+        # declare types
+        row: int
+        col: int
+        # get piece loactions
         for row in range(self._board_size):
             for col in range(self._board_size):
-
                 pos = Position(row, col)
 
-                if self.get_piece(pos) is None:
-                    # empty pieces cant make moves
+                if self.get_piece(pos).get_color() is not piece_color:
+                    # Ignore piece from other players
                     continue
 
-                if self.get_piece(pos).get_color() is piece_color:
-                    # allied piece cant attack
-                    continue
-
-                (valid, move) = self.is_valid(pos, origin, piece_color)
-
-                if valid:
-                    return True
-
-                elif self.get_piece(pos).get_type() is PieceType.PAWN:
-                    # check position behind dest
-                    # and check if valid used move is en passant
-
-                    # row that en passant move would move to
-                    passant_row = origin.row + piece_color.value[0]
-
-                    # position that the pawn would be arriving at
-                    en_passant_pos = Position(passant_row, origin.col)
-
-                    (valid, move) = self.is_valid(pos,
-                                                  en_passant_pos,
-                                                  piece_color)
-
-                    if valid and move[0] is MoveType.PAWN_EN_PASSANT:
-                        return True
-        return False
+                # piece of give color found
+                piece_list.append(pos)
+        return piece_list
 
     def __is_in_bounds(self, origin: Position, offset: Position) -> bool:
         """Checks if the given position would land
@@ -411,11 +505,8 @@ class Chessboard:
     def get_move_history(self) -> list[
         tuple[
             ChessPiece,
-            tuple[
-                MoveType,
-                list[MoveOption]],
             Position,
-            Position]]:
+            Move]]:
         """Retrives the move history list
 
         Returns a list of tuples that contains all information needed.
@@ -444,7 +535,7 @@ class Chessboard:
         MoveOption.PROTECTED - Is Piece at risk of being taken if move is made?
         If yes -> False"""
 
-        if self.get_piece(origin) is None:
+        if self.get_piece(origin) is EMPTY_PIECE:
             raise ValueError("Origin is empty")
 
         if MoveOption.FIRST in options:
@@ -453,7 +544,7 @@ class Chessboard:
 
         if MoveOption.MUST_TAKE in options:
 
-            if self.get_piece(destination) is None:
+            if self.get_piece(destination) is EMPTY_PIECE:
                 # Destination must have enemy piece
                 return False
 
@@ -466,9 +557,9 @@ class Chessboard:
                 return False
 
         if MoveOption.CAN_TAKE in options:
-            if self.get_piece(destination) is not None:
+            if self.get_piece(destination) is not EMPTY_PIECE:
 
-                if destination_color is None:
+                if destination_color is EMPTY_PIECE:
                     # Set destination color if not already set
                     destination_color = self.get_piece(destination).get_color()
 
@@ -479,7 +570,6 @@ class Chessboard:
             color = self.get_piece(origin).get_color()
 
             if self.in_danger(destination, color):
-                print("danger")
                 return False
 
         return True
@@ -506,7 +596,7 @@ class Chessboard:
         MoveOption.PROTECTED - Is Piece at risk of being taken if move is made?
         If yes -> False  """
 
-        if self.get_piece(origin) is None:
+        if self.get_piece(origin) is EMPTY_PIECE:
             raise ValueError("Origin is empty")
 
         if not vmh.diagonal_move(origin, destination):
@@ -521,7 +611,7 @@ class Chessboard:
         if MoveOption.MUST_TAKE in options:
             disregard_dest_square = True
 
-            if self.get_piece(destination) is None:
+            if self.get_piece(destination) is EMPTY_PIECE:
                 # Destination must have enemy piece
                 return False
 
@@ -535,7 +625,7 @@ class Chessboard:
 
         if MoveOption.CAN_TAKE in options:
             disregard_dest_square = True
-            if self.get_piece(destination) is not None:
+            if self.get_piece(destination) is not EMPTY_PIECE:
 
                 if destination_color is None:
                     # Set destination color if not already set
@@ -578,7 +668,7 @@ class Chessboard:
         MoveOption.PROTECTED - Is Piece at risk of being taken if move is made?
         If yes -> False"""
 
-        if self.get_piece(origin) is None:
+        if self.get_piece(origin) is EMPTY_PIECE:
             raise ValueError("Origin is empty")
 
         disregard_dest_square = False
@@ -593,7 +683,7 @@ class Chessboard:
         if MoveOption.MUST_TAKE in options:
             disregard_dest_square = True
 
-            if self.get_piece(destination) is None:
+            if self.get_piece(destination) is EMPTY_PIECE:
                 # Destination must have enemy piece
                 return False
 
@@ -607,7 +697,7 @@ class Chessboard:
 
         if MoveOption.CAN_TAKE in options:
             disregard_dest_square = True
-            if self.get_piece(destination) is not None:
+            if self.get_piece(destination) is not EMPTY_PIECE:
 
                 if destination_color is None:
                     # Set destination color due to it not being set
@@ -620,7 +710,6 @@ class Chessboard:
             color = self.get_piece(origin).get_color()
 
             if self.in_danger(destination, color):
-                print("danger")
                 return False
 
         if vmh.obstacle_in_path(self._chessboard,
@@ -669,7 +758,7 @@ class Chessboard:
                 searched_pos = Position(origin.row, searched_col)
 
                 # Check if spot is empty (req 3)
-                if self.get_piece(searched_pos) is None:
+                if self.get_piece(searched_pos) is EMPTY_PIECE:
 
                     # Check if the 2 spaces left of king is not under threat
                     # (req 7 & 8)
@@ -712,7 +801,7 @@ class Chessboard:
                 searched_pos = Position(origin.row, searched_col)
 
                 # Check if spot is empty (req 3)
-                if self.get_piece(searched_pos) is None:
+                if self.get_piece(searched_pos) is EMPTY_PIECE:
 
                     # Check if the 2 spaces left of king is not under threat
                     # (req 7 & 8)
@@ -774,17 +863,12 @@ class Chessboard:
 
         # Piece is a PAWN
         # Check if dest is empty (req 2)
-        if self.get_piece(dest) is not None:
+        if self.get_piece(dest) is not EMPTY_PIECE:
             # destination is occupied, en passant is not valid
             return False
         # destination is empty
 
         adjecent_pos = Position(origin.row, dest.col)
-
-        # Check if there is a enemy pawn next to origins position
-        if self.get_piece(adjecent_pos) is None:
-            # No Enemy Pawn next to origin, so en passant is invalid
-            return False
 
         # origin_row, dest_col must contain a pawn (req 3)
         if self.get_piece(adjecent_pos).get_type() is not PieceType.PAWN:
@@ -802,9 +886,8 @@ class Chessboard:
 
         move_index = len(self.get_move_history()) - 1  # last index
         (moved_piece,
-         used_move,
-         move_origin,
-         move_dest) = self.get_move_history()[move_index]
+         move_dest,
+         move) = self.get_move_history()[move_index]
         while moved_piece.get_color() is not self.get_piece(adjecent_pos).get_color():  # noqa E501
             # Move is not from the same player as what we are checking
 
@@ -820,9 +903,8 @@ class Chessboard:
 
             # index is in range, get next move
             (moved_piece,
-             used_move,
-             move_origin,
-             move_dest) = self.get_move_history()[move_index]
+             move_dest,
+             move) = self.get_move_history()[move_index]
         else:
             # Found move from enemy pawn color
             # Check if found move is to the pawn destination
@@ -832,9 +914,8 @@ class Chessboard:
                 return False
 
             # Enemy pawn was moved to location last move
-            (used_move_type, used_move_options) = used_move
             # check if it was a double forward move or another type.
-            if MoveOption.FIRST not in used_move_options:
+            if MoveOption.FIRST not in move.conditions:
                 # move was not a double forward move
                 # double forward move has MoveOption.FIRST flag
                 return False

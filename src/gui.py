@@ -27,18 +27,31 @@ class Window_Class(UI_Interface):
         self.running = True
         self.show_splash_screen
         self.font = pygame.font.Font(None, 36)
+        # Get the directory of the current script
+        self.script_directory = script_directory = os.path.dirname(__file__)
+
+        # Get the parent directory (the directory containing the script)
+        self.parent_directory = parent_directory = os.path.dirname(script_directory)
+
+        #Get the asset directory (the directory containing assets in this project)
+
+        self.asset_path = asset_path = os.path.join(parent_directory, "assets")
+
+        #Image path to the black pawn 'bp.png'
+        #image_path = os.path.join(parent_directory, "assets", "bp.png")
+
+        # Print the parent directory
+        print(f"The parent directory of the current script is: {parent_directory}")
+        print(f'The asset directory is {asset_path}')
 
 
     def run(self):
         self.running=True
 
-        current_directory = os.path.dirname(__file__)
-
-        assetfolder = os.path.dirname(__path__)
-
         #show splashscreen
         self.show_splash_screen()
-        bb = pygame.image.load("bb.png")  # Replace with the path to your sprite image
+        bb = self.asset_load('bb')
+        bb = self.load_and_scale_sprite(bb)
         while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -49,7 +62,7 @@ class Window_Class(UI_Interface):
 
             #call the show_chessboard function and draw the chessboard
             self.show_chess_board()
-            self.draw_sprite(bb,300,300)
+            self.draw_sprite(bb,150,150)
             pygame.display.flip()
 
         pygame.quit()
@@ -71,11 +84,17 @@ class Window_Class(UI_Interface):
         #Wait 2000 ms
         pygame.time.delay(2000)
 
-
-
-
-
         pass
+
+    def asset_load(self,target:str):
+       
+       target
+
+       asset_filepath=os.path.join(self.asset_path,target)
+       image_path = os.path.join(f'{asset_filepath}.png')
+
+
+       return image_path
 
     def input_game_setup_parameters():
         # Present user with successive choices of:
@@ -117,6 +136,22 @@ class Window_Class(UI_Interface):
     def draw_sprite(self, sprite, x, y):
         
         self.screen.blit(sprite, (x, y))
+
+    def load_and_scale_sprite(self, sprite_path):
+        # Load the sprite image
+        sprite_image = pygame.image.load(sprite_path)
+
+        # Get the original dimensions
+        original_width, original_height = sprite_image.get_size()
+
+        # Scale the sprite to one-quarter of its original size
+        scaled_width = original_width // 2
+        scaled_height = original_height // 2
+
+        # Scale the sprite image
+        scaled_sprite = pygame.transform.scale(sprite_image, (scaled_width, scaled_height))
+
+        return scaled_sprite
 
 
    

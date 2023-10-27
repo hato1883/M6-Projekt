@@ -10,6 +10,7 @@ from ui_interface import UI_Interface
 
 
 
+
 class Window_Class(UI_Interface):
     
     WHITE = (255, 255, 255)
@@ -51,6 +52,9 @@ class Window_Class(UI_Interface):
         #show splashscreen
         self.show_splash_screen()
 
+        self.board = Chessboard()
+        self.board.create_default_board()
+
         self.piece_image = [[],[]]
 
         colors =("b","w")
@@ -72,7 +76,8 @@ class Window_Class(UI_Interface):
             self.screen.fill(((43, 42, 51)))
 
             #call the show_chessboard function and draw the chessboard
-            self.show_chess_board()
+            self.show_chess_board(self.board.get_chessboard())
+            # print(type(self.board.get_chessboard()))
             self.draw_sprite(self.piece_image[0][1],150,150)
             pygame.display.flip()
 
@@ -115,7 +120,7 @@ class Window_Class(UI_Interface):
         # return ( two_player True/False , sec time limit integer, narration True/False)
         pass
 
-    def show_chess_board(self):
+    def show_chess_board_2(self):
         for row in range(8):
             for col in range(8):
                 x, y = col * self.SQUARE_SIZE, row * self.SQUARE_SIZE
@@ -124,6 +129,59 @@ class Window_Class(UI_Interface):
                 else:
                     pygame.draw.rect(self.screen, self.BLACK, (x, y, self.SQUARE_SIZE, self.SQUARE_SIZE))
         pass
+    
+    def piece_type_to_sprite_name(self, chess_piece:PieceType):
+        prefix = 1
+        if chess_piece.get_color() is Color.BLACK:
+            prefix = 0
+            
+        match chess_piece.get_type():
+            case PieceType.KING: 
+                image_name = self.piece_image[prefix][0]
+            case PieceType.QUEEN:
+                image_name = self.piece_image[prefix][1]
+            case PieceType.ROOK:
+                image_name = self.piece_image[prefix][2]
+            case PieceType.BISHOP:
+                image_name = self.piece_image[prefix][3]
+            case PieceType.KNIGHT:
+                image_name = self.piece_image[prefix][4]
+            case PieceType.PAWN:
+                image_name = self.piece_image[prefix][5]
+            
+        return image_name
+
+    def show_chess_board(self, Chessboard:list):
+        row_index = 0
+
+        for row in Chessboard:
+            self.paint_chess_board_row(row_index, row)
+            row_index += 1
+            
+
+    def paint_chess_board_row(self, row_index, row_list):
+        x_step = self.SQUARE_SIZE
+        y = self.SQUARE_SIZE * row_index
+
+        if row_index % 2 == 0:
+            even_square =  self.WHITE
+            odd_square =  self.BLACK
+        else:
+            even_square = self.BLACK
+            odd_square =  self.WHITE
+
+        i = 0
+        for square in row_list:
+            if square is not None:
+                image_name = self.piece_type_to_sprite_name(square)
+                self.draw_sprite(image_name, x_step*i, y,)
+                
+            elif i % 2 == 0:
+                pygame.draw.rect(self.screen, even_square, (x_step*i, y, self.SQUARE_SIZE, self.SQUARE_SIZE))
+            else:
+                pygame.draw.rect(self.screen, odd_square, (x_step*i, y, self.SQUARE_SIZE, self.SQUARE_SIZE))
+            i += 1
+
 
     def recount_user_move():
         # Input two 2-tupels. Origin, Dest.

@@ -88,24 +88,24 @@ class Window_Class(UI_Interface):
         # return ( two_player True/False , sec time limit integer, narration True/False)
         pass
     
-    def piece_type_to_sprite_name(self, chess_piece):
-        prefix = "w"
+    def piece_type_to_sprite_name(self, chess_piece, piece_image):
+        prefix = 1
         if chess_piece.get_color() is Color.BLACK:
-            suffix = "b"
+            prefix = 0
             
         match chess_piece.get_type():
             case PieceType.KING: 
-                image_name = prefix + "k"
+                image_name = piece_image[prefix][0]
             case PieceType.QUEEN:
-                image_name = prefix + "q"
+                image_name = piece_image[prefix][1]
             case PieceType.ROOK:
-                image_name = prefix + "r"
+                image_name = piece_image[prefix][2]
             case PieceType.BISHOP:
-                image_name = prefix + "b"
+                image_name = piece_image[prefix][3]
             case PieceType.KNIGHT:
-                image_name = prefix + "n"
+                image_name = piece_image[prefix][4]
             case PieceType.PAWN:
-                 image_name = prefix + "p"
+                image_name = piece_image[prefix][5]
             
         return image_name
 
@@ -116,11 +116,11 @@ class Window_Class(UI_Interface):
             row_index += 1
             
 
-    def paint_chess_board_row(self, row, row_list):
-        x = self.SQUARE_SIZE
-        y= self.SQUARE_SIZE * row
+    def paint_chess_board_row(self, row_index, row_list):
+        x_step = self.SQUARE_SIZE
+        y = self.SQUARE_SIZE * row_index
 
-        if row % 2 == 0:
+        if row_index % 2 == 0:
             even_square =  self.WHITE
             odd_square =  self.BLACK
         else:
@@ -131,12 +131,12 @@ class Window_Class(UI_Interface):
         for square in row_list:
             if square is not None:
                 image_name = self.piece_type_to_sprite_name(square)
-                pygame.draw.rect(self.screen, image_name, (x*i, y, self.SQUARE_SIZE, self.SQUARE_SIZE))
+                self.draw_sprite(image_name, x_step*i, y,)
                 
             elif i % 2 == 0:
-                pygame.draw.rect(self.screen, even_square, (x*i, y, self.SQUARE_SIZE, self.SQUARE_SIZE))
+                pygame.draw.rect(self.screen, even_square, (x_step*i, y, self.SQUARE_SIZE, self.SQUARE_SIZE))
             else:
-                pygame.draw.rect(self.screen, odd_square, (x*i, y, self.SQUARE_SIZE, self.SQUARE_SIZE))
+                pygame.draw.rect(self.screen, odd_square, (x_step*i, y, self.SQUARE_SIZE, self.SQUARE_SIZE))
             i += 1
 
 

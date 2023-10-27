@@ -242,6 +242,9 @@ class Window_Class(UI_Interface):
         scaled_sprite = pygame.transform.scale(sprite_image, (scaled_width, scaled_height))
 
         return scaled_sprite
+    def get_mouse_pos(self):
+        mouse_x, mouse_y = pygame.mouse.get_pos()
+        print(f"Mouse Position: x={mouse_x}, y={mouse_y}")
 
 
    

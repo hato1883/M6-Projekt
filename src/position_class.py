@@ -35,6 +35,9 @@ class Position:
         Overloads == operator"""
         if isinstance(__value, self.__class__):
             return self.__dict__ == __value.__dict__
+        elif type(__value) is tuple:
+            if len(__value) == 2:
+                return self.row == __value[0] and self.col == __value[1]
         else:
             return False
 

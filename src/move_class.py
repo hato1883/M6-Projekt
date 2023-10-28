@@ -1,3 +1,4 @@
+from position_class import Position
 from move_type_enum import MoveType
 from move_option_enum import MoveOption
 
@@ -5,30 +6,30 @@ from move_option_enum import MoveOption
 class Move:
 
     def __init__(self,
-                 capture_offset: tuple[int, int],
-                 move_type: MoveType,
+                 capture: Position,
+                 type: MoveType,
                  conditions: list[MoveOption] = []):
-        self._capture_offset = capture_offset
-        self._move_type = move_type
+        self._capture = capture
+        self._type = type
         self._conditions = conditions
 
     @property
-    def capture_offset(self) -> tuple[int, int]:
-        return self._capture_offset
+    def capture(self) -> Position:
+        return self._capture
 
-    @capture_offset.setter
-    def capture_offset(self, capture_offset):
-        if self._capture_offset in None:
-            self._capture_offset = capture_offset
+    @capture.setter
+    def capture(self, capture):
+        if self._capture in None:
+            self._capture = capture
 
     @property
-    def move_type(self) -> MoveType:
-        return self._move_type
+    def type(self) -> MoveType:
+        return self._type
 
-    @move_type.setter
-    def move_type(self, move_type):
-        if self._move_type in None:
-            self._move_type = move_type
+    @type.setter
+    def type(self, type):
+        if self._type in None:
+            self._type = type
 
     @property
     def conditions(self) -> list[MoveOption]:
@@ -42,9 +43,9 @@ class Move:
     def __str__(self):
         # prints that this move is attacking [a-h][1-8]
         text = "Attacks"
-        text = f"{text} {self.capture_offset}"  # noqa E501
+        text = f"{text} {self.capture}"  # noqa E501
         text = f"{text} using a"
-        text = f"{text} {str(self.move_type)} move"
+        text = f"{text} {str(self.type)} move"
         text = f"{text} with the conditions: ["
         for condition in self.conditions:
             text = f"{text}{condition}, "
@@ -53,8 +54,8 @@ class Move:
         return text
 
     def __repr__(self) -> str:
-        text = f"<Move:{self.capture_offset}"
-        text = f"{text} {self.move_type}"
+        text = f"<Move:{self.capture}"
+        text = f"{text} {self.type}"
         text = f"{text}, {self.conditions}>"
         return text
 

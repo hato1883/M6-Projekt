@@ -1,10 +1,12 @@
 from enum import Enum
 
+from position_class import Position
+
 
 class Color (Enum):
-    WHITE = (1, 1)
-    BLACK = (-1, 1)
-    EMPTY = (0, 0)
+    WHITE = Position(1, 1)
+    BLACK = Position(-1, 1)
+    EMPTY = Position(0, 0)
 
     def __str__(self) -> str:
         return f"{self.name}"

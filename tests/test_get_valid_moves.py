@@ -7,12 +7,15 @@ sys.path.append(current + "/../src")
 
 from chessboard import Chessboard  # noqa: E402
 from position_class import Position  # noqa: E402
+from move_class import Move  # noqa: E402
 from chess_piece_class import EMPTY_PIECE, ChessPiece  # noqa: E402
 from piece_color_enum import Color  # noqa: E402
 from piece_type_enum import PieceType  # noqa: E402
+from move_type_enum import MoveType  # noqa: E402
+from move_option_enum import MoveOption  # noqa: E402
 
 # Black pieces
-b_ro = ChessPiece(Color.BLACK, PieceType.ROOK)
+BLACK_ROOK = ChessPiece(Color.BLACK, PieceType.ROOK)
 b_kn = ChessPiece(Color.BLACK, PieceType.KNIGHT)
 b_bi = ChessPiece(Color.BLACK, PieceType.BISHOP)
 b_qu = ChessPiece(Color.BLACK, PieceType.QUEEN)
@@ -23,7 +26,7 @@ w_ro = ChessPiece(Color.WHITE, PieceType.ROOK)
 w_kn = ChessPiece(Color.WHITE, PieceType.KNIGHT)
 w_bi = ChessPiece(Color.WHITE, PieceType.BISHOP)
 w_qu = ChessPiece(Color.WHITE, PieceType.QUEEN)
-w_ki = ChessPiece(Color.WHITE, PieceType.KING)
+WHITE_KING = ChessPiece(Color.WHITE, PieceType.KING)
 w_pa = ChessPiece(Color.WHITE, PieceType.PAWN)
 
 
@@ -44,44 +47,56 @@ def test_get_valid_moves():
     """Tests get valid moves"""
 
     board_state: list[list[ChessPiece]] = [
-        [EMPTY_PIECE, EMPTY_PIECE, b_ro],
+        [EMPTY_PIECE, EMPTY_PIECE, BLACK_ROOK],
         [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],
-        [EMPTY_PIECE, EMPTY_PIECE, w_ki]
+        [EMPTY_PIECE, EMPTY_PIECE, WHITE_KING]
     ]
     chessboard_instance = Chessboard(board_state)
     valid_moves = chessboard_instance.get_valid_moves(Color.WHITE)
     # expected moves
-    expected_moves = [(Position(2, 2), Position(1, 1)),
-                      (Position(2, 2), Position(2, 1))]
-    assert (Position(2, 2), Position(1, 1)) in valid_moves
+
+    expected_moves = [(Position(2, 2), Move(Position(-1, -1),
+                                            MoveType.COLLISION_DIAG,
+                                            [MoveOption.CAN_TAKE,
+                                             MoveOption.PROTECTED])),
+                      (Position(2, 2), Move(Position(0, -1),
+                                            MoveType.COLLISION_AXIS,
+                                            [MoveOption.CAN_TAKE,
+                                             MoveOption.PROTECTED]))]
     assert expected_moves == valid_moves
 
     board_state: list[list[ChessPiece]] = [
-        [EMPTY_PIECE, EMPTY_PIECE, b_ro],
+        [EMPTY_PIECE, EMPTY_PIECE, BLACK_ROOK],
         [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],
-        [b_ro, EMPTY_PIECE, w_ki]
+        [BLACK_ROOK, EMPTY_PIECE, WHITE_KING]
     ]
     chessboard_instance = Chessboard(board_state)
     valid_moves = chessboard_instance.get_valid_moves(Color.WHITE)
     # expected moves
-    expected_moves = [(Position(2, 2), Position(1, 1))]
+    expected_moves = [(Position(2, 2), Move(Position(-1, -1),
+                                            MoveType.COLLISION_DIAG,
+                                            [MoveOption.CAN_TAKE,
+                                             MoveOption.PROTECTED]))]
     assert expected_moves == valid_moves
 
     board_state: list[list[ChessPiece]] = [
-        [EMPTY_PIECE, EMPTY_PIECE, b_ro],
-        [EMPTY_PIECE, b_ro, EMPTY_PIECE],
-        [b_ro, EMPTY_PIECE, w_ki]
+        [EMPTY_PIECE, EMPTY_PIECE, BLACK_ROOK],
+        [EMPTY_PIECE, BLACK_ROOK, EMPTY_PIECE],
+        [BLACK_ROOK, EMPTY_PIECE, WHITE_KING]
     ]
     chessboard_instance = Chessboard(board_state)
     valid_moves = chessboard_instance.get_valid_moves(Color.WHITE)
     # expected moves
-    expected_moves = [(Position(2, 2), Position(1, 1))]
+    expected_moves = [(Position(2, 2), Move(Position(-1, -1),
+                                            MoveType.COLLISION_DIAG,
+                                            [MoveOption.CAN_TAKE,
+                                             MoveOption.PROTECTED]))]
     assert expected_moves == valid_moves
 
     board_state: list[list[ChessPiece]] = [
-        [EMPTY_PIECE, b_ro, b_ro],
+        [EMPTY_PIECE, BLACK_ROOK, BLACK_ROOK],
         [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],
-        [b_ro, EMPTY_PIECE, w_ki]
+        [BLACK_ROOK, EMPTY_PIECE, WHITE_KING]
     ]
     chessboard_instance = Chessboard(board_state)
     valid_moves = chessboard_instance.get_valid_moves(Color.WHITE)

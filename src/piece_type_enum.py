@@ -3,6 +3,7 @@ from move_type_enum import MoveType
 from move_option_enum import MoveOption
 from move_class import Move
 from moveset_class import Moveset
+from position_class import Position
 
 
 class PieceType(Enum):
@@ -15,10 +16,10 @@ class PieceType(Enum):
         # - - -
         # - * -
         Moveset(
-            (-2, 0),  # Move destination
+            Position(-2, 0),  # Move destination
             [
                 Move(
-                    (-2, 0),  # Attacked destination
+                    Position(-2, 0),  # Attacked destination
                     MoveType.COLLISION_AXIS,  # straight move
                     [MoveOption.FIRST]  # Move option
                     )
@@ -30,14 +31,14 @@ class PieceType(Enum):
         # x - -
         # - * -
         Moveset(
-            (-1, -1),  # 1 step up, 1 step left
+            Position(-1, -1),  # 1 step up, 1 step left
             [
                 Move(
-                    (-1, -1),  # Attacked destination
+                    Position(-1, -1),  # Attacked destination
                     MoveType.COLLISION_DIAG,
                     [MoveOption.MUST_TAKE]),
                 Move(
-                    (-1, -1),  # Attacked destination
+                    Position(-1, -1),  # Attacked destination
                     MoveType.PAWN_EN_PASSANT,
                     [])
             ]
@@ -48,10 +49,10 @@ class PieceType(Enum):
         # - o -
         # - * -
         Moveset(
-            (-1, 0),  # 1 step up, same col
+            Position(-1, 0),  # 1 step up, same col
             [
                 Move(
-                    (-1, 0),  # Attacked destination
+                    Position(-1, 0),  # Attacked destination
                     MoveType.COLLISION_AXIS,
                     [])
             ]
@@ -62,14 +63,14 @@ class PieceType(Enum):
         # - - x
         # - * -
         Moveset(
-            (-1, 1),  # 1 step up, same col
+            Position(-1, 1),  # 1 step up, same col
             [
                 Move(
-                    (-1, 1),  # Attacked destination
+                    Position(-1, 1),  # Attacked destination
                     MoveType.COLLISION_DIAG,
                     [MoveOption.MUST_TAKE]),
                 Move(
-                    (-1, 1),  # Attacked destination
+                    Position(-1, 1),  # Attacked destination
                     MoveType.PAWN_EN_PASSANT,
                     [])
             ]
@@ -87,20 +88,20 @@ class PieceType(Enum):
         # - - - - -
         # - - - - -
         Moveset(
-            (-2, -1),  # 2 steps up, 1 step left
+            Position(-2, -1),  # 2 steps up, 1 step left
             [
                 Move(
-                    (-2, -1),  # Attacked destination
+                    Position(-2, -1),  # Attacked destination
                     MoveType.ABSOLUTE,
                     [MoveOption.CAN_TAKE])
             ]
         ),
 
         Moveset(
-            (-2, 1),  # 2 step up, 1 step right
+            Position(-2, 1),  # 2 step up, 1 step right
             [
                 Move(
-                    (-2, 1),  # Attacked destination
+                    Position(-2, 1),  # Attacked destination
                     MoveType.ABSOLUTE,
                     [MoveOption.CAN_TAKE])
             ]
@@ -113,10 +114,10 @@ class PieceType(Enum):
         # - - - - x
         # - - - - -
         Moveset(
-            (-1, 2),  # 1 step up, 2 steps right
+            Position(-1, 2),  # 1 step up, 2 steps right
             [
                 Move(
-                    (-1, 2),  # Attacked destination
+                    Position(-1, 2),  # Attacked destination
                     MoveType.ABSOLUTE,
                     [MoveOption.CAN_TAKE])
             ]
@@ -124,10 +125,10 @@ class PieceType(Enum):
 
         # Diag take + en passant
         Moveset(
-            (1, 2),  # 1 step down, 2 steps right
+            Position(1, 2),  # 1 step down, 2 steps right
             [
                 Move(
-                    (1, 2),  # Attacked destination
+                    Position(1, 2),  # Attacked destination
                     MoveType.ABSOLUTE,
                     [MoveOption.CAN_TAKE])
             ]
@@ -140,20 +141,20 @@ class PieceType(Enum):
         # - - - - -
         # - x - x -
         Moveset(
-            (2, -1),  # 2 steps down, same left
+            Position(2, -1),  # 2 steps down, same left
             [
                 Move(
-                    (2, -1),  # Attacked destination
+                    Position(2, -1),  # Attacked destination
                     MoveType.ABSOLUTE,
                     [MoveOption.CAN_TAKE])
             ]
         ),
 
         Moveset(
-            (2, 1),  # 2 steps down, 1 step right
+            Position(2, 1),  # 2 steps down, 1 step right
             [
                 Move(
-                    (2, 1),  # Attacked destination
+                    Position(2, 1),  # Attacked destination
                     MoveType.ABSOLUTE,
                     [MoveOption.CAN_TAKE])
             ]
@@ -166,10 +167,10 @@ class PieceType(Enum):
         # x - - - -
         # - - - - -
         Moveset(
-            (-1, -2),  # 1 step up, 2 steps left
+            Position(-1, -2),  # 1 step up, 2 steps left
             [
                 Move(
-                    (-1, -2),  # Attacked destination
+                    Position(-1, -2),  # Attacked destination
                     MoveType.ABSOLUTE,
                     [MoveOption.CAN_TAKE])
             ]
@@ -177,10 +178,10 @@ class PieceType(Enum):
 
         # Diag take + en passant
         Moveset(
-            (1, -2),  # 1 step down, 2 steps left
+            Position(1, -2),  # 1 step down, 2 steps left
             [
                 Move(
-                    (1, -2),  # Attacked destination
+                    Position(1, -2),  # Attacked destination
                     MoveType.ABSOLUTE,
                     [MoveOption.CAN_TAKE])
             ]
@@ -196,10 +197,10 @@ class PieceType(Enum):
         # - * -
         # - - -
         Moveset(
-            (-1, -1),  # 1 step up, 1 step left
+            Position(-1, -1),  # 1 step up, 1 step left
             [
                 Move(
-                    (-1, -1),  # Attacked destination
+                    Position(-1, -1),  # Attacked destination
                     MoveType.COLLISION_DIAG,
                     [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
             ]
@@ -210,10 +211,10 @@ class PieceType(Enum):
         # - * -
         # - - -
         Moveset(
-            (-1, 1),  # 1 step up, 1 step right
+            Position(-1, 1),  # 1 step up, 1 step right
             [
                 Move(
-                    (-1, 1),  # Attacked destination
+                    Position(-1, 1),  # Attacked destination
                     MoveType.COLLISION_DIAG,
                     [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
             ]
@@ -224,10 +225,10 @@ class PieceType(Enum):
         # - * -
         # - - x
         Moveset(
-            (1, 1),  # 1 step down, 1 step right
+            Position(1, 1),  # 1 step down, 1 step right
             [
                 Move(
-                    (1, 1),  # Attacked destination
+                    Position(1, 1),  # Attacked destination
                     MoveType.COLLISION_DIAG,
                     [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
             ]
@@ -238,10 +239,10 @@ class PieceType(Enum):
         # - * -
         # x - -
         Moveset(
-            (1, -1),  # 1 step down, 1 step left
+            Position(1, -1),  # 1 step down, 1 step left
             [
                 Move(
-                    (1, -1),  # Attacked destination
+                    Position(1, -1),  # Attacked destination
                     MoveType.COLLISION_DIAG,
                     [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
             ]
@@ -257,10 +258,10 @@ class PieceType(Enum):
         # - * -
         # - - -
         Moveset(
-            (-1, 0),  # 1 step up, same col
+            Position(-1, 0),  # 1 step up, same col
             [
                 Move(
-                    (-1, 0),  # Attacked destination
+                    Position(-1, 0),  # Attacked destination
                     MoveType.COLLISION_AXIS,
                     [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
             ]
@@ -271,10 +272,10 @@ class PieceType(Enum):
         # - * x
         # - - -
         Moveset(
-            (0, 1),  # same row, 1 step right
+            Position(0, 1),  # same row, 1 step right
             [
                 Move(
-                    (0, 1),  # Attacked destination
+                    Position(0, 1),  # Attacked destination
                     MoveType.COLLISION_AXIS,
                     [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
             ]
@@ -285,10 +286,10 @@ class PieceType(Enum):
         # - * -
         # - x -
         Moveset(
-            (1, 0),  # 1 step down, same col
+            Position(1, 0),  # 1 step down, same col
             [
                 Move(
-                    (1, 0),  # Attacked destination
+                    Position(1, 0),  # Attacked destination
                     MoveType.COLLISION_AXIS,
                     [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
             ]
@@ -299,10 +300,10 @@ class PieceType(Enum):
         # x * -
         # - - -
         Moveset(
-            (0, -1),  # same row, 1 step left
+            Position(0, -1),  # same row, 1 step left
             [
                 Move(
-                    (0, -1),  # Attacked destination
+                    Position(0, -1),  # Attacked destination
                     MoveType.COLLISION_AXIS,
                     [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
             ]
@@ -318,10 +319,10 @@ class PieceType(Enum):
         # - * -
         # - - -
         Moveset(
-            (-1, -1),  # 1 step up, 1 step left
+            Position(-1, -1),  # 1 step up, 1 step left
             [
                 Move(
-                    (-1, -1),  # Attacked destination
+                    Position(-1, -1),  # Attacked destination
                     MoveType.COLLISION_DIAG,
                     [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
             ]
@@ -331,10 +332,10 @@ class PieceType(Enum):
         # - * -
         # - - -
         Moveset(
-            (-1, 0),  # 1 step up, same col
+            Position(-1, 0),  # 1 step up, same col
             [
                 Move(
-                    (-1, 0),  # Attacked destination
+                    Position(-1, 0),  # Attacked destination
                     MoveType.COLLISION_AXIS,
                     [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
             ]
@@ -345,10 +346,10 @@ class PieceType(Enum):
         # - * -
         # - - -
         Moveset(
-            (-1, 1),  # 1 step up, 1 step right
+            Position(-1, 1),  # 1 step up, 1 step right
             [
                 Move(
-                    (-1, 1),  # Attacked destination
+                    Position(-1, 1),  # Attacked destination
                     MoveType.COLLISION_DIAG,
                     [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
             ]
@@ -359,10 +360,10 @@ class PieceType(Enum):
         # - * x
         # - - -
         Moveset(
-            (0, 1),  # same row, 1 step right
+            Position(0, 1),  # same row, 1 step right
             [
                 Move(
-                    (0, 1),  # Attacked destination
+                    Position(0, 1),  # Attacked destination
                     MoveType.COLLISION_AXIS,
                     [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
             ]
@@ -373,10 +374,10 @@ class PieceType(Enum):
         # - * -
         # - - x
         Moveset(
-            (1, 1),  # 1 step down, 1 step right
+            Position(1, 1),  # 1 step down, 1 step right
             [
                 Move(
-                    (1, 1),  # Attacked destination
+                    Position(1, 1),  # Attacked destination
                     MoveType.COLLISION_DIAG,
                     [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
             ]
@@ -387,10 +388,10 @@ class PieceType(Enum):
         # - * -
         # - x -
         Moveset(
-            (1, 0),  # 1 step down, same col
+            Position(1, 0),  # 1 step down, same col
             [
                 Move(
-                    (1, 0),  # Attacked destination
+                    Position(1, 0),  # Attacked destination
                     MoveType.COLLISION_AXIS,
                     [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
             ]
@@ -401,10 +402,10 @@ class PieceType(Enum):
         # - * -
         # x - -
         Moveset(
-            (1, -1),  # 1 step down, 1 step left
+            Position(1, -1),  # 1 step down, 1 step left
             [
                 Move(
-                    (1, -1),  # Attacked destination
+                    Position(1, -1),  # Attacked destination
                     MoveType.COLLISION_DIAG,
                     [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
             ]
@@ -415,10 +416,10 @@ class PieceType(Enum):
         # x * -
         # - - -
         Moveset(
-            (0, -1),  # same row, 1 step left
+            Position(0, -1),  # same row, 1 step left
             [
                 Move(
-                    (0, -1),  # Attacked destination
+                    Position(0, -1),  # Attacked destination
                     MoveType.COLLISION_AXIS,
                     [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
             ]
@@ -434,10 +435,10 @@ class PieceType(Enum):
         # - - * - -
         # - - - - -
         Moveset(
-            (-1, -1),  # 1 step up, 1 step left
+            Position(-1, -1),  # 1 step up, 1 step left
             [
                 Move(
-                    (-1, -1),  # Attacked destination
+                    Position(-1, -1),  # Attacked destination
                     MoveType.COLLISION_DIAG,
                     [MoveOption.CAN_TAKE, MoveOption.PROTECTED])
             ]
@@ -447,10 +448,10 @@ class PieceType(Enum):
         # - - * - -
         # - - - - -
         Moveset(
-            (-1, 0),  # 1 step up, same col
+            Position(-1, 0),  # 1 step up, same col
             [
                 Move(
-                    (-1, 0),  # Attacked destination
+                    Position(-1, 0),  # Attacked destination
                     MoveType.COLLISION_AXIS,
                     [MoveOption.CAN_TAKE, MoveOption.PROTECTED])
             ]
@@ -461,10 +462,10 @@ class PieceType(Enum):
         # - - * - -
         # - - - - -
         Moveset(
-            (-1, 1),  # 1 step up, 1 step right
+            Position(-1, 1),  # 1 step up, 1 step right
             [
                 Move(
-                    (-1, 1),  # Attacked destination
+                    Position(-1, 1),  # Attacked destination
                     MoveType.COLLISION_DIAG,
                     [MoveOption.CAN_TAKE, MoveOption.PROTECTED])
             ]
@@ -475,10 +476,10 @@ class PieceType(Enum):
         # - - * x -
         # - - - - -
         Moveset(
-            (0, 1),  # same row, 1 step right
+            Position(0, 1),  # same row, 1 step right
             [
                 Move(
-                    (0, 1),  # Attacked destination
+                    Position(0, 1),  # Attacked destination
                     MoveType.COLLISION_AXIS,
                     [MoveOption.CAN_TAKE, MoveOption.PROTECTED])
             ]
@@ -489,10 +490,10 @@ class PieceType(Enum):
         # - - * - -
         # - - - x -
         Moveset(
-            (1, 1),  # 1 step down, 1 step right
+            Position(1, 1),  # 1 step down, 1 step right
             [
                 Move(
-                    (1, 1),  # Attacked destination
+                    Position(1, 1),  # Attacked destination
                     MoveType.COLLISION_DIAG,
                     [MoveOption.CAN_TAKE, MoveOption.PROTECTED])
             ]
@@ -503,10 +504,10 @@ class PieceType(Enum):
         # - - * - -
         # - - x - -
         Moveset(
-            (1, 0),  # 1 step down, same col
+            Position(1, 0),  # 1 step down, same col
             [
                 Move(
-                    (1, 0),  # Attacked destination
+                    Position(1, 0),  # Attacked destination
                     MoveType.COLLISION_AXIS,
                     [MoveOption.CAN_TAKE, MoveOption.PROTECTED])
             ]
@@ -517,10 +518,10 @@ class PieceType(Enum):
         # - - * - -
         # - x - - -
         Moveset(
-            (1, -1),  # 1 step down, 1 step left
+            Position(1, -1),  # 1 step down, 1 step left
             [
                 Move(
-                    (1, -1),  # Attacked destination
+                    Position(1, -1),  # Attacked destination
                     MoveType.COLLISION_DIAG,
                     [MoveOption.CAN_TAKE, MoveOption.PROTECTED])
             ]
@@ -531,10 +532,10 @@ class PieceType(Enum):
         # - x * - -
         # - - - - -
         Moveset(
-            (0, -1),  # same row, 1 step left
+            Position(0, -1),  # same row, 1 step left
             [
                 Move(
-                    (0, -1),  # Attacked destination
+                    Position(0, -1),  # Attacked destination
                     MoveType.COLLISION_AXIS,
                     [MoveOption.CAN_TAKE, MoveOption.PROTECTED])
             ]
@@ -545,10 +546,10 @@ class PieceType(Enum):
         # s - * - -
         # - - - - -
         Moveset(
-            (0, -2),  # same row, 2 steps left
+            Position(0, -2),  # same row, 2 steps left
             [
                 Move(
-                    (0, -2),  # Attacked destination
+                    Position(0, -2),  # Attacked destination
                     MoveType.KING_CASTLE,
                     [MoveOption.PROTECTED])
             ]
@@ -559,10 +560,10 @@ class PieceType(Enum):
         # - - * - s
         # - - - - -
         Moveset(
-            (0, 2),  # same row, 2 steps right
+            Position(0, 2),  # same row, 2 steps right
             [
                 Move(
-                    (0, 2),  # Attacked destination
+                    Position(0, 2),  # Attacked destination
                     MoveType.KING_CASTLE,
                     [MoveOption.PROTECTED])
             ]

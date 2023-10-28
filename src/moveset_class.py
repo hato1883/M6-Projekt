@@ -1,22 +1,23 @@
 from move_class import Move
+from position_class import Position
 
 
 class Moveset:
 
     def __init__(self,
-                 dest_offset: tuple[int, int],
+                 dest: Position,
                  moves: list[Move] = []):
-        self._dest_offset = dest_offset
+        self._dest = dest
         self._moves = moves
 
     @property
-    def dest_offset(self) -> tuple[int, int]:
-        return self._dest_offset
+    def dest(self) -> Position:
+        return self._dest
 
-    @dest_offset.setter
-    def dest_offset(self, dest_offset):
-        if self._dest_offset in None:
-            self._dest_offset = dest_offset
+    @dest.setter
+    def dest(self, dest):
+        if self._dest in None:
+            self._dest = dest
 
     @property
     def moves(self) -> list[Move]:
@@ -29,7 +30,7 @@ class Moveset:
 
     def __str__(self):
         # prints that this move is attacking [a-h][1-8]
-        text = f"{self.dest_offset}"  # noqa E501
+        text = f"{self.dest}"  # noqa E501
         text = f"{text} ["
         for move in self.moves:
             text = f"{text}{str(move)}, "
@@ -38,7 +39,7 @@ class Moveset:
         return text
 
     def __repr__(self) -> str:
-        text = f"<Move:{self.dest_offset}"
+        text = f"<Move:{self.dest}"
         text = f"{text} {self.moves}>"
         return text
 

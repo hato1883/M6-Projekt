@@ -1,5 +1,7 @@
 #### TODO More shit, draw the actual chesspieces[import the stolen assets], find
 #### out how to make the program relate the chessboard to the graphics
+from pdb import post_mortem
+from re import X
 import pygame
 import sys
 import os
@@ -15,6 +17,7 @@ class Window_Class(UI_Interface):
     
     WHITE = (255, 255, 255)
     BLACK = (0, 0, 0)
+    YELLOW = (255, 255, 0)
 
     WIDTH, HEIGHT = 600,600
 
@@ -47,6 +50,10 @@ class Window_Class(UI_Interface):
 
 
     def run(self):
+        flip = True
+        marked = False
+        origin=Position
+        destination=Position
         self.running=True
 
         #show splashscreen
@@ -66,12 +73,23 @@ class Window_Class(UI_Interface):
                 self.piece_image[i].append( self.load_and_scale_sprite(temp) )
             i += 1
 
-
         while self.running:
             for event in pygame.event.get():
+
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     pos = pygame.mouse.get_pos()
-                    self.mouse_pos_to_index(pos)
+                    if flip == True:
+                        origin = self.mouse_pos_to_index(pos)
+                        print(f'origins value is {origin}')
+                        flip = False
+                        marked=True
+                    else:
+                        destination = self.mouse_pos_to_index(pos)
+                        print(f'destinations value is {destination}')
+                        self.input_user_move(origin,destination)
+                        flip = True
+                        marked=False
+
                 if event.type == pygame.QUIT:
                     self.running = False
 
@@ -80,15 +98,13 @@ class Window_Class(UI_Interface):
 
             #call the show_chessboard function and draw the chessboard
             self.show_chess_board(self.board.get_chessboard())
+            if marked==True:
+                self.draw_selection(origin)
 
             ip= "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
             self.text_wrap(self.screen, ip, (602, 0), pygame.font.SysFont('Arial', 20))
             # print(type(self.board.get_chessboard()))
-            
-                
             pygame.display.flip()
-
-
         pygame.quit()
         sys.exit()
 
@@ -104,8 +120,6 @@ class Window_Class(UI_Interface):
             print(f"({row},{col})")
         
         return Position(row, col)
-
-
 
     def text_wrap(self, surface, text, pos, font, color=pygame.Color('white')):
         words = [word.split(' ') for word in text.splitlines()]  # 2D array where each row is a list of words.
@@ -220,7 +234,6 @@ class Window_Class(UI_Interface):
             return None
         else:
             return (origin,destination)
-        pass
 
     def input_promotion():
         # Prompt's user to select promotion for pawn in question
@@ -246,7 +259,7 @@ class Window_Class(UI_Interface):
         # Get the original dimensions
         original_width, original_height = sprite_image.get_size()
 
-        # Scale the sprite to one-quarter of its original size
+        # Scale the sprite to half of its original size
         scaled_width = original_width // 2
         scaled_height = original_height // 2
 
@@ -257,6 +270,14 @@ class Window_Class(UI_Interface):
     def get_mouse_pos(self):
         mouse_x, mouse_y = pygame.mouse.get_pos()
         print(f"Mouse Position: x={mouse_x}, y={mouse_y}")
+    def draw_selection(self,position:Position):
+
+        x = position.row
+
+        y = position.col
+
+        pygame.draw.rect(self.screen, self.YELLOW, (x*self.SQUARE_SIZE,y*self.SQUARE_SIZE,self.SQUARE_SIZE,self.SQUARE_SIZE),2)
+
 
 if __name__ == "__main__":
     game=Window_Class()

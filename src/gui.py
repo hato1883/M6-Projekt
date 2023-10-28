@@ -69,6 +69,9 @@ class Window_Class(UI_Interface):
 
         while self.running:
             for event in pygame.event.get():
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    pos = pygame.mouse.get_pos()
+                    self.mouse_pos_to_index(pos)
                 if event.type == pygame.QUIT:
                     self.running = False
 
@@ -77,19 +80,19 @@ class Window_Class(UI_Interface):
 
             #call the show_chessboard function and draw the chessboard
             self.show_chess_board(self.board.get_chessboard())
+
             ip= "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
             self.text_wrap(self.screen, ip, (602, 0), pygame.font.SysFont('Arial', 20))
             # print(type(self.board.get_chessboard()))
             
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                pos = pygame.mouse.get_pos()
-                self.mouse_pos_to_index(pos)
+                
             pygame.display.flip()
 
 
         pygame.quit()
         sys.exit()
 
+    
     def mouse_pos_to_index(self, pos):
         x, y = pos
         if x > 601:
@@ -207,10 +210,16 @@ class Window_Class(UI_Interface):
         # Recount previous move to user by text or possibly graphically
         pass
 
-    def input_user_move():
+    def input_user_move(self, origin, destination):
+
         # Used to input the user's move either through algebraic notation or graphical interacivity
         # returns two 2-tupels. Origin, Dest.
         # 2-tuple form is (row, column) were each element is integer [0,7]
+
+        if origin == destination:
+            return None
+        else:
+            return (origin,destination)
         pass
 
     def input_promotion():
@@ -218,6 +227,12 @@ class Window_Class(UI_Interface):
         # Multiple choice: queen, rook, bishop or knight
         # Either by text (q, r, b or k) or graphical interaction
         # return  integer in [0,3]. 0 == queen, 1 == r and so on.
+        pass
+
+    def draw_turn(self):
+
+
+        
         pass
 
     def draw_sprite(self, sprite, x, y):
@@ -243,8 +258,6 @@ class Window_Class(UI_Interface):
         mouse_x, mouse_y = pygame.mouse.get_pos()
         print(f"Mouse Position: x={mouse_x}, y={mouse_y}")
 
-
-   
 if __name__ == "__main__":
     game=Window_Class()
     game.run()

@@ -1,6 +1,9 @@
 from enum import Enum
 from move_type_enum import MoveType
 from move_option_enum import MoveOption
+from move_class import Move
+from moveset_class import Moveset
+from position_class import Position
 
 
 class PieceType(Enum):
@@ -12,10 +15,14 @@ class PieceType(Enum):
         # - o -
         # - - -
         # - * -
-        (   # Offset
-            (-2, 0),  # 2 steps up, same colum
-            [   # Moves
-                (MoveType.COLLISION_AXIS, [MoveOption.FIRST])
+        Moveset(
+            Position(-2, 0),  # Move destination
+            [
+                Move(
+                    Position(-2, 0),  # Attacked destination
+                    MoveType.COLLISION_AXIS,  # straight move
+                    [MoveOption.FIRST]  # Move option
+                    )
             ]
         ),
 
@@ -23,11 +30,17 @@ class PieceType(Enum):
         # - - -
         # x - -
         # - * -
-        (   # Offset
-            (-1, -1),  # 1 step up, 1 step left
-            [   # Moves
-                (MoveType.COLLISION_DIAG, [MoveOption.MUST_TAKE]),
-                (MoveType.PAWN_EN_PASSANT, [])
+        Moveset(
+            Position(-1, -1),  # 1 step up, 1 step left
+            [
+                Move(
+                    Position(-1, -1),  # Attacked destination
+                    MoveType.COLLISION_DIAG,
+                    [MoveOption.MUST_TAKE]),
+                Move(
+                    Position(-1, -1),  # Attacked destination
+                    MoveType.PAWN_EN_PASSANT,
+                    [])
             ]
         ),
 
@@ -35,10 +48,13 @@ class PieceType(Enum):
         # - - -
         # - o -
         # - * -
-        (   # Offset
-            (-1, 0),  # 1 step up, same col
-            [   # Moves
-                (MoveType.COLLISION_AXIS, [])
+        Moveset(
+            Position(-1, 0),  # 1 step up, same col
+            [
+                Move(
+                    Position(-1, 0),  # Attacked destination
+                    MoveType.COLLISION_AXIS,
+                    [])
             ]
         ),
 
@@ -46,14 +62,20 @@ class PieceType(Enum):
         # - - -
         # - - x
         # - * -
-        (   # Offset
-            (-1, 1),  # 1 step up, same col
+        Moveset(
+            Position(-1, 1),  # 1 step up, same col
             [
-                (MoveType.COLLISION_DIAG, [MoveOption.MUST_TAKE]),
-                (MoveType.PAWN_EN_PASSANT, [])
+                Move(
+                    Position(-1, 1),  # Attacked destination
+                    MoveType.COLLISION_DIAG,
+                    [MoveOption.MUST_TAKE]),
+                Move(
+                    Position(-1, 1),  # Attacked destination
+                    MoveType.PAWN_EN_PASSANT,
+                    [])
             ]
         )
-        ]
+    ]
 
     ####
     # Knight Move List
@@ -65,17 +87,23 @@ class PieceType(Enum):
         # - - * - -
         # - - - - -
         # - - - - -
-        (   # Offset
-            (-2, -1),  # 2 steps up, 1 step left
-            [   # Moves
-                (MoveType.ABSOLUTE, [MoveOption.CAN_TAKE])
+        Moveset(
+            Position(-2, -1),  # 2 steps up, 1 step left
+            [
+                Move(
+                    Position(-2, -1),  # Attacked destination
+                    MoveType.ABSOLUTE,
+                    [MoveOption.CAN_TAKE])
             ]
         ),
 
-        (   # Offset
-            (-2, 1),  # 2 step up, 1 step right
-            [   # Moves
-                (MoveType.ABSOLUTE, [MoveOption.CAN_TAKE])
+        Moveset(
+            Position(-2, 1),  # 2 step up, 1 step right
+            [
+                Move(
+                    Position(-2, 1),  # Attacked destination
+                    MoveType.ABSOLUTE,
+                    [MoveOption.CAN_TAKE])
             ]
         ),
 
@@ -85,18 +113,24 @@ class PieceType(Enum):
         # - - * - -
         # - - - - x
         # - - - - -
-        (   # Offset
-            (-1, 2),  # 1 step up, 2 steps right
-            [   # Moves
-                (MoveType.ABSOLUTE, [MoveOption.CAN_TAKE])
+        Moveset(
+            Position(-1, 2),  # 1 step up, 2 steps right
+            [
+                Move(
+                    Position(-1, 2),  # Attacked destination
+                    MoveType.ABSOLUTE,
+                    [MoveOption.CAN_TAKE])
             ]
         ),
 
         # Diag take + en passant
-        (   # Offset
-            (1, 2),  # 1 step down, 2 steps right
-            [   # Moves
-                (MoveType.ABSOLUTE, [MoveOption.CAN_TAKE])
+        Moveset(
+            Position(1, 2),  # 1 step down, 2 steps right
+            [
+                Move(
+                    Position(1, 2),  # Attacked destination
+                    MoveType.ABSOLUTE,
+                    [MoveOption.CAN_TAKE])
             ]
         ),
 
@@ -106,17 +140,23 @@ class PieceType(Enum):
         # - - * - -
         # - - - - -
         # - x - x -
-        (   # Offset
-            (2, -1),  # 2 steps down, same left
-            [   # Moves
-                (MoveType.ABSOLUTE, [MoveOption.CAN_TAKE])
+        Moveset(
+            Position(2, -1),  # 2 steps down, same left
+            [
+                Move(
+                    Position(2, -1),  # Attacked destination
+                    MoveType.ABSOLUTE,
+                    [MoveOption.CAN_TAKE])
             ]
         ),
 
-        (   # Offset
-            (2, 1),  # 2 steps down, 1 step right
-            [   # Moves
-                (MoveType.ABSOLUTE, [MoveOption.CAN_TAKE])
+        Moveset(
+            Position(2, 1),  # 2 steps down, 1 step right
+            [
+                Move(
+                    Position(2, 1),  # Attacked destination
+                    MoveType.ABSOLUTE,
+                    [MoveOption.CAN_TAKE])
             ]
         ),
 
@@ -126,21 +166,27 @@ class PieceType(Enum):
         # - - * - -
         # x - - - -
         # - - - - -
-        (   # Offset
-            (-1, -2),  # 1 step up, 2 steps left
-            [   # Moves
-                (MoveType.ABSOLUTE, [MoveOption.CAN_TAKE])
+        Moveset(
+            Position(-1, -2),  # 1 step up, 2 steps left
+            [
+                Move(
+                    Position(-1, -2),  # Attacked destination
+                    MoveType.ABSOLUTE,
+                    [MoveOption.CAN_TAKE])
             ]
         ),
 
         # Diag take + en passant
-        (   # Offset
-            (1, -2),  # 1 step down, 2 steps left
-            [   # Moves
-                (MoveType.ABSOLUTE, [MoveOption.CAN_TAKE])
+        Moveset(
+            Position(1, -2),  # 1 step down, 2 steps left
+            [
+                Move(
+                    Position(1, -2),  # Attacked destination
+                    MoveType.ABSOLUTE,
+                    [MoveOption.CAN_TAKE])
             ]
         )
-        ]
+    ]
 
     ####
     # Bishop Move List
@@ -150,11 +196,13 @@ class PieceType(Enum):
         # x - -
         # - * -
         # - - -
-        (   # Offset
-            (-1, -1),  # 1 step up, 1 step left
-            [   # Moves
-                (MoveType.COLLISION_DIAG, [MoveOption.CAN_TAKE,
-                                           MoveOption.PROPEGATES])
+        Moveset(
+            Position(-1, -1),  # 1 step up, 1 step left
+            [
+                Move(
+                    Position(-1, -1),  # Attacked destination
+                    MoveType.COLLISION_DIAG,
+                    [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
             ]
         ),
 
@@ -162,11 +210,13 @@ class PieceType(Enum):
         # - - x
         # - * -
         # - - -
-        (   # Offset
-            (-1, 1),  # 1 step up, 1 step right
-            [   # Moves
-                (MoveType.COLLISION_DIAG, [MoveOption.CAN_TAKE,
-                                           MoveOption.PROPEGATES])
+        Moveset(
+            Position(-1, 1),  # 1 step up, 1 step right
+            [
+                Move(
+                    Position(-1, 1),  # Attacked destination
+                    MoveType.COLLISION_DIAG,
+                    [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
             ]
         ),
 
@@ -174,11 +224,13 @@ class PieceType(Enum):
         # - - -
         # - * -
         # - - x
-        (   # Offset
-            (1, 1),  # 1 step down, 1 step right
-            [   # Moves
-                (MoveType.COLLISION_DIAG, [MoveOption.CAN_TAKE,
-                                           MoveOption.PROPEGATES])
+        Moveset(
+            Position(1, 1),  # 1 step down, 1 step right
+            [
+                Move(
+                    Position(1, 1),  # Attacked destination
+                    MoveType.COLLISION_DIAG,
+                    [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
             ]
         ),
 
@@ -186,289 +238,343 @@ class PieceType(Enum):
         # - - -
         # - * -
         # x - -
-        (   # Offset
-            (1, -1),  # 1 step down, 1 step left
-            [   # Moves
-                (MoveType.COLLISION_DIAG, [MoveOption.CAN_TAKE,
-                                           MoveOption.PROPEGATES])
+        Moveset(
+            Position(1, -1),  # 1 step down, 1 step left
+            [
+                Move(
+                    Position(1, -1),  # Attacked destination
+                    MoveType.COLLISION_DIAG,
+                    [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
             ]
         )
-        ]
+    ]
 
     ####
     # Rook Move List
     ####
     ROOK = [
-            # Rook attacking y-axis up
-            # - x -
-            # - * -
-            # - - -
-            (   # Offset
-                (-1, 0),  # 1 step up, same col
-                [   # Moves
-                    (MoveType.COLLISION_AXIS, [MoveOption.CAN_TAKE,
-                                               MoveOption.PROPEGATES])
-                ]
-            ),
-
-            # Rook attacking x-axis right
-            # - - -
-            # - * x
-            # - - -
-            (   # Offset
-                (0, 1),  # same row, 1 step right
-                [   # Moves
-                    (MoveType.COLLISION_AXIS, [MoveOption.CAN_TAKE,
-                                               MoveOption.PROPEGATES])
-                ]
-            ),
-
-            # Rook attacking y-axis down
-            # - - -
-            # - * -
-            # - x -
-            (   # Offset
-                (1, 0),  # 1 step down, same col
-                [   # Moves
-                    (MoveType.COLLISION_AXIS, [MoveOption.CAN_TAKE,
-                                               MoveOption.PROPEGATES])
-                ]
-            ),
-
-            # Rook attacking x-axis left
-            # - - -
-            # x * -
-            # - - -
-            (   # Offset
-                (0, -1),  # same row, 1 step left
-                [   # Moves
-                    (MoveType.COLLISION_AXIS, [MoveOption.CAN_TAKE,
-                                               MoveOption.PROPEGATES])
-                ]
-            )
+        # Rook attacking y-axis up
+        # - x -
+        # - * -
+        # - - -
+        Moveset(
+            Position(-1, 0),  # 1 step up, same col
+            [
+                Move(
+                    Position(-1, 0),  # Attacked destination
+                    MoveType.COLLISION_AXIS,
+                    [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
             ]
+        ),
+
+        # Rook attacking x-axis right
+        # - - -
+        # - * x
+        # - - -
+        Moveset(
+            Position(0, 1),  # same row, 1 step right
+            [
+                Move(
+                    Position(0, 1),  # Attacked destination
+                    MoveType.COLLISION_AXIS,
+                    [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
+            ]
+        ),
+
+        # Rook attacking y-axis down
+        # - - -
+        # - * -
+        # - x -
+        Moveset(
+            Position(1, 0),  # 1 step down, same col
+            [
+                Move(
+                    Position(1, 0),  # Attacked destination
+                    MoveType.COLLISION_AXIS,
+                    [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
+            ]
+        ),
+
+        # Rook attacking x-axis left
+        # - - -
+        # x * -
+        # - - -
+        Moveset(
+            Position(0, -1),  # same row, 1 step left
+            [
+                Move(
+                    Position(0, -1),  # Attacked destination
+                    MoveType.COLLISION_AXIS,
+                    [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
+            ]
+        )
+    ]
 
     ####
     # QUEEN Move List
     ####
     QUEEN = [
-            # Queen attacking diag
-            # x - -
-            # - * -
-            # - - -
-            (   # Offset
-                (-1, -1),  # 1 step up, 1 step left
-                [   # Moves
-                    (MoveType.COLLISION_DIAG, [MoveOption.CAN_TAKE,
-                                               MoveOption.PROPEGATES])
-                ]
-            ),
-            # Queen attacking y-axis up
-            # - x -
-            # - * -
-            # - - -
-            (   # Offset
-                (-1, 0),  # 1 step up, same col
-                [   # Moves
-                    (MoveType.COLLISION_AXIS, [MoveOption.CAN_TAKE,
-                                               MoveOption.PROPEGATES])
-                ]
-            ),
-
-            # Queen attacking diag
-            # - - x
-            # - * -
-            # - - -
-            (   # Offset
-                (-1, 1),  # 1 step up, 1 step right
-                [   # Moves
-                    (MoveType.COLLISION_DIAG, [MoveOption.CAN_TAKE,
-                                               MoveOption.PROPEGATES])
-                ]
-            ),
-
-            # Queen attacking x-axis
-            # - - -
-            # - * x
-            # - - -
-            (   # Offset
-                (0, 1),  # same row, 1 step right
-                [   # Moves
-                    (MoveType.COLLISION_AXIS, [MoveOption.CAN_TAKE,
-                                               MoveOption.PROPEGATES])
-                ]
-            ),
-
-            # Queen attacking diag
-            # - - -
-            # - * -
-            # - - x
-            (   # Offset
-                (1, 1),  # 1 step down, 1 step right
-                [   # Moves
-                    (MoveType.COLLISION_DIAG, [MoveOption.CAN_TAKE,
-                                               MoveOption.PROPEGATES])
-                ]
-            ),
-
-            # Queen attacking y-axis
-            # - - -
-            # - * -
-            # - x -
-            (   # Offset
-                (1, 0),  # 1 step down, same col
-                [   # Moves
-                    (MoveType.COLLISION_AXIS, [MoveOption.CAN_TAKE,
-                                               MoveOption.PROPEGATES])
-                ]
-            ),
-
-            # Bishop attacking diag
-            # - - -
-            # - * -
-            # x - -
-            (   # Offset
-                (1, -1),  # 1 step down, 1 step left
-                [   # Moves
-                    (MoveType.COLLISION_DIAG, [MoveOption.CAN_TAKE,
-                                               MoveOption.PROPEGATES])
-                ]
-            ),
-
-            # Queen attacking x-axis
-            # - - -
-            # x * -
-            # - - -
-            (   # Offset
-                (0, -1),  # same row, 1 step left
-                [   # Moves
-                    (MoveType.COLLISION_AXIS, [MoveOption.CAN_TAKE,
-                                               MoveOption.PROPEGATES])
-                ]
-            )
+        # Queen attacking diag
+        # x - -
+        # - * -
+        # - - -
+        Moveset(
+            Position(-1, -1),  # 1 step up, 1 step left
+            [
+                Move(
+                    Position(-1, -1),  # Attacked destination
+                    MoveType.COLLISION_DIAG,
+                    [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
             ]
+        ),
+        # Queen attacking y-axis up
+        # - x -
+        # - * -
+        # - - -
+        Moveset(
+            Position(-1, 0),  # 1 step up, same col
+            [
+                Move(
+                    Position(-1, 0),  # Attacked destination
+                    MoveType.COLLISION_AXIS,
+                    [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
+            ]
+        ),
+
+        # Queen attacking diag
+        # - - x
+        # - * -
+        # - - -
+        Moveset(
+            Position(-1, 1),  # 1 step up, 1 step right
+            [
+                Move(
+                    Position(-1, 1),  # Attacked destination
+                    MoveType.COLLISION_DIAG,
+                    [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
+            ]
+        ),
+
+        # Queen attacking x-axis
+        # - - -
+        # - * x
+        # - - -
+        Moveset(
+            Position(0, 1),  # same row, 1 step right
+            [
+                Move(
+                    Position(0, 1),  # Attacked destination
+                    MoveType.COLLISION_AXIS,
+                    [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
+            ]
+        ),
+
+        # Queen attacking diag
+        # - - -
+        # - * -
+        # - - x
+        Moveset(
+            Position(1, 1),  # 1 step down, 1 step right
+            [
+                Move(
+                    Position(1, 1),  # Attacked destination
+                    MoveType.COLLISION_DIAG,
+                    [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
+            ]
+        ),
+
+        # Queen attacking y-axis
+        # - - -
+        # - * -
+        # - x -
+        Moveset(
+            Position(1, 0),  # 1 step down, same col
+            [
+                Move(
+                    Position(1, 0),  # Attacked destination
+                    MoveType.COLLISION_AXIS,
+                    [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
+            ]
+        ),
+
+        # Bishop attacking diag
+        # - - -
+        # - * -
+        # x - -
+        Moveset(
+            Position(1, -1),  # 1 step down, 1 step left
+            [
+                Move(
+                    Position(1, -1),  # Attacked destination
+                    MoveType.COLLISION_DIAG,
+                    [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
+            ]
+        ),
+
+        # Queen attacking x-axis
+        # - - -
+        # x * -
+        # - - -
+        Moveset(
+            Position(0, -1),  # same row, 1 step left
+            [
+                Move(
+                    Position(0, -1),  # Attacked destination
+                    MoveType.COLLISION_AXIS,
+                    [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
+            ]
+        )
+    ]
 
     ####
     # King Move List
     ####
     KING = [
-            # KING attacking diag
-            # - x - - -
-            # - - * - -
-            # - - - - -
-            (   # Offset
-                (-1, -1),  # 1 step up, 1 step left
-                [   # Moves
-                    (MoveType.COLLISION_DIAG, [MoveOption.CAN_TAKE,
-                                               MoveOption.PROTECTED])
-                ]
-            ),
-            # KING attacking y-axis up
-            # - - x - -
-            # - - * - -
-            # - - - - -
-            (   # Offset
-                (-1, 0),  # 1 step up, same col
-                [   # Moves
-                    (MoveType.COLLISION_AXIS, [MoveOption.CAN_TAKE,
-                                               MoveOption.PROTECTED])
-                ]
-            ),
-
-            # KING attacking diag
-            # - - - x -
-            # - - * - -
-            # - - - - -
-            (   # Offset
-                (-1, 1),  # 1 step up, 1 step right
-                [   # Moves
-                    (MoveType.COLLISION_DIAG, [MoveOption.CAN_TAKE,
-                                               MoveOption.PROTECTED])
-                ]
-            ),
-
-            # KING attacking x-axis
-            # - - - - -
-            # - - * x -
-            # - - - - -
-            (   # Offset
-                (0, 1),  # same row, 1 step right
-                [   # Moves
-                    (MoveType.COLLISION_AXIS, [MoveOption.CAN_TAKE,
-                                               MoveOption.PROTECTED])
-                ]
-            ),
-
-            # KING attacking diag
-            # - - - - -
-            # - - * - -
-            # - - - x -
-            (   # Offset
-                (1, 1),  # 1 step down, 1 step right
-                [   # Moves
-                    (MoveType.COLLISION_DIAG, [MoveOption.CAN_TAKE,
-                                               MoveOption.PROTECTED])
-                ]
-            ),
-
-            # KING attacking y-axis
-            # - - - - -
-            # - - * - -
-            # - - x - -
-            (   # Offset
-                (1, 0),  # 1 step down, same col
-                [   # Moves
-                    (MoveType.COLLISION_AXIS, [MoveOption.CAN_TAKE,
-                                               MoveOption.PROTECTED])
-                ]
-            ),
-
-            # KING attacking diag
-            # - - - - -
-            # - - * - -
-            # - x - - -
-            (   # Offset
-                (1, -1),  # 1 step down, 1 step left
-                [   # Moves
-                    (MoveType.COLLISION_DIAG, [MoveOption.CAN_TAKE,
-                                               MoveOption.PROTECTED])
-                ]
-            ),
-
-            # KING attacking x-axis
-            # - - - - -
-            # - x * - -
-            # - - - - -
-            (   # Offset
-                (0, -1),  # same row, 1 step left
-                [   # Moves
-                    (MoveType.COLLISION_AXIS, [MoveOption.CAN_TAKE,
-                                               MoveOption.PROTECTED])
-                ]
-            ),
-
-            # KING attacking x-axis
-            # - - - - -
-            # s - * - -
-            # - - - - -
-            (   # Offset
-                (0, -2),  # same row, 2 steps left
-                [   # Moves
-                    (MoveType.KING_CASTLE, [MoveOption.PROTECTED])
-                ]
-            ),
-
-            # KING attacking x-axis
-            # - - - - -
-            # - - * - s
-            # - - - - -
-            (   # Offset
-                (0, 2),  # same row, 2 steps right
-                [   # Moves
-                    (MoveType.KING_CASTLE, [MoveOption.PROTECTED])
-                ]
-            )
+        # KING attacking diag
+        # - x - - -
+        # - - * - -
+        # - - - - -
+        Moveset(
+            Position(-1, -1),  # 1 step up, 1 step left
+            [
+                Move(
+                    Position(-1, -1),  # Attacked destination
+                    MoveType.COLLISION_DIAG,
+                    [MoveOption.CAN_TAKE, MoveOption.PROTECTED])
             ]
+        ),
+        # KING attacking y-axis up
+        # - - x - -
+        # - - * - -
+        # - - - - -
+        Moveset(
+            Position(-1, 0),  # 1 step up, same col
+            [
+                Move(
+                    Position(-1, 0),  # Attacked destination
+                    MoveType.COLLISION_AXIS,
+                    [MoveOption.CAN_TAKE, MoveOption.PROTECTED])
+            ]
+        ),
+
+        # KING attacking diag
+        # - - - x -
+        # - - * - -
+        # - - - - -
+        Moveset(
+            Position(-1, 1),  # 1 step up, 1 step right
+            [
+                Move(
+                    Position(-1, 1),  # Attacked destination
+                    MoveType.COLLISION_DIAG,
+                    [MoveOption.CAN_TAKE, MoveOption.PROTECTED])
+            ]
+        ),
+
+        # KING attacking x-axis
+        # - - - - -
+        # - - * x -
+        # - - - - -
+        Moveset(
+            Position(0, 1),  # same row, 1 step right
+            [
+                Move(
+                    Position(0, 1),  # Attacked destination
+                    MoveType.COLLISION_AXIS,
+                    [MoveOption.CAN_TAKE, MoveOption.PROTECTED])
+            ]
+        ),
+
+        # KING attacking diag
+        # - - - - -
+        # - - * - -
+        # - - - x -
+        Moveset(
+            Position(1, 1),  # 1 step down, 1 step right
+            [
+                Move(
+                    Position(1, 1),  # Attacked destination
+                    MoveType.COLLISION_DIAG,
+                    [MoveOption.CAN_TAKE, MoveOption.PROTECTED])
+            ]
+        ),
+
+        # KING attacking y-axis
+        # - - - - -
+        # - - * - -
+        # - - x - -
+        Moveset(
+            Position(1, 0),  # 1 step down, same col
+            [
+                Move(
+                    Position(1, 0),  # Attacked destination
+                    MoveType.COLLISION_AXIS,
+                    [MoveOption.CAN_TAKE, MoveOption.PROTECTED])
+            ]
+        ),
+
+        # KING attacking diag
+        # - - - - -
+        # - - * - -
+        # - x - - -
+        Moveset(
+            Position(1, -1),  # 1 step down, 1 step left
+            [
+                Move(
+                    Position(1, -1),  # Attacked destination
+                    MoveType.COLLISION_DIAG,
+                    [MoveOption.CAN_TAKE, MoveOption.PROTECTED])
+            ]
+        ),
+
+        # KING attacking x-axis
+        # - - - - -
+        # - x * - -
+        # - - - - -
+        Moveset(
+            Position(0, -1),  # same row, 1 step left
+            [
+                Move(
+                    Position(0, -1),  # Attacked destination
+                    MoveType.COLLISION_AXIS,
+                    [MoveOption.CAN_TAKE, MoveOption.PROTECTED])
+            ]
+        ),
+
+        # KING attacking x-axis
+        # - - - - -
+        # s - * - -
+        # - - - - -
+        Moveset(
+            Position(0, -2),  # same row, 2 steps left
+            [
+                Move(
+                    Position(0, -2),  # Attacked destination
+                    MoveType.KING_CASTLE,
+                    [MoveOption.PROTECTED])
+            ]
+        ),
+
+        # KING attacking x-axis
+        # - - - - -
+        # - - * - s
+        # - - - - -
+        Moveset(
+            Position(0, 2),  # same row, 2 steps right
+            [
+                Move(
+                    Position(0, 2),  # Attacked destination
+                    MoveType.KING_CASTLE,
+                    [MoveOption.PROTECTED])
+            ]
+        )
+    ]
+
+    ####
+    # King Move List
+    ####
+    EMPTY = [
+    ]
 
     def __str__(self):
         """Overriden to String method

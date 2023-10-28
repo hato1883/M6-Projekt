@@ -6,12 +6,12 @@ current = os.path.dirname(__file__)
 sys.path.append(current + "/../src")
 
 from chessboard import Chessboard  # noqa: E402
-from chess_piece_class import ChessPiece  # noqa: E402
+from chess_piece_class import EMPTY_PIECE, ChessPiece  # noqa: E402
 from piece_color_enum import Color  # noqa: E402
 from piece_type_enum import PieceType  # noqa: E402
 
 
-# Test if create board gives us a 2d list filled with None elements
+# Test if create board gives us a 2d list filled with EMPTY_PIECE elements
 # Also test if Chessboard(list[list[]]) works as intended
 def test_create_board():
     """Tests create_board(size)
@@ -19,7 +19,7 @@ def test_create_board():
     tests both for size 1 and size 8"""
     chessboard_ref = Chessboard()
     expected_board = [
-        [None]
+        [EMPTY_PIECE]
         ]
     expected_ref = Chessboard(expected_board)
     chessboard_ref.create_board(1)
@@ -33,18 +33,18 @@ def test_create_board():
         # Check amount of columns in the row are equal
         assert len(expected_board[row]) == len(chessboard_ref.get_chessboard()[row])  # noqa E501
         for col in range(len(expected_board)):
-            assert chessboard_ref.get_chessboard()[row][col] is None
+            assert chessboard_ref.get_chessboard()[row][col] is EMPTY_PIECE
 
     # Create a 2d list of 8x8
     expected_board = [
-        [None, None, None, None, None, None, None, None],
-        [None, None, None, None, None, None, None, None],
-        [None, None, None, None, None, None, None, None],
-        [None, None, None, None, None, None, None, None],
-        [None, None, None, None, None, None, None, None],
-        [None, None, None, None, None, None, None, None],
-        [None, None, None, None, None, None, None, None],
-        [None, None, None, None, None, None, None, None]
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],  # noqa E501
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],  # noqa E501
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],  # noqa E501
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],  # noqa E501
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],  # noqa E501
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],  # noqa E501
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],  # noqa E501
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE]  # noqa E501
         ]
     # load it into a Chessboard instance
     expected_ref = Chessboard(expected_board)
@@ -88,10 +88,10 @@ def test_create_default_board():
     expected_board: list[list[ChessPiece]] = [
         [b_ro, b_kn, b_bi, b_qu, b_ki, b_bi, b_kn, b_ro],
         [b_pa, b_pa, b_pa, b_pa, b_pa, b_pa, b_pa, b_pa],
-        [None, None, None, None, None, None, None, None],
-        [None, None, None, None, None, None, None, None],
-        [None, None, None, None, None, None, None, None],
-        [None, None, None, None, None, None, None, None],
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],  # noqa E501
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],  # noqa E501
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],  # noqa E501
+        [EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE, EMPTY_PIECE],  # noqa E501
         [w_pa, w_pa, w_pa, w_pa, w_pa, w_pa, w_pa, w_pa],
         [w_ro, w_kn, w_bi, w_qu, w_ki, w_bi, w_kn, w_ro],
     ]

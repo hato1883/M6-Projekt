@@ -1,6 +1,6 @@
 from narration_interface import NarrationInterface
 from position_class import Position
-from chess_piece_class import ChessPiece
+from chess_piece_class import EMPTY_PIECE, ChessPiece
 import openai
 import json
 
@@ -21,7 +21,7 @@ class ChatGPTNarrator(NarrationInterface):
                            destination: Position,
                            moved_piece: ChessPiece,
                            attacked_piece: ChessPiece) -> str:
-        if attacked_piece is None:
+        if attacked_piece is EMPTY_PIECE:
             return f"The {str(moved_piece.get_color()).lower()} {str(moved_piece.get_type()).lower()} on {cls.index_to_alpha_numeral(origin)} moved to {cls.index_to_alpha_numeral(destination)}"  # noqa E501
         else:
             prompt = f"Describe dramaticly how the {str(moved_piece.get_color()).lower()} {str(moved_piece.get_type()).lower()} on {cls.index_to_alpha_numeral(origin)} takes {str(attacked_piece.get_color()).lower()} {str(attacked_piece.get_type()).lower()} at {cls.index_to_alpha_numeral(destination)} on a chess board in 3 sentances"  # noqa E501

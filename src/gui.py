@@ -1,7 +1,7 @@
-#### TODO More shit, draw the actual chesspieces[import the stolen assets], find
-#### out how to make the program relate the chessboard to the graphics
+#### TODO Make a function that actually manipulates the state of the chessboard(hint, check the gameloop, it's all there, just need to connect it somehow)
+#### TODO Make a function that puts the current players name on the screen(Preferably in the right hand corner)
+#### TODO Make a function that creates a textbox for our chatgpt integration 
 from pdb import post_mortem
-from re import X
 import pygame
 import sys
 import os
@@ -83,6 +83,7 @@ class Window_Class(UI_Interface):
                         print(f'origins value is {origin}')
                         flip = False
                         marked=True
+                        
                     else:
                         destination = self.mouse_pos_to_index(pos)
                         print(f'destinations value is {destination}')
@@ -267,9 +268,11 @@ class Window_Class(UI_Interface):
         scaled_sprite = pygame.transform.scale(sprite_image, (scaled_width, scaled_height))
 
         return scaled_sprite
+
     def get_mouse_pos(self):
         mouse_x, mouse_y = pygame.mouse.get_pos()
         print(f"Mouse Position: x={mouse_x}, y={mouse_y}")
+
     def draw_selection(self,position:Position):
 
         x = position.row
@@ -277,7 +280,6 @@ class Window_Class(UI_Interface):
         y = position.col
 
         pygame.draw.rect(self.screen, self.YELLOW, (x*self.SQUARE_SIZE,y*self.SQUARE_SIZE,self.SQUARE_SIZE,self.SQUARE_SIZE),2)
-
 
 if __name__ == "__main__":
     game=Window_Class()

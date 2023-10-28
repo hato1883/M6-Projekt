@@ -1,4 +1,5 @@
 #### TODO Make a function that actually manipulates the state of the chessboard(hint, check the gameloop, it's all there, just need to connect it somehow)
+#### TODO Compare the functions in main.py to gui.py to find out how to properly manipulate the board
 #### TODO Make a function that puts the current players name on the screen(Preferably in the right hand corner)
 #### TODO Make a function that creates a textbox for our chatgpt integration 
 from pdb import post_mortem
@@ -64,6 +65,8 @@ class Window_Class(UI_Interface):
 
         self.piece_image = [[],[]]
 
+        current_turn='white'
+
         colors =("b","w")
         suffix = ("k","q","r","b","n","p")
         i = 0
@@ -101,9 +104,16 @@ class Window_Class(UI_Interface):
             self.show_chess_board(self.board.get_chessboard())
             if marked==True:
                 self.draw_selection(origin)
-
-            ip= "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+            
+            #text for the textbox
+            if(current_turn)== 'white':
+                ip = 'white'
+            else:
+                ip = 'black'
+        # ip= "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+            #textbox started at 602,0
             self.text_wrap(self.screen, ip, (602, 0), pygame.font.SysFont('Arial', 20))
+            # self.draw_turn(current_turn)
             # print(type(self.board.get_chessboard()))
             pygame.display.flip()
         pygame.quit()
@@ -243,7 +253,15 @@ class Window_Class(UI_Interface):
         # return  integer in [0,3]. 0 == queen, 1 == r and so on.
         pass
 
-    def draw_turn(self):
+    def draw_turn(self,current_turn):
+
+       if(current_turn)== 'white':
+        ip = 'white'
+       else:
+        ip = 'black'
+
+        self.text_wrap(self.screen, ip, (602, 0), pygame.font.SysFont('Arial', 20))
+
 
 
         

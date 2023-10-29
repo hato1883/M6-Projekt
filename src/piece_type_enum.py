@@ -38,7 +38,7 @@ class PieceType(Enum):
                     MoveType.COLLISION_DIAG,
                     [MoveOption.MUST_TAKE]),
                 Move(
-                    Position(-1, -1),  # Attacked destination
+                    Position(0, -1),  # Attacked destination
                     MoveType.PAWN_EN_PASSANT,
                     [])
             ]
@@ -70,7 +70,7 @@ class PieceType(Enum):
                     MoveType.COLLISION_DIAG,
                     [MoveOption.MUST_TAKE]),
                 Move(
-                    Position(-1, 1),  # Attacked destination
+                    Position(0, 1),  # Attacked destination
                     MoveType.PAWN_EN_PASSANT,
                     [])
             ]
@@ -200,7 +200,7 @@ class PieceType(Enum):
             Position(-1, -1),  # 1 step up, 1 step left
             [
                 Move(
-                    Position(-1, -1),  # Attacked destination
+                    Position(0, 0),  # Attacked destination
                     MoveType.COLLISION_DIAG,
                     [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
             ]
@@ -214,7 +214,7 @@ class PieceType(Enum):
             Position(-1, 1),  # 1 step up, 1 step right
             [
                 Move(
-                    Position(-1, 1),  # Attacked destination
+                    Position(0, 0),  # Attacked destination
                     MoveType.COLLISION_DIAG,
                     [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
             ]
@@ -228,7 +228,7 @@ class PieceType(Enum):
             Position(1, 1),  # 1 step down, 1 step right
             [
                 Move(
-                    Position(1, 1),  # Attacked destination
+                    Position(0, 0),  # Attacked destination
                     MoveType.COLLISION_DIAG,
                     [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
             ]
@@ -242,7 +242,7 @@ class PieceType(Enum):
             Position(1, -1),  # 1 step down, 1 step left
             [
                 Move(
-                    Position(1, -1),  # Attacked destination
+                    Position(0, 0),  # Attacked destination
                     MoveType.COLLISION_DIAG,
                     [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
             ]
@@ -261,7 +261,7 @@ class PieceType(Enum):
             Position(-1, 0),  # 1 step up, same col
             [
                 Move(
-                    Position(-1, 0),  # Attacked destination
+                    Position(0, 0),  # Attacked destination
                     MoveType.COLLISION_AXIS,
                     [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
             ]
@@ -275,7 +275,7 @@ class PieceType(Enum):
             Position(0, 1),  # same row, 1 step right
             [
                 Move(
-                    Position(0, 1),  # Attacked destination
+                    Position(0, 0),  # Attacked destination
                     MoveType.COLLISION_AXIS,
                     [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
             ]
@@ -289,7 +289,7 @@ class PieceType(Enum):
             Position(1, 0),  # 1 step down, same col
             [
                 Move(
-                    Position(1, 0),  # Attacked destination
+                    Position(0, 0),  # Attacked destination
                     MoveType.COLLISION_AXIS,
                     [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
             ]
@@ -303,7 +303,7 @@ class PieceType(Enum):
             Position(0, -1),  # same row, 1 step left
             [
                 Move(
-                    Position(0, -1),  # Attacked destination
+                    Position(0, 0),  # Attacked destination
                     MoveType.COLLISION_AXIS,
                     [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
             ]
@@ -322,7 +322,7 @@ class PieceType(Enum):
             Position(-1, -1),  # 1 step up, 1 step left
             [
                 Move(
-                    Position(-1, -1),  # Attacked destination
+                    Position(0, 0),  # Attacked destination
                     MoveType.COLLISION_DIAG,
                     [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
             ]
@@ -335,7 +335,7 @@ class PieceType(Enum):
             Position(-1, 0),  # 1 step up, same col
             [
                 Move(
-                    Position(-1, 0),  # Attacked destination
+                    Position(0, 0),  # Attacked destination
                     MoveType.COLLISION_AXIS,
                     [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
             ]
@@ -349,7 +349,7 @@ class PieceType(Enum):
             Position(-1, 1),  # 1 step up, 1 step right
             [
                 Move(
-                    Position(-1, 1),  # Attacked destination
+                    Position(0, 0),  # Attacked destination
                     MoveType.COLLISION_DIAG,
                     [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
             ]
@@ -363,7 +363,7 @@ class PieceType(Enum):
             Position(0, 1),  # same row, 1 step right
             [
                 Move(
-                    Position(0, 1),  # Attacked destination
+                    Position(0, 0),  # Attacked destination
                     MoveType.COLLISION_AXIS,
                     [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
             ]
@@ -377,7 +377,7 @@ class PieceType(Enum):
             Position(1, 1),  # 1 step down, 1 step right
             [
                 Move(
-                    Position(1, 1),  # Attacked destination
+                    Position(0, 0),  # Attacked destination
                     MoveType.COLLISION_DIAG,
                     [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
             ]
@@ -391,7 +391,7 @@ class PieceType(Enum):
             Position(1, 0),  # 1 step down, same col
             [
                 Move(
-                    Position(1, 0),  # Attacked destination
+                    Position(0, 0),  # Attacked destination
                     MoveType.COLLISION_AXIS,
                     [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
             ]
@@ -405,7 +405,7 @@ class PieceType(Enum):
             Position(1, -1),  # 1 step down, 1 step left
             [
                 Move(
-                    Position(1, -1),  # Attacked destination
+                    Position(0, 0),  # Attacked destination
                     MoveType.COLLISION_DIAG,
                     [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
             ]
@@ -419,7 +419,7 @@ class PieceType(Enum):
             Position(0, -1),  # same row, 1 step left
             [
                 Move(
-                    Position(0, -1),  # Attacked destination
+                    Position(0, 0),  # Attacked destination
                     MoveType.COLLISION_AXIS,
                     [MoveOption.CAN_TAKE, MoveOption.PROPEGATES])
             ]

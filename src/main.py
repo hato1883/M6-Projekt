@@ -1,3 +1,4 @@
+from tkinter import N
 from chess_piece_class import EMPTY_PIECE, ChessPiece
 import text_user_interface as ui
 from ui_interface import UI_Interface
@@ -46,14 +47,6 @@ if __name__ == "__main__":
                 # get origin and destination of the move
                 (origin, dest) = tui.input_user_move()
 
-                # check if origin is empty
-                if chessboard.get_piece(origin) is EMPTY_PIECE:
-                    # Can't move a empty position
-
-                    # TODO: TextUserInterface needs
-                    # to display that move is invalid
-                    continue
-
                 # Check if origin contains piece
                 # of color equal to current player
                 if chessboard.get_piece(origin).get_color() != color_turn:
@@ -64,9 +57,7 @@ if __name__ == "__main__":
                     continue
 
                 # Move chess piece
-                (succeeded, status, pieces) = chessboard.move(origin,
-                                                              dest,
-                                                              color_turn)
+                (succeeded, status, pieces) = chessboard.move(origin, dest)
                 # Check if it worked
                 if not succeeded:
                     # Moved failed valid check

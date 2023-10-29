@@ -1,8 +1,7 @@
 import copy
 import chessboard_helper as ChessHelper
 from piece_type_enum import PieceType
-from chess_piece_class import ChessPiece
-from chess_piece_class import EMPTY_PIECE
+from chess_piece_class import ChessPiece, EMPTY_PIECE
 from piece_color_enum import Color
 from move_type_enum import MoveType
 from move_option_enum import MoveOption
@@ -15,11 +14,12 @@ import valid_move_helper as vmh
 class Chessboard:
 
     def __init__(self, chessboard: list[list[ChessPiece]] = []) -> None:
+        """Creates a instance to a chessboard
+        
+        Chessboard is empty by default but can be created with either
+        .create_board(...) or .create_default_board(...)"""
         # chessboard is a 2d list of ChessPiece objects
-        self._chessboard: list[
-            list[
-                ChessPiece]
-            ] = chessboard
+        self._chessboard: list[list[ChessPiece]] = chessboard
 
         # Move history is a list of tuple of ChessPiece, origin and destination
         # Moves are in order (1st move is at index 0 2nd at next etc)
@@ -35,18 +35,16 @@ class Chessboard:
         # and value will be a ref to the king (ChessPiece)
         self._kings_location: dict[Position: ChessPiece] = {}
 
-        # size of chessboard
         self._board_size: int = len(self._chessboard)
 
-        if self._board_size != 0:
-            # Find kings in loaded list
+        if self._board_size != 0:  # loaded board is not empty
+
             for row in range(self._board_size):
                 for col in range(self._board_size):
                     pos = Position(row, col)
-                    if self.get_piece(pos) is EMPTY_PIECE:
-                        continue
+
                     if self.get_piece(pos).get_type() is PieceType.KING:
-                        # add king chess piece to list
+                        # add king chess piece to _king_locations
                         self._kings_location[pos] = self.get_piece(pos)
 
     def create_board(self, size: int = 8):
@@ -62,9 +60,9 @@ class Chessboard:
         self._board_size: int = len(self._chessboard)
 
     def create_default_board(self):
-        """Creates the default 8x8 chess board with 16 pieces in each color
+        """Creates the default 8x8 chessboard with 16 pieces for White and Black
 
-        returns None (new chessboard is saved in object)
+        board is saved in the chessboard instance
         """
         self.create_board()
 
@@ -85,15 +83,15 @@ class Chessboard:
         self._kings_location[Position(7, 4)] = ChessPiece(Color.WHITE, PieceType.KING)  # noqa E501
 
     def get_piece(self, location: Position) -> ChessPiece:
-        """Get a chess piece at location
+        """Get a chess piece at given location
 
-        location the posistion to retrive
+        location the posistion (row and col in a Position object)
 
         Returns a ChessPiece or EMPTY_PIECE if it was empty"""
         return self._chessboard[location.row][location.col]
 
     def add_piece(self, chess_piece: ChessPiece, dest: Position):
-        """adds a chess piece to specifed empty position
+        """Adds a chess piece to position
 
         returns True if the position was empty,
         returns False if it was already taken
@@ -125,22 +123,39 @@ class Chessboard:
 
     def move(self,
              origin: Position,
-             dest: Position) -> tuple[bool, Status]:
+             dest: Position) -> tuple[bool, Status, tuple[Position, Position]]:
+        """Moves a chess piece from origin to destination
+        
+        returns if move was succsesfull
+        if move was Successful Status will contain information if a pawn promoted,
+        and what piece was moved and if any enemy pieces was taken 
+        if move failed it will contain a flag giving a reason"""
 
-        # assume origin piece is current players piece
+        # Assume origin piece is current players piece
         player_color = self.get_piece(origin).get_color()
 
-        # get list of valid moves
+        # get list of valid moves for given color
         valid_moves = self.get_valid_moves(player_color)
 
         if len(valid_moves) == 0:
-            return (False, Status.IN_CHECKMATE, None)
+            # No valid moves, player is either in check, or in a draw
+            if self.in_check(player_color):
+                return (False, Status.IN_CHECKMATE, None)
+            else:
+                return (False, Status.DRAW, None)
         # Not checkmate.
 
         # Check if move is valid
-        for (pos, move) in valid_moves:
-            if (origin, dest) == (pos, Position(pos.row + move.capture.row * player_color.value.row,  # noqa: E501
-                                                pos.col + move.capture.col * player_color.value.col)):  # noqa: E501
+        attacked_pos = None
+        move: Move
+        for (valid_origin, valid_dest, move) in valid_moves:
+            if MoveOption.PROPEGATES in move.conditions:
+                attacked_pos = Position(valid_dest.row + move.capture.row * player_color.value.row,
+                                        valid_dest.col + move.capture.col * player_color.value.col)
+            else:
+                attacked_pos = Position(valid_origin.row + move.capture.row * player_color.value.row,
+                                        valid_origin.col + move.capture.col * player_color.value.col)
+            if (origin, dest) == (valid_origin, valid_dest):
                 break
         else:
             # Loop not broken
@@ -156,7 +171,7 @@ class Chessboard:
 
         # Get chess piece at origin
         moved_piece = self.get_piece(origin)
-        attacked_piece = self.get_piece(dest)
+        attacked_piece = self.get_piece(attacked_pos)
 
         # Add move to move_history (at end of list)
         self.move_history.append((moved_piece, origin, move))
@@ -165,6 +180,15 @@ class Chessboard:
         if not moved_piece.get_has_moved():
             # It has now
             moved_piece.set_has_moved_true()
+
+        # Remove piece from origin,
+        self.remove_piece(origin)
+
+        # Remove attacked piece
+        self.remove_piece(attacked_pos)
+
+        # Add piece to destination
+        self.add_piece(moved_piece, dest)
 
         # Check if piece is a Pawn
         if moved_piece.get_type() is PieceType.PAWN:
@@ -191,11 +215,6 @@ class Chessboard:
                                 (moved_piece, attacked_piece)
                             )
             # End of Pawn Promotion check
-            if MoveType.PAWN_EN_PASSANT is move.type:
-                # get killed pawn location
-                pawn_location = Position(origin.row, dest.col)
-                # remove killed enemy pawn
-                self.remove_piece(pawn_location)
 
         # Check if we was castling on this move
         if (moved_piece.get_type() is PieceType.KING
@@ -232,17 +251,6 @@ class Chessboard:
             self.add_piece(rook_piece, rook_landing)
             # remove it from the old
             self.remove_piece(rook_loaction)
-
-        # is destination Empty?
-        if self.get_piece(dest) is not EMPTY_PIECE:
-            # Clear destination
-            self.remove_piece(dest)
-
-        # Add piece to destination
-        self.add_piece(moved_piece, dest)
-
-        # Remove it from origin
-        self.remove_piece(origin)
 
         # Succsesful move
         return (True, Status.SUCCESS, (moved_piece, attacked_piece))
@@ -434,7 +442,7 @@ class Chessboard:
 
         uses in check method so we can disgared moves that put king in check"""
         # list of valid moves
-        valid_moves: list[tuple[Position, Move]] = []
+        valid_moves: list[tuple[Position, Position, Move]] = []
 
         piece_list: list[Position] = self.get_pieces(player_color)
 
@@ -445,32 +453,38 @@ class Chessboard:
 
             # check all moves in the pieces moveset
             for moveset in piece_type.value:
+                for move in moveset.moves:
+                    if MoveOption.PROPEGATES in move.conditions:
+                        end = self._board_size-1
+                    else:
+                        end = 1
 
-                # Get destination of move
-                dest = Position(pos.row + moveset.dest.row * player_color.value.row, pos.col + moveset.dest.col * player_color.value.col)  # noqa E501
+                    for multiple in range(1, end+1):
+                        # Get destination of move, reflects offset given color
+                        dest = Position(pos.row + moveset.dest.row * multiple * player_color.value.row, pos.col + moveset.dest.col * multiple * player_color.value.col)  # noqa E501
 
-                # check if move is valid:
-                (valid, move) = self.is_valid(pos, dest)
-                if not valid:
-                    # Invalid move continue to the next
-                    continue
+                        # check if move is valid:
+                        (valid, move) = self.is_valid(pos, dest)
+                        if not valid:
+                            # Invalid move continue to the next
+                            continue
 
-                # Move is valid but might put player in check, lets test.
-                simulated = self.deep_copy()
-                # we know move is valid acording to move rules
-                # set resulting board instead checking move rules again
-                simulated.remove_piece(dest)
-                simulated.add_piece(simulated.get_piece(pos), dest)
-                simulated.get_piece(dest).set_has_moved_true()
-                simulated.remove_piece(pos)
+                        # Move is valid but might put player in check, lets test.
+                        simulated = self.deep_copy()
+                        # we know move is valid acording to move rules
+                        # set resulting board instead checking move rules again
+                        simulated.remove_piece(dest)
+                        simulated.add_piece(simulated.get_piece(pos), dest)
+                        simulated.get_piece(dest).set_has_moved_true()
+                        simulated.remove_piece(pos)
 
-                # check if king is being attacked after the move
-                if simulated.in_check(player_color):
-                    # move puts king in check so its invalid.
-                    continue
+                        # check if king is being attacked after the move
+                        if simulated.in_check(player_color):
+                            # move puts king in check so its invalid.
+                            continue
 
-                # move did not put king in check so it's valid
-                valid_moves.append((pos, move))
+                        # move did not put king in check so it's valid
+                        valid_moves.append((pos, dest, move))
 
         # returns all moves that did not result in the king
         # being in danger
@@ -560,7 +574,7 @@ class Chessboard:
         if MoveOption.CAN_TAKE in options:
             if self.get_piece(destination) is not EMPTY_PIECE:
 
-                if destination_color is EMPTY_PIECE:
+                if destination_color is None:
                     # Set destination color if not already set
                     destination_color = self.get_piece(destination).get_color()
 
@@ -717,7 +731,6 @@ class Chessboard:
                                 origin,
                                 destination,
                                 disregard_dest_square):
-            print("obstacle")
             return False
 
         return True
@@ -975,4 +988,11 @@ class Chessboard:
 
         This means that chessboard layout is the same
         but modifications can be made withot affecting the original"""  # noqa E501
-        return copy.deepcopy(self, memo)
+        copied = Chessboard()
+        copied.create_board(self._board_size)
+        for color in list(Color)[:2]:
+            pieces_pos = self.get_pieces(color)
+            for pos in pieces_pos:
+                copied.add_piece(ChessPiece(self.get_piece(pos).get_color(), self.get_piece(pos).get_type(), self.get_piece(pos).get_has_moved()), pos)
+        copied.move_history = copy.deepcopy(self.get_move_history())
+        return copied

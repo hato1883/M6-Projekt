@@ -8,17 +8,20 @@ class Status(Enum):
     # Err Invalid move
     INVALID_MOVE = 2
 
-    # Err Invalid move
+    # Move was invalid, Player is in a check but can move out of check
     IN_CHECK = 3
 
-    # Err Invalid move
+    # No valid moves, Player is checkmated
     IN_CHECKMATE = 4
 
-    # Pawn can promote due to move
-    PAWN_PROMOTION = 5
+    # No valid moves, Player is in a Draw
+    DRAW = 5
 
     # Pawn can promote due to move
-    SUCCESS = 6
+    PAWN_PROMOTION = 6
+
+    # Pawn can promote due to move
+    SUCCESS = 7
 
     def __str__(self):
         """Overriden to String method

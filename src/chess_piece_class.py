@@ -4,10 +4,10 @@ from piece_type_enum import PieceType
 
 class ChessPiece:
 
-    def __init__(self, piece_color: Color, piece_type: PieceType):
+    def __init__(self, piece_color: Color, piece_type: PieceType, has_moved: bool = False):
         self.piece_type = piece_type
         self.piece_color = piece_color
-        self.piece_has_moved = False
+        self.piece_has_moved = has_moved
 
     def get_type(self) -> PieceType:
         return self.piece_type

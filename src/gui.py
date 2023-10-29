@@ -98,6 +98,7 @@ class Window_Class(UI_Interface):
                     else:
                         destination = self.mouse_pos_to_index(pos)
                         print(f'destinations value is {destination}')
+                        self.board.move(origin, destination)
                         self.input_user_move(origin,destination)
                         flip = True
                         marked=False
@@ -140,8 +141,8 @@ class Window_Class(UI_Interface):
         if x > 601:
             return None
         else:
-            row = x // self.SQUARE_SIZE
-            col = y // self.SQUARE_SIZE
+            row = y // self.SQUARE_SIZE
+            col = x // self.SQUARE_SIZE
 
             print(f"({row},{col})")
         
@@ -243,7 +244,7 @@ class Window_Class(UI_Interface):
 
         i = 0
         for square in row_list:
-            if square is not None:
+            if square is not EMPTY_PIECE:
                 image_name = self.piece_type_to_sprite_name(square)
                 self.draw_sprite(image_name, x_step*i, y,)
             i += 1
@@ -309,15 +310,14 @@ class Window_Class(UI_Interface):
         mouse_x, mouse_y = pygame.mouse.get_pos()
         print(f"Mouse Position: x={mouse_x}, y={mouse_y}")
 
-    def draw_selection(self,position:Position):
+    def draw_selection(self, position: Position):
         '''Given a Position draw a hollowed out yellow rectangle at the given coordinate unless Position is None, then return None'''
 
         if position==None:
             return None
         else:
-            x = position.row
-
-            y = position.col
+            y = position.row
+            x = position.col
 
             pygame.draw.rect(self.screen, self.YELLOW, (x*self.SQUARE_SIZE,y*self.SQUARE_SIZE,self.SQUARE_SIZE,self.SQUARE_SIZE),2)
 

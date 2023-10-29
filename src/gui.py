@@ -122,7 +122,7 @@ class Window_Class(UI_Interface):
 
     
     def mouse_pos_to_index(self, pos):
-        '''Returns the current mouse position a board index'''
+        '''Returns the current mouse position as a board (row,column)'''
         x, y = pos
         if x > 601:
             return None

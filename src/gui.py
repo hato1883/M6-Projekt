@@ -1,7 +1,7 @@
-#### TODO Make a function that actually manipulates the state of the chessboard(hint, check the gameloop, it's all there, just need to connect it somehow)
+#### TODO #68 Make a function that manipulates the state of the chessboard given our origin and destination inputs
 #### TODO Compare the functions in main.py to gui.py to find out how to properly manipulate the board
-#### TODO Make a function that puts the current players name on the screen(Preferably in the right hand corner)
-#### TODO Make a function that creates a textbox for our chatgpt integration 
+#### TODO #67 Make a function that puts the current players name on the screen(Preferably in the right hand corner)
+#### TODO Make a function that creates a textbox for text received from our chatgpt integration 
 import pygame
 import sys
 import os
@@ -82,6 +82,8 @@ class Window_Class(UI_Interface):
                 self.piece_image[i].append( self.load_and_scale_sprite(temp) )
             i += 1
 
+            ip = ''
+            x = 0
         while self.running:
             for event in pygame.event.get():
 
@@ -121,10 +123,12 @@ class Window_Class(UI_Interface):
 
             ip= "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
 
+            
+
+
             #textbox starts at 602,0
             self.text_wrap(self.screen, ip, (602, 0), pygame.font.SysFont('Arial', 20))
             self.draw_turn(current_turn)
-            # print(type(self.board.get_chessboard()))
             pygame.display.flip()
         pygame.quit()
         sys.exit()

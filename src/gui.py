@@ -7,6 +7,7 @@ import sys
 import os
 from chessboard import *
 from ui_interface import UI_Interface
+from piece_color_enum import Color
 
 
 
@@ -58,6 +59,8 @@ class Window_Class(UI_Interface):
         destination=Position
         self.running=True
 
+        game_has_ended = False
+
         #show splashscreen
         self.show_splash_screen()
 
@@ -71,6 +74,8 @@ class Window_Class(UI_Interface):
         colors =("b","w")
         suffix = ("k","q","r","b","n","p")
         i = 0
+
+        #Loads in and scales all assets
         for color in colors:
             for letter in suffix:
                 temp = self.asset_load(f"{color}{letter}")
@@ -95,26 +100,30 @@ class Window_Class(UI_Interface):
                         flip = True
                         marked=False
 
+
                 if event.type == pygame.QUIT:
                     self.running = False
+            
+ 
+
 
             #paint the background
             self.screen.fill(((43, 42, 51)))
 
             #call the show_chessboard function and draw the chessboard
             self.show_chess_board(self.board.get_chessboard())
+
+            #If something is marked, draw a yellow box around it's cordinates
             if marked==True:
                 self.draw_selection(origin)
             
             #text for the textbox
-            if(current_turn)== 'white':
-                ip = 'white'
-            else:
-                ip = 'black'
-        # ip= "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-            #textbox started at 602,0
+
+            ip= "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+
+            #textbox starts at 602,0
             self.text_wrap(self.screen, ip, (602, 0), pygame.font.SysFont('Arial', 20))
-            # self.draw_turn(current_turn)
+            self.draw_turn(current_turn)
             # print(type(self.board.get_chessboard()))
             pygame.display.flip()
         pygame.quit()
@@ -268,7 +277,6 @@ class Window_Class(UI_Interface):
         ip = 'black'
 
         self.text_wrap(self.screen, ip, (602, 0), pygame.font.SysFont('Arial', 20))
-        pass
 
     def draw_sprite(self, sprite, x, y):
         '''Given a sprite path, draws a single sprite at a given coordinate'''

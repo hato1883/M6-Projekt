@@ -171,7 +171,7 @@ class Window_Class(UI_Interface):
         pass
 
     def asset_load(self,target:str):
-       '''A function that loads assets and preps them for use within py.game'''
+       '''A function that returns the image_path'''
        
        asset_filepath=os.path.join(self.asset_path,target)
        image_path = os.path.join(f'{asset_filepath}.png')

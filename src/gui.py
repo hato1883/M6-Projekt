@@ -6,8 +6,10 @@ import pygame
 import sys
 import os
 from chessboard import *
+from narration_interface import NarrationInterface
 from ui_interface import UI_Interface
 from piece_color_enum import Color
+import chatgpt_narrator as gpt
 
 
 
@@ -50,6 +52,7 @@ class Window_Class(UI_Interface):
         # Print the parent directory
         print(f"The parent directory of the current script is: {parent_directory}")
         print(f'The asset directory is {asset_path}')
+        self.narrator: NarrationInterface = gpt.ChatGPTNarrator()
 
 
     def run(self):
@@ -59,7 +62,7 @@ class Window_Class(UI_Interface):
         destination=Position
         self.running=True
 
-        game_has_ended = False
+        self.game_has_ended = False
 
         #show splashscreen
         self.show_splash_screen()
@@ -69,7 +72,8 @@ class Window_Class(UI_Interface):
 
         self.piece_image = [[],[]]
 
-        current_turn='white'
+        current_turn = Color.WHITE
+        potential_winner = current_turn
 
         colors =("b","w")
         suffix = ("k","q","r","b","n","p")
@@ -98,7 +102,21 @@ class Window_Class(UI_Interface):
                     else:
                         destination = self.mouse_pos_to_index(pos)
                         print(f'destinations value is {destination}')
-                        self.board.move(origin, destination)
+                        if self.board.get_piece(origin).get_color() == current_turn:
+                            (succeeded, status, pieces) = self.board.move(origin, destination)
+                            
+                            # Check if it worked
+                            if succeeded:
+
+                                ip = self.narrator.generate_move_text(origin,
+                                                                    destination,
+                                                                    pieces[0],
+                                                                    pieces[1])
+                                potential_winner = current_turn
+                                current_turn = self.change_turn(current_turn)
+                                if len(self.board.get_valid_moves(current_turn)) == 0:
+                                    self.game_has_ended = True
+                                    self.running = False
                         self.input_user_move(origin,destination)
                         flip = True
                         marked=False
@@ -122,18 +140,23 @@ class Window_Class(UI_Interface):
             
             #text for the textbox
 
-            ip= "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-
-            
-
 
             #textbox starts at 602,0
-            self.text_wrap(self.screen, ip, (602, 0), pygame.font.SysFont('Arial', 20))
+            self.text_wrap(self.screen, ip, (602, 30), pygame.font.SysFont('Arial', 20))
             self.draw_turn(current_turn)
             pygame.display.flip()
+        if self.game_has_ended:
+            self.show_end_screen(potential_winner)
+        pygame.time.delay(1000)
         pygame.quit()
         sys.exit()
 
+    
+    def change_turn(self, turn: Color) -> Color:
+        if turn == Color.WHITE:
+            return Color.BLACK
+        else:
+            return Color.WHITE
     
     def mouse_pos_to_index(self, pos):
         '''Returns the current mouse position as a board (row,column)'''
@@ -181,6 +204,25 @@ class Window_Class(UI_Interface):
         
         #Wait 500 ms
         pygame.time.delay(500)
+
+        pass
+
+    def show_end_screen(self, winner: Color):
+        '''Shows a short splashscreen with text'''
+        # Display game name, authors, date/build
+
+        # Display text in the middle of the screen
+        text = self.font.render(f" {str(winner)[0:1]}{str(winner)[1:].lower()} won the game", True, (255, 255, 255), (0, 0, 0))
+        text_rect = text.get_rect()
+        text_rect.center = (self.size[0] // 2, self.size[1] // 2)
+        self.screen.blit(text, text_rect)
+
+        #Draw the text
+        pygame.time.delay(500)
+        pygame.display.flip()
+        
+        #Wait 500 ms
+        pygame.time.delay(10000)
 
         pass
 
@@ -276,12 +318,12 @@ class Window_Class(UI_Interface):
 
     def draw_turn(self,current_turn):
 
-       if(current_turn)== 'white':
-        ip = 'white'
-       else:
-        ip = 'black'
+        if(current_turn) == Color.WHITE:
+            ip = 'white'
+        else:
+            ip = 'black'
 
-        self.text_wrap(self.screen, ip, (602, 0), pygame.font.SysFont('Arial', 20))
+        self.text_wrap(self.screen, ip, (602, 0), pygame.font.SysFont('Arial', 25))
 
     def draw_sprite(self, sprite, x, y):
         '''Given a sprite path, draws a single sprite at a given coordinate'''

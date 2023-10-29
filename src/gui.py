@@ -2,7 +2,6 @@
 #### TODO Compare the functions in main.py to gui.py to find out how to properly manipulate the board
 #### TODO Make a function that puts the current players name on the screen(Preferably in the right hand corner)
 #### TODO Make a function that creates a textbox for our chatgpt integration 
-from pdb import post_mortem
 import pygame
 import sys
 import os
@@ -23,7 +22,9 @@ class Window_Class(UI_Interface):
     WIDTH, HEIGHT = 600,600
 
     SQUARE_SIZE = WIDTH // 8  # Divide the width into 8 squares
+    '''Defines the width of each square of the chessboard as WIDTH/8'''
     def __init__(self, size=(800, 600)) -> None:
+        '''Initializes the screen as it's own object and sets the size of the screen to 800 x 600 by default if no other value is given'''
         
         pygame.init()
         self.size = size
@@ -121,6 +122,7 @@ class Window_Class(UI_Interface):
 
     
     def mouse_pos_to_index(self, pos):
+        '''Returns the current mouse position a board index'''
         x, y = pos
         if x > 601:
             return None
@@ -133,6 +135,7 @@ class Window_Class(UI_Interface):
         return Position(row, col)
 
     def text_wrap(self, surface, text, pos, font, color=pygame.Color('white')):
+        '''Creates a textbox at the given co-ordinates and wraps the supplied text within it'''
         words = [word.split(' ') for word in text.splitlines()]  # 2D array where each row is a list of words.
         space = font.size(' ')[0]  # The width of a space.
         max_width, max_height = surface.get_size()
@@ -150,6 +153,7 @@ class Window_Class(UI_Interface):
             y += word_height  # Start on new row.
 
     def show_splash_screen(self):
+        '''Shows a short splashscreen with text'''
         # Display game name, authors, date/build
 
         # Display text in the middle of the screen
@@ -167,6 +171,7 @@ class Window_Class(UI_Interface):
         pass
 
     def asset_load(self,target:str):
+       '''A function that loads assets and preps them for use within py.game'''
        
        asset_filepath=os.path.join(self.asset_path,target)
        image_path = os.path.join(f'{asset_filepath}.png')
@@ -203,6 +208,7 @@ class Window_Class(UI_Interface):
         return image_name
 
     def show_chess_board(self, Chessboard:list):
+        '''First draws the black and white squares on the chessboard, then draws the sprites on top of the tiles'''
         for row in range(8):
             for col in range(8):
                 x, y = col * self.SQUARE_SIZE, row * self.SQUARE_SIZE
@@ -218,6 +224,7 @@ class Window_Class(UI_Interface):
             
 
     def paint_chess_board_row(self, row_index, row_list):
+        '''Given the row_index and row_list, draws the sprites in their given position'''
         x_step = self.SQUARE_SIZE
         y = self.SQUARE_SIZE * row_index
 
@@ -261,17 +268,15 @@ class Window_Class(UI_Interface):
         ip = 'black'
 
         self.text_wrap(self.screen, ip, (602, 0), pygame.font.SysFont('Arial', 20))
-
-
-
-        
         pass
 
     def draw_sprite(self, sprite, x, y):
+        '''Given a sprite path, draws a single sprite at a given coordinate'''
         
         self.screen.blit(sprite, (x, y))
 
     def load_and_scale_sprite(self, sprite_path):
+        '''Given a sprite, imports and scales the sprite down to an appropriate size '''
         # Load the sprite image
         sprite_image = pygame.image.load(sprite_path)
 
@@ -288,16 +293,21 @@ class Window_Class(UI_Interface):
         return scaled_sprite
 
     def get_mouse_pos(self):
+        '''Gets the mouse position in a (x,y)-format'''
         mouse_x, mouse_y = pygame.mouse.get_pos()
         print(f"Mouse Position: x={mouse_x}, y={mouse_y}")
 
     def draw_selection(self,position:Position):
+        '''Given a Position draw a hollowed out yellow rectangle at the given coordinate unless Position is None, then return None'''
 
-        x = position.row
+        if position==None:
+            return None
+        else:
+            x = position.row
 
-        y = position.col
+            y = position.col
 
-        pygame.draw.rect(self.screen, self.YELLOW, (x*self.SQUARE_SIZE,y*self.SQUARE_SIZE,self.SQUARE_SIZE,self.SQUARE_SIZE),2)
+            pygame.draw.rect(self.screen, self.YELLOW, (x*self.SQUARE_SIZE,y*self.SQUARE_SIZE,self.SQUARE_SIZE,self.SQUARE_SIZE),2)
 
 if __name__ == "__main__":
     game=Window_Class()

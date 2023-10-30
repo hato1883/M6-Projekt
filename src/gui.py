@@ -70,7 +70,7 @@ class Window_Class(UI_Interface):
         suffix = ("k", "q", "r", "b", "n", "p")
         i = 0
 
-        #Loads in and scales all assets
+        # Loads in and scales all assets
         for color in colors:
             for letter in suffix:
                 temp = self.asset_load(f"{color}{letter}")
@@ -93,21 +93,22 @@ class Window_Class(UI_Interface):
                     else:
                         destination = self.mouse_pos_to_index(pos)
                         print(f'destinations value is {destination}')
-                        if self.board.get_piece(origin).get_color() == current_turn:
-                            (succeeded, status, pieces) = self.board.move(origin, destination)
-                            
-                            # Check if it worked
-                            if succeeded:
+                        if origin is not None and destination is not None:   
+                            if self.board.get_piece(origin).get_color() == current_turn:
+                                (succeeded, status, pieces) = self.board.move(origin, destination)
+                                
+                                # Check if it worked
+                                if succeeded:
 
-                                ip = self.narrator.generate_move_text(origin,
-                                                                      destination,
-                                                                      pieces[0],
-                                                                      pieces[1])
-                                potential_winner = current_turn
-                                current_turn = self.change_turn(current_turn)
-                                if len(self.board.get_valid_moves(current_turn)) == 0:
-                                    self.game_has_ended = True
-                                    self.running = False
+                                    ip = self.narrator.generate_move_text(origin,
+                                                                        destination,
+                                                                        pieces[0],
+                                                                        pieces[1])
+                                    potential_winner = current_turn
+                                    current_turn = self.change_turn(current_turn)
+                                    if len(self.board.get_valid_moves(current_turn)) == 0:
+                                        self.game_has_ended = True
+                                        self.running = False
                         self.input_user_move(origin, destination)
                         flip = True
                         marked = False

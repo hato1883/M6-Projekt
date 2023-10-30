@@ -1,6 +1,8 @@
 from tkinter import N
 from chess_piece_class import EMPTY_PIECE, ChessPiece
+from text_formater import TextFormater
 import text_user_interface as ui
+import gui as gui
 from ui_interface import UI_Interface
 import chatgpt_narrator as gpt
 import normal_narrator as nn
@@ -9,84 +11,67 @@ import chessboard as logic
 from piece_color_enum import Color
 from status_enum import Status
 
+
+def input_game_setup_parameters():
+    """ Asks user to whether AI-narration should be On/Off, returns True for Yes"""
+    ai_narration = False
+    text_display = False
+
+    while True:
+        
+        answer = None
+        while answer not in ("y", "yes", "n", "no"):
+
+            answer = input("AI Narration(y/n): ").lower()
+        
+        if answer[0] == "y":
+            ai_narration = True
+
+        answer = None
+        while answer not in ("y", "yes", "n", "no"):
+
+            answer = input("Text Display(y/n): ").lower()
+        
+        if answer[0] == "y":
+            text_display = True
+
+        current_setting = f"|AI Narration: { 'On' if ai_narration == True else 'Off' }, Text Display: { 'On' if text_display == True else 'Off' }|"
+
+        TextFormater.print_divider("-", len(current_setting))
+        print(current_setting)
+        TextFormater.print_divider("-", len(current_setting))
+
+        answer = None
+        while answer not in ("y", "yes", "n", "no"):
+
+            answer = input("Proceed(y/n): ").lower()
+
+        if answer[0] == "y":
+            break
+
+    return (ai_narration, text_display)
+
+
 if __name__ == "__main__":
-    tui: UI_Interface = ui.TextUserInterface()
-    narrator: NarrationInterface = gpt.ChatGPTNarrator()
+    display: UI_Interface
+    narrator: NarrationInterface
     chessboard = logic.Chessboard()
 
-    # show titel screen
-    tui.show_splash_screen("@", 40, "Sagoschak", "DVA-J",
-                           "2023-10-17", "Welcome to Sagoschack!")
+    # create the default 8x8 board
+    chessboard.create_default_board()
 
     # get game parameters
-    (ai_naration) = tui.input_game_setup_parameters()
+    (ai_naration, text_display) = input_game_setup_parameters()
 
     if ai_naration:
         narrator: NarrationInterface = gpt.ChatGPTNarrator()
     else:
         narrator: NarrationInterface = nn.NormalNarrator()
 
-    # create the default 8x8 board
-    chessboard.create_default_board()
+    if text_display:
+        display = ui.TextUserInterface(chessboard, narrator)
+    else:
+        display = gui.Window_Class(chessboard, narrator)
 
+    display.run()
     # game state bool
-    has_ended = False
-
-    ai_naration_text = ""
-    while not has_ended:
-        # TODO: check if king is being attacked.
-        # TODO: If king is attacked, can the king move,
-        # Or can something block attacker.
-        for color_turn in list(Color)[:2]:
-
-            # Show user the chess board
-            tui.show_chess_board(chessboard.get_chessboard(), ai_naration_text)
-
-            # Loop until valid move
-            while True:  # Wait for valid move
-                # get origin and destination of the move
-                (origin, dest) = tui.input_user_move()
-
-                # Check if origin contains piece
-                # of color equal to current player
-                if chessboard.get_piece(origin).get_color() != color_turn:
-                    # Can't move enemy piece on your turn
-
-                    # TODO: TextUserInterface needs
-                    # to display that move is invalid
-                    continue
-
-                # Move chess piece
-                (succeeded, status, pieces) = chessboard.move(origin, dest)
-                # Check if it worked
-                if not succeeded:
-                    # Moved failed valid check
-
-                    # TODO: TextUserInterface needs
-                    # to display that move is invalid
-                    continue
-
-                ai_naration_text = narrator.generate_move_text(origin,
-                                                               dest,
-                                                               pieces[0],
-                                                               pieces[1])
-
-                # Did a Pawn promote?
-                if status is Status.PAWN_PROMOTION:
-                    # Remove pawn
-                    chessboard.remove_piece(origin)
-
-                    # Remove piece on destination
-                    chessboard.remove_piece(dest)
-
-                    # Add chosen promoted piece
-                    chessboard.add_piece(ChessPiece(color_turn,
-                                                    tui.input_promotion()),
-                                         dest)
-
-                # End this players turn.
-                break
-
-        # Next color
-        continue
-    # Game has ended

@@ -1,11 +1,22 @@
-from ui_interface import *
-from text_formater import *
+from chess_piece_class import ChessPiece
+from piece_color_enum import Color
+from piece_type_enum import PieceType
+from position_class import Position
+from status_enum import Status
+from ui_interface import UI_Interface
+from text_formater import TextFormater
+from narration_interface import NarrationInterface
+from chessboard import Chessboard
 
 
 class TextUserInterface(UI_Interface):
-      
-    @classmethod    
-    def show_splash_screen(cls, char:chr, width:int, game_name:str, authors:str, build_date:str, greeting):
+
+    def __init__(self, chessboard: Chessboard, narration: NarrationInterface) -> None:
+        super().__init__()
+        self.chessboard = chessboard
+        self.narration = narration
+
+    def show_splash_screen(self, char: chr, width: int, game_name: str, authors: str, build_date: str, greeting):
         """ Display game name, authors, date/build in box of specified width. Box border of spcified char"""
         TextFormater.print_divider( char, width)
         TextFormater.print_box_row_with_content(char, width, game_name)
@@ -14,66 +25,94 @@ class TextUserInterface(UI_Interface):
         TextFormater.print_divider(char, width)
         print(f"{greeting}")
 
+    def run(self):
 
-    @classmethod
-    def input_game_setup_parameters(cls):
-        """ Asks user to whether AI-narration should be On/Off, returns True for Yes"""
-        ai_narration = False
-    
-        while True:
-            
-            answer = None
-            while not answer in ("y","yes","n","no"):
-    
-                answer = input("AI Narration(y/n): ").lower()
-            
-            if answer[0] == "y":
-                ai_narration = True
+        # show titel screen
+        self.show_splash_screen("@", 40, "Sagoschak", "DVA-J",
+                                "2023-10-17", "Welcome to Sagoschack!")
+        has_ended = False
 
-            current_setting = f"|AI Narration: { 'On' if ai_narration == True else 'Off' }|"
+        ai_naration_text = ""
+        while not has_ended:
+            # TODO: check if king is being attacked.
+            # TODO: If king is attacked, can the king move,
+            # Or can something block attacker.
+            for color_turn in list(Color)[:2]:
 
-            TextFormater.print_divider("-", len(current_setting))
-            print(current_setting)
-            TextFormater.print_divider("-", len(current_setting))
+                # Show user the chess board
+                self.show_chess_board(self.chessboard.get_chessboard(), ai_naration_text)
 
-            answer = None
-            while not answer in ("y","yes","n","no"):
-    
-                answer = input("Proceed(y/n): ").lower()
-            
-            if answer[0] == "y":
-                break
-        
-        return (ai_narration)
+                # Loop until valid move
+                while True:  # Wait for valid move
+                    # get origin and destination of the move
+                    (origin, dest) = self.input_user_move()
 
-    # Display the current layout of chess board text-based represenation
-    @classmethod
-    def show_chess_board(cls, chess_board:list, ai_narration:str, debug:bool = False):
+                    # Check if origin contains piece
+                    # of color equal to current player
+                    if self.chessboard.get_piece(origin).get_color() != color_turn:
+                        # Can't move enemy piece on your turn
+
+                        # TODO: TextUserInterface needs
+                        # to display that move is invalid
+                        continue
+
+                    # Move chess piece
+                    (succeeded, status, pieces) = self.chessboard.move(origin, dest)
+                    # Check if it worked
+                    if not succeeded:
+                        # Moved failed valid check
+
+                        # TODO: TextUserInterface needs
+                        # to display that move is invalid
+                        continue
+
+                    ai_naration_text = self.narration.generate_move_text(origin,
+                                                                         dest,
+                                                                         pieces[0],
+                                                                         pieces[1])
+
+                    # Did a Pawn promote?
+                    if status is Status.PAWN_PROMOTION:
+                        # Remove pawn
+                        self.chessboard.remove_piece(origin)
+
+                        # Remove piece on destination
+                        self.chessboard.remove_piece(dest)
+
+                        # Add chosen promoted piece
+                        self.chessboard.add_piece(ChessPiece(color_turn,
+                                                             self.input_promotion()),
+                                                  dest)
+
+                    # End this players turn.
+                    break
+
+            # Next color
+            continue
+        # Game has ended
+
+
+    def show_chess_board(self, chessboard: list, ai_narration: str, debug: bool = False):
 
         if ai_narration != '':
             row_lines = TextFormater.split_string_into_rows(ai_narration)
         else:
             row_lines = []
             
-        while len(row_lines) != len(chess_board):
+        while len(row_lines) != len(chessboard):
             row_lines.append('')
 
         if debug:
-            column_names = TextFormater.create_column_number_tuple(len(chess_board))
+            column_names = TextFormater.create_column_number_tuple(len(chessboard))
             TextFormater.print_column_letters(column_names)
-            for i in range(len(chess_board)):
-                TextFormater.print_chess_board_row(i, chess_board[i], row_lines[i])
+            for i in range(len(chessboard)):
+                TextFormater.print_chess_board_row(i, chessboard[i], row_lines[i])
         else:
-            column_names = TextFormater.create_column_letter_tuple(len(chess_board))
+            column_names = TextFormater.create_column_letter_tuple(len(chessboard))
             TextFormater.print_column_letters(column_names)
-            for i in range(len(chess_board)):
-                TextFormater.print_chess_board_row(len(chess_board)-i, chess_board[i], row_lines[i])
-        
-        
+            for i in range(len(chessboard)):
+                TextFormater.print_chess_board_row(len(chessboard)-i, chessboard[i], row_lines[i])
 
-        
-
-    @classmethod
     def recount_user_move(self, move:tuple[Position, Position]):
         """ Returns string recounting user move  """
         (coordinates_origin, coordinates_dest) = move
@@ -82,8 +121,6 @@ class TextUserInterface(UI_Interface):
 
         print(f"Moved {algebraic_origin} to {algebraic_dest}")
 
-
-    @classmethod
     def input_user_move(self, prompt_one:str = "From", prompt_two:str ="To"):
         """ Prompts user to enter a chess move in algebraic chess notation. Returns tuple of Postion objects, origin and destination"""
 
@@ -108,6 +145,14 @@ class TextUserInterface(UI_Interface):
 
         return (origin, dest)
     
+    @classmethod
+    def input_game_setup_parameters():
+        # Present user with successive choices of:
+        # 1 or 2 player game (if 1, 2nd player is computer) 1 player == True
+        # Time limit per move in seconds, integer
+        # AI narration On/Off
+        # return (narration True/False)
+        pass
     
     @classmethod
     def input_promotion(self):

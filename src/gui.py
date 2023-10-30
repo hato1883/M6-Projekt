@@ -1,34 +1,28 @@
-#### TODO #68 Make a function that manipulates the state of the chessboard given our origin and destination inputs
-#### TODO Compare the functions in main.py to gui.py to find out how to properly manipulate the board
-#### TODO #67 Make a function that puts the current players name on the screen(Preferably in the right hand corner)
-#### TODO Make a function that creates a textbox for text received from our chatgpt integration 
 import pygame
 import sys
 import os
-from chessboard import *
+from chess_piece_class import EMPTY_PIECE
 from narration_interface import NarrationInterface
+from piece_type_enum import PieceType
 from ui_interface import UI_Interface
 from piece_color_enum import Color
-import chatgpt_narrator as gpt
-
-
-
-
+from chessboard import Chessboard
+from position_class import Position
 
 
 class Window_Class(UI_Interface):
-    
+
     WHITE = (255, 255, 255)
     BLACK = (0, 0, 0)
     YELLOW = (255, 255, 0)
 
-    WIDTH, HEIGHT = 600,600
+    WIDTH, HEIGHT = 600, 600
 
     SQUARE_SIZE = WIDTH // 8  # Divide the width into 8 squares
     '''Defines the width of each square of the chessboard as WIDTH/8'''
-    def __init__(self, size=(800, 600)) -> None:
+    def __init__(self, chessboard: Chessboard, narration: NarrationInterface, size=(800, 600)) -> None:
         '''Initializes the screen as it's own object and sets the size of the screen to 800 x 600 by default if no other value is given'''
-        
+
         pygame.init()
         self.size = size
         self.screen = pygame.display.set_mode(self.size)
@@ -42,48 +36,45 @@ class Window_Class(UI_Interface):
         # Get the parent directory (the directory containing the script)
         self.parent_directory = parent_directory = os.path.dirname(script_directory)
 
-        #Get the asset directory (the directory containing assets in this project)
+        # Get the asset directory (the directory containing assets in this project)
 
         self.asset_path = asset_path = os.path.join(parent_directory, "assets")
 
-        #Image path to the black pawn 'bp.png'
-        #image_path = os.path.join(parent_directory, "assets", "bp.png")
+        # Image path to the black pawn 'bp.png'
+        # image_path = os.path.join(parent_directory, "assets", "bp.png")
 
         # Print the parent directory
         print(f"The parent directory of the current script is: {parent_directory}")
         print(f'The asset directory is {asset_path}')
-        self.narrator: NarrationInterface = gpt.ChatGPTNarrator()
-
+        self.narrator: NarrationInterface = narration
+        self.board: Chessboard = chessboard
 
     def run(self):
         flip = True
         marked = False
-        origin=Position
-        destination=Position
-        self.running=True
+        origin = Position
+        destination = Position
+        self.running = True
 
         self.game_has_ended = False
 
-        #show splashscreen
+        # show splashscreen
         self.show_splash_screen()
 
-        self.board = Chessboard()
-        self.board.create_default_board()
-
-        self.piece_image = [[],[]]
+        self.piece_image = [[], []]
 
         current_turn = Color.WHITE
         potential_winner = current_turn
 
-        colors =("b","w")
-        suffix = ("k","q","r","b","n","p")
+        colors = ("b", "w")
+        suffix = ("k", "q", "r", "b", "n", "p")
         i = 0
 
         #Loads in and scales all assets
         for color in colors:
             for letter in suffix:
                 temp = self.asset_load(f"{color}{letter}")
-                self.piece_image[i].append( self.load_and_scale_sprite(temp) )
+                self.piece_image[i].append(self.load_and_scale_sprite(temp))
             i += 1
 
             ip = ''
@@ -93,11 +84,11 @@ class Window_Class(UI_Interface):
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     pos = pygame.mouse.get_pos()
-                    if flip == True:
+                    if flip is True:
                         origin = self.mouse_pos_to_index(pos)
                         print(f'origins value is {origin}')
                         flip = False
-                        marked=True
+                        marked = True
                         
                     else:
                         destination = self.mouse_pos_to_index(pos)
@@ -109,39 +100,35 @@ class Window_Class(UI_Interface):
                             if succeeded:
 
                                 ip = self.narrator.generate_move_text(origin,
-                                                                    destination,
-                                                                    pieces[0],
-                                                                    pieces[1])
+                                                                      destination,
+                                                                      pieces[0],
+                                                                      pieces[1])
                                 potential_winner = current_turn
                                 current_turn = self.change_turn(current_turn)
                                 if len(self.board.get_valid_moves(current_turn)) == 0:
                                     self.game_has_ended = True
                                     self.running = False
-                        self.input_user_move(origin,destination)
+                        self.input_user_move(origin, destination)
                         flip = True
-                        marked=False
-
+                        marked = False
 
                 if event.type == pygame.QUIT:
                     self.running = False
-            
- 
 
-
-            #paint the background
+            # paint the background
             self.screen.fill(((43, 42, 51)))
 
-            #call the show_chessboard function and draw the chessboard
+            # call the show_chessboard function and draw the chessboard
             self.show_chess_board(self.board.get_chessboard())
 
-            #If something is marked, draw a yellow box around it's cordinates
-            if marked==True:
+            # If something is marked, draw a yellow box around it's cordinates
+            if marked:
                 self.draw_selection(origin)
-            
-            #text for the textbox
+
+            # text for the textbox
 
 
-            #textbox starts at 602,0
+            # textbox starts at 602,0
             self.text_wrap(self.screen, ip, (602, 30), pygame.font.SysFont('Arial', 20))
             self.draw_turn(current_turn)
             pygame.display.flip()
@@ -151,13 +138,12 @@ class Window_Class(UI_Interface):
         pygame.quit()
         sys.exit()
 
-    
     def change_turn(self, turn: Color) -> Color:
         if turn == Color.WHITE:
             return Color.BLACK
         else:
             return Color.WHITE
-    
+
     def mouse_pos_to_index(self, pos):
         '''Returns the current mouse position as a board (row,column)'''
         x, y = pos
@@ -217,19 +203,19 @@ class Window_Class(UI_Interface):
         text_rect.center = (self.size[0] // 2, self.size[1] // 2)
         self.screen.blit(text, text_rect)
 
-        #Draw the text
+        # Draw the text
         pygame.time.delay(500)
         pygame.display.flip()
         
-        #Wait 500 ms
+        # Wait 500 ms
         pygame.time.delay(10000)
 
         pass
 
-    def asset_load(self,target:str):
+    def asset_load(self, target: str):
        '''A function that returns the image_path'''
-       
-       asset_filepath=os.path.join(self.asset_path,target)
+
+       asset_filepath = os.path.join(self.asset_path, target)
        image_path = os.path.join(f'{asset_filepath}.png')
 
        return image_path
@@ -242,7 +228,7 @@ class Window_Class(UI_Interface):
         # return ( two_player True/False , sec time limit integer, narration True/False)
         pass
 
-    def piece_type_to_sprite_name(self, chess_piece:PieceType):
+    def piece_type_to_sprite_name(self, chess_piece: PieceType):
         prefix = 1
         if chess_piece.get_color() is Color.BLACK:
             prefix = 0
@@ -263,7 +249,7 @@ class Window_Class(UI_Interface):
             
         return image_name
 
-    def show_chess_board(self, Chessboard:list):
+    def show_chess_board(self, Chessboard: list):
         '''First draws the black and white squares on the chessboard, then draws the sprites on top of the tiles'''
         for row in range(8):
             for col in range(8):
@@ -277,7 +263,6 @@ class Window_Class(UI_Interface):
         for row in Chessboard:
             self.paint_chess_board_row(row_index, row)
             row_index += 1
-            
 
     def paint_chess_board_row(self, row_index, row_list):
         '''Given the row_index and row_list, draws the sprites in their given position'''
@@ -290,7 +275,6 @@ class Window_Class(UI_Interface):
                 image_name = self.piece_type_to_sprite_name(square)
                 self.draw_sprite(image_name, x_step*i, y,)
             i += 1
-
 
     def recount_user_move():
         # Input two 2-tupels. Origin, Dest.
@@ -307,7 +291,7 @@ class Window_Class(UI_Interface):
         if origin == destination:
             return None
         else:
-            return (origin,destination)
+            return (origin, destination)
 
     def input_promotion():
         # Prompt's user to select promotion for pawn in question
@@ -316,9 +300,8 @@ class Window_Class(UI_Interface):
         # return  integer in [0,3]. 0 == queen, 1 == r and so on.
         pass
 
-    def draw_turn(self,current_turn):
-
-        if(current_turn) == Color.WHITE:
+    def draw_turn(self, current_turn):
+        if current_turn is Color.WHITE:
             ip = 'white'
         else:
             ip = 'black'
@@ -327,7 +310,7 @@ class Window_Class(UI_Interface):
 
     def draw_sprite(self, sprite, x, y):
         '''Given a sprite path, draws a single sprite at a given coordinate'''
-        
+
         self.screen.blit(sprite, (x, y))
 
     def load_and_scale_sprite(self, sprite_path):
@@ -355,7 +338,7 @@ class Window_Class(UI_Interface):
     def draw_selection(self, position: Position):
         '''Given a Position draw a hollowed out yellow rectangle at the given coordinate unless Position is None, then return None'''
 
-        if position==None:
+        if position == None:
             return None
         else:
             y = position.row
@@ -364,5 +347,5 @@ class Window_Class(UI_Interface):
             pygame.draw.rect(self.screen, self.YELLOW, (x*self.SQUARE_SIZE,y*self.SQUARE_SIZE,self.SQUARE_SIZE,self.SQUARE_SIZE),2)
 
 if __name__ == "__main__":
-    game=Window_Class()
+    game = Window_Class()
     game.run()
